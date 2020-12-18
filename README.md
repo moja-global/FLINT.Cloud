@@ -1,7 +1,7 @@
-# TITLE 
+# FLINT.Cloud
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
 
-Text 
+The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
 
 ## How to Get Involved?  
 
