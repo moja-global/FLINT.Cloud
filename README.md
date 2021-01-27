@@ -5,7 +5,9 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 ## How to Get Involved?  
 
-moja global welcomes a wide range of contributions as explained in [Contributing document](https://github.com/moja-global/About-moja-global/blob/master/CONTRIBUTING.md) and in the [About moja-global Wiki](https://github.com/moja-global/.github/wiki).  
+This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.
+
+If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global We'd love to have you involved.
 
   
 ## FAQ and Other Questions  
