@@ -7,7 +7,7 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.
 
-Feel free to join our community and get to know everyone, we'd be happy to help you apply: https://join-moja-global.herokuapp.com/
+Feel free to join our community and get to know everyone on Slack, or get help with your application: https://join-moja-global.herokuapp.com/
 
 If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global. We'd love to have you involved.
 
