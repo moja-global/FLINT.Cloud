@@ -3,6 +3,21 @@
 
 The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
 
+### Flask REST API Setup  
+
+In order to run the REST API, please follow the following steps: - 
+
+1. `docker build -t FLINT-api .`
+2. `docker run --rm -p 8080:8080 FLINT-api`
+
+Currently the REST API has the following endpoints available for access:-
+
+- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
+- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
+- **\version**: This endpoint outputs the version number of moja.CLI.
+
+This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
+
 ## How to Get Involved?  
 
 This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.
