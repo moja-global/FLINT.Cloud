@@ -1,0 +1,75 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0",
+        "title": "FLINT Rest Api"
+    },
+    "paths": {
+        "/version": {
+            "get": {
+                "summary": "Get Version of FLINT",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Version"
+                    }
+                },
+                "tags": [
+                    "version"
+                ]
+            }
+        },
+        "/point": {
+            "post": {
+                "summary": "Get Point example of FLINT",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Point based example FLINT"
+                    }
+                },
+                "tags": [
+                    "point"
+                ]
+            }
+        },
+        "/rothc": {
+            "post": {
+                "summary": "Get RothC example of FLINT",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "RothC based example FLINT"
+                    }
+                },
+                "tags": [
+                    "rothc"
+                ]
+            }
+        },
+        "/help/{arg}": {
+            "get": {
+                "summary": "Get Help Section",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Help"
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "arg",
+                        "in": "path",
+                        "description": "Help info about named section. Pass all to get all info",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "help"
+                ]
+            }
+        }
+    },
+    "definitions": {}
+}
