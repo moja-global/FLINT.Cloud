@@ -3,7 +3,7 @@
 
 The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
 
-### Flask REST API Setup  
+### Flask.example REST API Setup  
 
 In order to run the REST API, please follow the following steps: - 
 
@@ -15,6 +15,28 @@ Currently the REST API has the following endpoints available for access:-
 - **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
 - **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
 - **\version**: This endpoint outputs the version number of moja.CLI.
+- **\point**: This endpoint runs point example and outputs point_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations.
+- **\rothc**: This endpoint runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
+
+
+This REST API is built using the `flask-restful` package and has been containerized using `Docker`.  
+
+### Flask-GCBM REST API Setup  
+
+In order to run the REST API, please follow the following steps: - 
+
+1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
+2. `docker run -v /home/kalilinux/Documents/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
+  
+
+In the point 2 as you can see we have mounted the GCBM folder as gcbm_files onto our container. The zipped GCBM folder is available in the root of this repository for setup and use.  
+
+Currently the REST API has the following endpoints available for access:-
+
+- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
+- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
+- **\version**: This endpoint outputs the version number of moja.CLI.
+- **\gcbm**: This endpoint runs flint-gcbm and outputs some files in the output directory along with the output db. Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
 
