@@ -8,6 +8,7 @@ from datetime import datetime
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_autoindex import AutoIndex
+from run_distributed import *
 
 app = Flask(__name__)
 ppath = "/"
@@ -139,6 +140,61 @@ def gcbm():
 	#UPLOAD_DIRECTORY = "./gcbm_files/config/"	
 	#return send_from_directory(UPLOAD_DIRECTORY,timestampStr + "..\output\gcbm_output.db", as_attachment=True), 200
 
+
+
+@app.route('/gcbm/dynamic', methods=['POST'])
+def gcbm_dynamic():
+	"""
+		Get GCBM Dynamic implementation of FLINT
+		---
+		tags:
+		  - gcbm
+		responses:
+		  200:
+		parameters:
+			  - in: body
+			name: title
+			required: true
+			schema:
+			  type: string
+			description: GCBM Implementation FLINT
+		"""
+	s = time.time()
+	title = 'example simulation'
+	if 'config_files' in request.files:
+		uploaded_files = request.files.getlist('config_files')
+		for fil in uploaded_files:
+			if fil.filename != '':
+				# .cfg and all .json files
+						fil.save(os.path.join(fil.filename))
+		gcbm_config_path = 'gcbm_config.cfg'
+		provider_config_path = 'provider_config.json'
+	else:
+		gcbm_config = 'gcbm_config.cfg'
+		
+	if 'input' in request.files:
+		uploaded_files = request.files.getlist('input')
+		os.makedirs('/input')
+		for fil in uploaded_files:
+			if fil.filename != '':
+				# all .tif,.json and input_db file
+						fil.save('/input/'+fil.filename)
+						
+	if 'db' in request.files:
+		db = request.files['db']
+		#input db file
+		if db.filename != '':
+			db.save('/input/gcbm_input.db')
+	config_provider = 'provider_config.json'
+	returncode = final_run(title, gcbm_config_path, provider_config_path)
+	e = time.time()
+
+	response = {
+		'exitCode' : returncode,
+		'execTime' : e - s,
+		'response' : "Operation executed successfully"
+	}
+	return {'data': response}, 200
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
