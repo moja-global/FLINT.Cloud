@@ -141,7 +141,6 @@ def gcbm():
 	#return send_from_directory(UPLOAD_DIRECTORY,timestampStr + "..\output\gcbm_output.db", as_attachment=True), 200
 
 
-
 @app.route('/gcbm/dynamic', methods=['POST'])
 def gcbm_dynamic():
 	"""
@@ -159,38 +158,64 @@ def gcbm_dynamic():
 			  type: string
 			description: GCBM Implementation FLINT
 		"""
-	s = time.time()
-	title = 'example simulation'
+	
+	# Default title = simulation
+	title = request.form.get('title') or 'simulation'
+	# Sanitize title
+	title = ''.join(c for c in title if c.isalnum())
+
+	# Create project directory
+	project_dir = f'{title}-{time.time()}'
+	os.makedirs(f'/input/{project_dir}')
+
+	# Function to flatten paths
+	def fix_path(path):
+		return os.path.basename(path.replace('\\', '/'))
+
+	# Process configuration files
 	if 'config_files' in request.files:
-		uploaded_files = request.files.getlist('config_files')
-		for fil in uploaded_files:
-			if fil.filename != '':
-				# .cfg and all .json files
-						fil.save(os.path.join(fil.filename))
-		gcbm_config_path = 'gcbm_config.cfg'
-		provider_config_path = 'provider_config.json'
+		for file in request.files.getlist('config_files'):
+			# Fix paths in provider_config
+			if file.filename == 'provider_config.json':
+				provider_config = json.load(file)
+				provider_config['Providers']['SQLite']['path'] = fix_path(provider_config['Providers']['SQLite']['path'])
+				layers = []
+				for layer in provider_config['Providers']['RasterTiled']['layers']:
+					layer['layer_path'] = fix_path(layer['layer_path'])
+					layers.append(layer)
+				provider_config['Providers']['RasterTiled']['layers'] = layers
+				with open(f'/input/{project_dir}/provider_config.json', 'w') as pcf:
+					json.dump(provider_config, pcf)
+			else:
+				# Save file immediately
+				file.save(f'/input/{project_dir}/{file.filename}')
 	else:
-		gcbm_config = 'gcbm_config.cfg'
-		
+		return {'error': 'Missing configuration file'}, 400
+	
+	# Save input 
 	if 'input' in request.files:
-		uploaded_files = request.files.getlist('input')
-		os.makedirs('/input')
-		for fil in uploaded_files:
-			if fil.filename != '':
-				# all .tif,.json and input_db file
-						fil.save('/input/'+fil.filename)
-						
+		for file in request.files.getlist('input'):
+			# Save file immediately
+			file.save(f'/input/{project_dir}/{file.filename}')
+	else:
+		return {'error': 'Missing input'}, 400
+
+	# Save db
 	if 'db' in request.files:
-		db = request.files['db']
-		#input db file
-		if db.filename != '':
-			db.save('/input/gcbm_input.db')
-	config_provider = 'provider_config.json'
-	returncode = final_run(title, gcbm_config_path, provider_config_path)
+		for file in request.files.getlist('db'):
+			# Save file immediately
+			file.save(f'/input/{project_dir}/{file.filename}')
+	else:
+		return {'error': 'Missing database'}, 400
+
+	s = time.time()
+	f = open(f'/input/{project_dir}/gcbm_logs.csv', 'w+')
+	res = subprocess.Popen(['/opt/gcbm/moja.cli', '--config_file', 'gcbm_config.cfg', '--config_provider', 'provider_config.json'], stdout=f, cwd=f'/input/{project_dir}')
 	e = time.time()
+	(output, err) = res.communicate()  
 
 	response = {
-		'exitCode' : returncode,
+		'exitCode' : res.returncode,
 		'execTime' : e - s,
 		'response' : "Operation executed successfully"
 	}
