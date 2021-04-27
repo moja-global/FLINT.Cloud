@@ -174,19 +174,17 @@ def stage_files(title, gcbm_config, provider_config):
     return (staging_dir, input_files)
 
 
-def final_run(title, gcbm_config, provider_config):
+def final_run(title, gcbm_config, provider_config, project_dir):
     
     staging_dir, input_files = stage_files(title, gcbm_config, provider_config)
     upload_simulation_files(title, staging_dir, input_files)
     
     #output_dir = os.path.join(working_dir, "output")
     os.makedirs("output", exist_ok=True)
-    
-    dateTimeObj = datetime.now()
-    timestampStr = dateTimeObj.strftime("%H:%M:%S.%f - %b %d %Y")
-    f = open(timestampStr + "gcbm_logs.csv", "w+")
+
+    f = open(f'/input/{project_dir}/gcbm_logs.csv', 'w+')
     subprocess.run(["pwd"], cwd="/gcbm_files/config")
-    res = subprocess.Popen(['/opt/gcbm/moja.cli', '--config_file' , gcbm_config, '--config_provider', 'provider_config.json'], stdout=f, cwd='/gcbm_files/config')
+    res = subprocess.Popen(['/opt/gcbm/moja.cli', '--config_file' , gcbm_config, '--config_provider', 'provider_config.json'], stdout=f, cwd=f'/input/{project_dir}')
     (output, err) = res.communicate()  
 
     #This makes the wait possible
