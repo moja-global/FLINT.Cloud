@@ -167,6 +167,29 @@ def upload_blob(title, source_file_name):
 	)
 
 
+def download_blob(title, source_blob_name):
+	"""Downloads a file from the bucket."""
+	# The ID of your GCS bucket
+	bucket_name = "simulation_data_flint-cloud"
+	# The path to your file to download
+	#source_file_name = "local/path/to/file"
+	# The ID of your GCS object
+	source_blob_name = "simulations/simulation-"+title+"/"+source_blob_name
+	destination_file_name = "input.zip"
+
+	storage_client = storage.Client()
+	bucket = storage_client.bucket(bucket_name)
+	blob = bucket.blob(source_blob_name)
+
+	blob.download_to_filename(destination_file_name)
+
+	print(
+		"File {} downloaded to {}.".format(
+			source_blob_name, destination_file_name
+		)
+	)
+
+
 @app.route('/gcbm/new', methods=['POST'])
 def gcbm_new():
 	"""
@@ -266,6 +289,10 @@ def gcbm_upload():
 	else:
 		return {'error': 'Missing database'}, 400
 
+	#save input in bucket (to maintain state for Cloudrun)
+	shutil.make_archive('input', 'zip', f'/input/{project_dir}')
+	upload_blob(title, 'input.zip')
+
 	return {"data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
 
 @app.route('/gcbm/dynamic', methods=['POST'])
@@ -296,6 +323,10 @@ def gcbm_dynamic():
 	gcbm_config_path = 'gcbm_config.cfg'
 	provider_config_path = 'provider_config.json'
 
+	#download input from bucket
+	download_blob(title, 'input.zip')
+	shutil.unpack_archive('input.zip', '/')
+	os.remove('input.zip')
 
 	f = open(f'/input/{project_dir}/gcbm_logs.csv', 'w+')
 	subprocess.run(["pwd"], cwd="/gcbm_files/config")
@@ -307,10 +338,10 @@ def gcbm_dynamic():
 	#returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
 	shutil.make_archive('output', 'zip', f'/input/{project_dir}/output')
 	shutil.rmtree(f'/input/{project_dir}/output')
-	shutil.make_archive('input', 'zip', f'/input/{project_dir}')
+	#shutil.make_archive('input', 'zip', f'/input/{project_dir}')
 	shutil.rmtree('/input')
 	upload_blob(title, 'output.zip')
-	upload_blob(title, 'input.zip')
+	#upload_blob(title, 'input.zip')
 
 	e = time.time()
 	download_url = generate_download_signed_url_v4(project_dir)
