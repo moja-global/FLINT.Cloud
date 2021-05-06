@@ -371,17 +371,17 @@ def generate_download_signed_url_v4(project_dir):
 	url_input = blob.generate_signed_url(
 		version="v4",
 		# This URL is valid for 15 minutes
-		expiration=timedelta(minutes=15),
+		expiration=timedelta(minutes=30),
 		# Allow GET requests using this URL.
 		method="GET",
 	)
 
 	blob_output = bucket.blob(blob_path+"output.zip")
 
-	url_output = blob.generate_signed_url(
+	url_output = blob_output.generate_signed_url(
 		version="v4",
 		# This URL is valid for 15 minutes
-		expiration=timedelta(minutes=15),
+		expiration=timedelta(minutes=30),
 		# Allow GET requests using this URL.
 		method="GET",
 	)
