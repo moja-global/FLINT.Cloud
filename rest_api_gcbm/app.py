@@ -5,13 +5,16 @@ import subprocess
 import time
 import json
 import shutil
-from google.cloud import storage
+from google.api_core.exceptions import AlreadyExists
+from google.cloud import storage, pubsub_v1
 from datetime import datetime
 from datetime import timedelta
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_autoindex import AutoIndex
 from run_distributed import *
+from threading import Thread
+import logging
 
 app = Flask(__name__)
 # ppath = "/"
@@ -19,7 +22,32 @@ app = Flask(__name__)
 api = Api(app)
 
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-48b76ff5ddbc.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
+publisher = pubsub_v1.PublisherClient()
+
+def create_topic_and_sub(name, project='flint-cloud'):
+	"""Create topic in the given project and subscribe to it. Returns subscription path"""
+	topic_path = publisher.topic_path(project, name)
+	try:
+		topic = publisher.create_topic(request={'name': topic_path})
+	except AlreadyExists:
+		pass
+	subscriber = pubsub_v1.SubscriberClient()
+	subscription_path = subscriber.subscription_path(project, f'{name}-sub')
+	with subscriber:
+		try:
+			subscription = subscriber.create_subscription(
+				request={'name': subscription_path, 'topic': topic_path}
+			)
+		except AlreadyExists:
+			pass
+	return subscription_path
+
+def publish_message(topic, attribs, project='flint-cloud'):
+	"""Publish message in given topic"""
+	msg = json.dumps(attribs).encode('utf-8')
+	topic_path = publisher.topic_path(project, topic)
+	return publisher.publish(topic_path, msg)
 
 ### swagger specific ###
 SWAGGER_URL = '/swagger'
@@ -49,15 +77,15 @@ def help(arg):
 		Get Help Section
 		---
 		tags:
-		  - help
+			- help
 		parameters:
 		- name: arg
-		  in: path
-		  description: Help info about named section. Pass all to get all info
-		  required: true
-		  type: string
+			in: path
+			description: Help info about named section. Pass all to get all info
+			required: true
+			type: string
 		responses:
-		  200:
+			200:
 			description: Help
 		"""
 	s = time.time()
@@ -81,9 +109,9 @@ def version():
 		Get Version of FLINT
 		---
 		tags:
-		  - version
+			- version
 		responses:
-		  200:
+			200:
 			description: Version
 		"""
 	s = time.time()
@@ -104,9 +132,9 @@ def gcbm():
 		Get GCBM implementation of FLINT
 		---
 		tags:
-		  - gcbm
+			- gcbm
 		responses:
-		  200:
+			200:
 			description: GCBM Implementation FLINT
 		"""
 	s = time.time()
@@ -160,7 +188,7 @@ def upload_blob(title, source_file_name):
 
 	blob.upload_from_filename(source_file_name)
 
-	print(
+	logging.info(
 		"File {} uploaded to {}.".format(
 			source_file_name, destination_blob_name
 		)
@@ -183,7 +211,7 @@ def download_blob(title, source_blob_name):
 
 	blob.download_to_filename(destination_file_name)
 
-	print(
+	logging.info(
 		"File {} downloaded to {}.".format(
 			source_blob_name, destination_file_name
 		)
@@ -228,15 +256,15 @@ def gcbm_upload():
 		Upload files for GCBM Dynamic implementation of FLINT
 		---
 		tags:
-		  - gcbm
+			- gcbm
 		responses:
-		  200:
+			200:
 		parameters:
-			  - in: body
+				- in: body
 			name: title
 			required: true
 			schema:
-			  type: string
+				type: string
 			description: File upload for GCBM Implementation FLINT
 		"""
 
@@ -247,7 +275,8 @@ def gcbm_upload():
 
 	# Create project directory
 	project_dir = f'{title}'
-	os.makedirs(f'/input/{project_dir}')
+	if not os.path.exists(f'/input/{project_dir}'):
+		os.makedirs(f'/input/{project_dir}')
 
 	# Function to flatten paths
 	def fix_path(path):
@@ -301,19 +330,17 @@ def gcbm_dynamic():
 		Get GCBM Dynamic implementation of FLINT
 		---
 		tags:
-		  - gcbm
+			- gcbm
 		responses:
-		  200:
+			200:
 		parameters:
-			  - in: body
+				- in: body
 			name: title
 			required: true
 			schema:
-			  type: string
+				type: string
 			description: GCBM Implementation FLINT
 		"""
-	s = time.time()
-
 	# Default title = simulation
 	title = request.form.get('title') or 'simulation'
 	# Sanitize title
@@ -325,33 +352,50 @@ def gcbm_dynamic():
 
 	#download input from bucket
 	download_blob(title, 'input.zip')
-	shutil.unpack_archive('input.zip', '/')
+	if not os.path.exists(f'/input/{project_dir}'):
+		os.makedirs(f'/input/{project_dir}')
+	shutil.unpack_archive('input.zip', f'/input/{project_dir}/')
 	os.remove('input.zip')
 
-	f = open(f'/input/{project_dir}/gcbm_logs.csv', 'w+')
-	subprocess.run(["pwd"], cwd="/gcbm_files/config")
-	res = subprocess.Popen(['/opt/gcbm/moja.cli', '--config_file' , 'gcbm_config.cfg', '--config_provider', 'provider_config.json'], stdout=f, cwd=f'/input/{project_dir}')
-	(output, err) = res.communicate()  
+	thread = Thread(target=launch_run, kwargs={'title': title, 'project_dir': project_dir})
+	thread.start()
+	subscriber_path = create_topic_and_sub(title)
+	return {'status': 'Run started', 'subscription': subscriber_path}, 200
 
-	#This makes the wait possible
-	res_status = res.wait()
-	#returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
-	shutil.make_archive('output', 'zip', f'/input/{project_dir}/output')
-	shutil.rmtree(f'/input/{project_dir}/output')
-	#shutil.make_archive('input', 'zip', f'/input/{project_dir}')
-	shutil.rmtree('/input')
-	upload_blob(title, 'output.zip')
-	#upload_blob(title, 'input.zip')
+def launch_run(title, project_dir):
+		s = time.time()
+		logging.debug('Starting run')
+		with open(f'/input/{project_dir}/gcbm_logs.csv', 'w+') as f:
+			res = subprocess.Popen(['/opt/gcbm/moja.cli', '--config_file' , 'gcbm_config.cfg', '--config_provider', 'provider_config.json'], stdout=f, cwd=f'/input/{project_dir}')
+		logging.debug('Communicating')
+		(output, err) = res.communicate()
+		logging.debug('Communicated')
+		if not os.path.exists(f'/input/{project_dir}/output'):
+			logging.error(err)
+			publish_message(title, {'error': err})
+			return
+		logging.debug('Output exists')
+		#returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
+		shutil.make_archive('output', 'zip', f'/input/{project_dir}/output')
+		shutil.rmtree(f'/input/{project_dir}/output')
+		logging.debug('Made archive')
+		#shutil.make_archive('input', 'zip', f'/input/{project_dir}')
+		shutil.rmtree('/input')
+		upload_blob(title, 'output.zip')
+		logging.debug('Uploaded output')
+		#upload_blob(title, 'input.zip')
+		e = time.time()
 
-	e = time.time()
-	download_url = generate_download_signed_url_v4(project_dir)
-	response = {
-		'exitCode' : res_status,
-		'execTime' : e - s,
-		'response' : "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body.",
-		'urls': download_url
-	}
-	return {'data': response}, 200
+		download_url = generate_download_signed_url_v4(project_dir)
+		logging.debug('Generated URL')
+		response = {
+			'exitCode' : res.returncode,
+			'execTime' : e - s,
+			'response' : "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body.",
+			'urls': download_url
+		}
+		logging.info(response)
+		publish_message(title, response)
 
 def generate_download_signed_url_v4(project_dir):
 	"""Generates a v4 signed URL for downloading a blob.
@@ -398,15 +442,15 @@ def gcbm_download():
 		Download GCBM Input and Output
 		---
 		tags:
-		  - gcbm
+			- gcbm
 		responses:
-		  200:
+			200:
 		parameters:
-			  - in: body
+				- in: body
 			name: title
 			required: true
 			schema:
-			  type: string
+				type: string
 			description: GCBM Download FLINT
 		"""
 	# Default title = simulation
@@ -424,9 +468,9 @@ def gcbm_list_simulations():
 		Get GCBM Simulations List
 		---
 		tags:
-		  - gcbm
+			- gcbm
 		responses:
-		  200:
+			200:
 		description: GCBM Simulations List
 		"""
 	storage_client = storage.Client()
