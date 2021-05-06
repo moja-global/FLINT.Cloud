@@ -14,8 +14,8 @@ from flask_autoindex import AutoIndex
 from run_distributed import *
 
 app = Flask(__name__)
-ppath = "/"
-AutoIndex(app, browse_root=ppath)    
+# ppath = "/"
+# AutoIndex(app, browse_root=ppath)    
 api = Api(app)
 
 
@@ -441,6 +441,14 @@ def gcbm_list_simulations():
 			blob_list.append(dir_name)
 
 	return {'data':blob_list, 'message': "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download."}, 200		
+
+@app.route('/check', methods=['GET', 'POST'])
+def check():
+	return 'Checks OK', 200
+
+@app.route('/', methods=['GET'])
+def home():
+	return 'FLINT.Cloud API'
 
 if __name__ == '__main__':
 	app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
