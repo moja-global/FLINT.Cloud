@@ -5,6 +5,7 @@ import subprocess
 import time
 import json
 import shutil
+import logging
 from google.api_core.exceptions import AlreadyExists
 from google.cloud import storage, pubsub_v1
 from datetime import datetime
@@ -20,6 +21,15 @@ app = Flask(__name__)
 # ppath = "/"
 # AutoIndex(app, browse_root=ppath)    
 api = Api(app)
+
+# logger config
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+c_handler = logging.StreamHandler()
+c_handler.setLevel(logging.DEBUG)
+c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+c_handler.setFormatter(c_format)
+logger.addHandler(c_handler)
 
 
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
@@ -188,10 +198,9 @@ def upload_blob(title, source_file_name):
 
 	blob.upload_from_filename(source_file_name)
 
-	logging.info(
-		"File {} uploaded to {}.".format(
+	logger.debug(
+		"File %s uploaded to %s.",
 			source_file_name, destination_blob_name
-		)
 	)
 
 
@@ -202,8 +211,8 @@ def download_blob(title, source_blob_name):
 	# The path to your file to download
 	#source_file_name = "local/path/to/file"
 	# The ID of your GCS object
+	destination_file_name = source_blob_name
 	source_blob_name = "simulations/simulation-"+title+"/"+source_blob_name
-	destination_file_name = "input.zip"
 
 	storage_client = storage.Client()
 	bucket = storage_client.bucket(bucket_name)
@@ -211,10 +220,9 @@ def download_blob(title, source_blob_name):
 
 	blob.download_to_filename(destination_file_name)
 
-	logging.info(
-		"File {} downloaded to {}.".format(
+	logger.debug(
+		"File %s downloaded to %s.",
 			source_blob_name, destination_file_name
-		)
 	)
 
 
@@ -410,11 +418,11 @@ def generate_download_signed_url_v4(project_dir):
 
 	storage_client = storage.Client()
 	bucket = storage_client.bucket(bucket_name)
-	blob = bucket.blob(blob_path+"input.zip")
+	blob_input = bucket.blob(blob_path+"input.zip")
 
-	url_input = blob.generate_signed_url(
+	url_input = blob_input.generate_signed_url(
 		version="v4",
-		# This URL is valid for 15 minutes
+		# This URL is valid for 30 minutes
 		expiration=timedelta(minutes=30),
 		# Allow GET requests using this URL.
 		method="GET",
@@ -424,7 +432,7 @@ def generate_download_signed_url_v4(project_dir):
 
 	url_output = blob_output.generate_signed_url(
 		version="v4",
-		# This URL is valid for 15 minutes
+		# This URL is valid for 30 minutes
 		expiration=timedelta(minutes=30),
 		# Allow GET requests using this URL.
 		method="GET",
@@ -433,7 +441,7 @@ def generate_download_signed_url_v4(project_dir):
 	url = {}
 	url['input'] = url_input
 	url['output'] = url_output
-	url['message'] = 'These links are valid only upto 15 mins. Incase the links expire, you may create a new request.'
+	url['message'] = 'These links are valid only upto 30 mins. Incase the links expire, you may create a new request.'
 	return url
 
 @app.route('/gcbm/download', methods=['POST'])
