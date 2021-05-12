@@ -16,6 +16,7 @@ from flask_autoindex import AutoIndex
 from run_distributed import *
 from threading import Thread
 import logging
+from celery import Celery
 
 app = Flask(__name__)
 # ppath = "/"
@@ -35,6 +36,20 @@ logger.addHandler(c_handler)
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
 publisher = pubsub_v1.PublisherClient()
 
+### swagger specific ###
+SWAGGER_URL = '/swagger'
+API_URL = '/static/swagger.json'
+SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
+	SWAGGER_URL,
+	API_URL,
+	config={
+		'app_name': "FLINT-GCBM REST API"
+	}
+)
+app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
+### end swagger specific ###
+
+
 def create_topic_and_sub(name, project='flint-cloud'):
 	"""Create topic in the given project and subscribe to it. Returns subscription path"""
 	topic_path = publisher.topic_path(project, name)
@@ -53,24 +68,41 @@ def create_topic_and_sub(name, project='flint-cloud'):
 			pass
 	return subscription_path
 
+
 def publish_message(topic, attribs, project='flint-cloud'):
 	"""Publish message in given topic"""
 	msg = json.dumps(attribs).encode('utf-8')
 	topic_path = publisher.topic_path(project, topic)
 	return publisher.publish(topic_path, msg)
 
-### swagger specific ###
-SWAGGER_URL = '/swagger'
-API_URL = '/static/swagger.json'
-SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
-	SWAGGER_URL,
-	API_URL,
-	config={
-		'app_name': "FLINT-GCBM REST API"
-	}
-)
-app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
-### end swagger specific ###
+
+def callback(message):
+	subscriber = pubsub_v1.SubscriberClient()
+	subscription_path = subscriber.subscription_path(project, f'{name}-sub')
+	json_file = open(f'{name}-sub', "w+")
+	json_file.write(message.data)
+	upload_blob(name, f'{name}-sub.json')
+	os.remove(f'{name}-sub.json')
+	logger.info("Received %s", message.data)
+    if message.attributes:
+		logger.info("Attributes: ")
+        for key in message.attributes:
+            value = message.attributes.get(key)
+			logger.info("%s: %s", key, value)
+    message.ack()
+
+streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
+logger.info("Listening for messages on %s ..\n", subscription_path)
+
+# Wrap subscriber in a 'with' block to automatically call close() when done.
+with subscriber:
+    try:
+        # When `timeout` is not set, result() will block indefinitely,
+        # unless an exception is encountered first.
+        streaming_pull_future.result(timeout=timeout)
+    except TimeoutError:
+        streaming_pull_future.cancel()
+
 
 @app.route("/spec")
 def spec():
@@ -258,6 +290,7 @@ def gcbm_new():
 	else:
 		return {'data': "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."}, 400
 
+
 @app.route('/gcbm/upload', methods=['POST'])
 def gcbm_upload():
 	"""
@@ -331,6 +364,7 @@ def gcbm_upload():
 	upload_blob(title, 'input.zip')
 
 	return {"data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
+
 
 @app.route('/gcbm/dynamic', methods=['POST'])
 def gcbm_dynamic():
@@ -493,6 +527,35 @@ def gcbm_list_simulations():
 			blob_list.append(dir_name)
 
 	return {'data':blob_list, 'message': "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download."}, 200		
+
+
+@app.route('/gcbm/status', methods=['GET'])
+def status():
+	# Default title = simulation
+	title = request.form.get('title') or 'simulation'
+	# Sanitize title
+	title = ''.join(c for c in title if c.isalnum())
+	project_dir = f'{title}'
+
+	storage_client = storage.Client()
+	bucket_name = 'simulation_data_flint-cloud'
+	bucket = storage_client.bucket(bucket_name)
+	blob_path = 'simulations/simulation-'+project_dir + '/' 
+	blob_json = bucket.blob(blob_path+f"{title}-sub")
+
+	url_json = blob_json.generate_signed_url(
+		version="v4",
+		# This URL is valid for 30 minutes
+		expiration=timedelta(minutes=30),
+		# Allow GET requests using this URL.
+		method="GET",
+	)
+
+	url = {}
+	url['json_url'] = url_json
+	url['message'] = 'These links are valid only upto 30 mins. Incase the links expire, you may create a new request.'
+	return url, 200
+
 
 @app.route('/check', methods=['GET', 'POST'])
 def check():
