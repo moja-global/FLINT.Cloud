@@ -1,20 +1,13 @@
-Moja global Developer Documentation
+FLINT.Cloud Developer Documentation
 ===================================
 
-moja global provides tools for estimating emissions and removals of greenhouse gases from the land sector.
+The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The FLINT-GCBM scripts are converted to a REST Api service built using Flask. This API Service is designed to be consumed by Gcloud.
 
-FLINT: the Full Lands INtegration Tool
-The Full Lands Integration Tool (FLINT) is the flagship software developed by the moja global community. It is an integrating platform for estimating land-based greenhouse gas emissions and removals. Integrating refers to FLINT’s design to combine a wide range of data with models to achieve more accurate estimates of stocks and fluxes of greenhouse gases. FLINT is consistent with the UNFCCC guidelines.
-
-This Documentation is meant for Developers wishing to contribute to moja global repositories. If you would like to get in touch with the maintainers for other reasons, please drop a mail at info@moja-global.com.
+This Documentation is meant for Developers wishing to contribute to FLINT.Cloud repository. If you would like to get in touch with the maintainers for other reasons, please drop a mail at info@moja-global.com.
 
 
 .. toctree::
    :hidden:
 
-   prerequisites/index
+   Api/index
    DevelopmentSetup/index
-   contributing/index
-   DeveloperWorkflow/index
-   faq
-   contact
