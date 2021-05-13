@@ -30,6 +30,7 @@ author = u'Sneha Mishra, Arnav Tiwari & contributors'
 extensions = ['recommonmark',
 'sphinx_rtd_theme',
 'sphinx_copybutton',
+'sphinx_tabs.tabs',
 ]
 
 master_doc = 'index'
