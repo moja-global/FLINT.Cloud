@@ -1,4 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify, redirect
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
 import os
 import subprocess
@@ -16,7 +18,6 @@ from flask_autoindex import AutoIndex
 from run_distributed import *
 from threading import Thread
 import logging
-from celery import Celery
 
 app = Flask(__name__)
 # ppath = "/"
@@ -74,35 +75,6 @@ def publish_message(topic, attribs, project='flint-cloud'):
 	msg = json.dumps(attribs).encode('utf-8')
 	topic_path = publisher.topic_path(project, topic)
 	return publisher.publish(topic_path, msg)
-
-
-def callback(message):
-	subscriber = pubsub_v1.SubscriberClient()
-	subscription_path = subscriber.subscription_path(project, f'{name}-sub')
-	json_file = open(f'{name}-sub', "w+")
-	json_file.write(message.data)
-	upload_blob(name, f'{name}-sub.json')
-	os.remove(f'{name}-sub.json')
-	logger.info("Received %s", message.data)
-    if message.attributes:
-		logger.info("Attributes: ")
-        for key in message.attributes:
-            value = message.attributes.get(key)
-			logger.info("%s: %s", key, value)
-    message.ack()
-
-streaming_pull_future = subscriber.subscribe(subscription_path, callback=callback)
-logger.info("Listening for messages on %s ..\n", subscription_path)
-
-# Wrap subscriber in a 'with' block to automatically call close() when done.
-with subscriber:
-    try:
-        # When `timeout` is not set, result() will block indefinitely,
-        # unless an exception is encountered first.
-        streaming_pull_future.result(timeout=timeout)
-    except TimeoutError:
-        streaming_pull_future.cancel()
-
 
 @app.route("/spec")
 def spec():
@@ -529,32 +501,34 @@ def gcbm_list_simulations():
 	return {'data':blob_list, 'message': "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download."}, 200		
 
 
-@app.route('/gcbm/status', methods=['GET'])
+@app.route('/gcbm/status', methods=['POST'])
 def status():
+	"""
+		Get status of a simulation
+		---
+		tags:
+			- gcbm
+		responses:
+			200:
+		parameters:
+				- in: body
+			name: title
+			required: true
+			schema:
+				type: string
+			description: Get status of simulation
+	"""
 	# Default title = simulation
 	title = request.form.get('title') or 'simulation'
 	# Sanitize title
 	title = ''.join(c for c in title if c.isalnum())
-	project_dir = f'{title}'
 
 	storage_client = storage.Client()
 	bucket_name = 'simulation_data_flint-cloud'
 	bucket = storage_client.bucket(bucket_name)
-	blob_path = 'simulations/simulation-'+project_dir + '/' 
-	blob_json = bucket.blob(blob_path+f"{title}-sub")
-
-	url_json = blob_json.generate_signed_url(
-		version="v4",
-		# This URL is valid for 30 minutes
-		expiration=timedelta(minutes=30),
-		# Allow GET requests using this URL.
-		method="GET",
-	)
-
-	url = {}
-	url['json_url'] = url_json
-	url['message'] = 'These links are valid only upto 30 mins. Incase the links expire, you may create a new request.'
-	return url, 200
+	blob_path = f'simulations/simulation-{title}/output.zip'
+	stats = storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)
+	return {'finished': stats}
 
 
 @app.route('/check', methods=['GET', 'POST'])
