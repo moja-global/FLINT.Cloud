@@ -19,6 +19,15 @@ publisher = pubsub_v1.PublisherClient()
 project = 'flint-cloud'
 
 
+def create_topic(name, project='flint-cloud'):
+    """Create topic in the given project and subscribe to it. Returns subscription path"""
+    topic_path = publisher.topic_path(project, name)
+    try:
+        topic = publisher.create_topic(request={'name': topic_path})
+    except AlreadyExists:
+        pass
+
+
 def publish_message(topic, attribs, project='flint-cloud'):
     """Publish message in given topic"""
     msg = json.dumps(attribs).encode('utf-8')
@@ -109,6 +118,23 @@ def generate_download_signed_url_v4(project_dir):
     return url
 
 
+def cleanup(subscription_path):
+    subscriber = pubsub_v1.SubscriberClient()
+    with subscriber:
+        response = subscriber.pull(
+            request={'subscription': subscription_path, 'max_messages': 25},
+            retry=retry.Retry(deadline=15),
+        )
+        if len(response.received_messages) > 0:
+            # Simulation already started/finished, exit
+            ack_ids = []
+            for msg in response.received_messages:
+                ack_ids.append(msg.ack_id)
+            subscriber.acknowledge(
+                request={'subscription': subscription_path, 'ack_ids': ack_ids}
+            )
+
+
 @app.route('/', methods=['POST'])
 def index():
     envelope = request.get_json()
@@ -132,6 +158,11 @@ def index():
         title = data['title']
         subscription_path = f"{data['subscription']}-internal"
 
+        internal_topic_name = f'{topic_name}-internal'
+        internal_topic_path = publisher.topic_path(
+            project, internal_topic_name)
+        create_topic(internal_topic_name)
+
         # Exit if input exists already
         if os.path.exists(f'/input/{title}'):
             return '', 204
@@ -140,7 +171,8 @@ def index():
         with subscriber:
             try:
                 subscription = subscriber.create_subscription(
-                    request={'name': subscription_path, 'topic': topic_path}
+                    request={'name': subscription_path,
+                             'topic': internal_topic_path}
                 )
             except AlreadyExists:
                 pass
@@ -148,13 +180,14 @@ def index():
                 request={'subscription': subscription_path, 'max_messages': 1},
                 retry=retry.Retry(deadline=10),
             )
-        if len(response.received_messages) > 0:
-            # Simulation already started/finished, ack trigger message and exit
-            return '', 204
+            if len(response.received_messages) > 0:
+                # Simulation already started/finished, ack trigger message and exit
+                return '', 204
 
         # Publish info message
         info_msg = {'message': 'Simulation started'}
         publish_message(topic_name, info_msg)
+        publish_message(internal_topic_name, info_msg)
 
         # download input from bucket
         download_blob(title, 'input.zip')
@@ -197,6 +230,7 @@ def index():
         }
         logging.info(response)
         publish_message(topic_name, response)
+        cleanup(subscription_path)
 
     return '', 204
 

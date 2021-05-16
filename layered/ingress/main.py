@@ -1,6 +1,7 @@
 from flask import Flask, request
 from google.cloud import storage, pubsub_v1
 from google.api_core.exceptions import AlreadyExists
+from googleapiclient import discovery
 import json
 import logging
 import os
@@ -9,7 +10,7 @@ import shutil
 
 app = Flask(__name__)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-baec10f8dd27.json'
 publisher = pubsub_v1.PublisherClient()
 
 
@@ -227,6 +228,26 @@ def status():
     return {'finished': stats}
 
 
+def small_run(data):
+    """Publish message for small run on Pub/Sub"""
+    publish_message('small-simulations', data)
+
+
+def large_run(data):
+    """Start GCE instance and publish  message for large run on Pub/Sub"""
+    service = discovery.build('compute', 'v1')
+
+    project = 'flint-cloud'
+    zone = 'us-central1-a'
+    instance = 'instance-1'
+
+    request = service.instances().start(project=project, zone=zone, instance=instance)
+    response = request.execute()
+    logging.info(response)
+
+    publish_message('large-simulations', data)
+
+
 @app.route('/gcbm/dynamic', methods=['POST'])
 def gcbm_dynamic():
     """
@@ -269,9 +290,10 @@ def gcbm_dynamic():
     sim_data = {
         'topic': topic_name,
         'title': title,
-        'subscription': subscriber_path 
+        'subscription': subscriber_path
     }
-    publish_message('small-simulations', sim_data)
+    small_run(sim_data)
+    # large_run(sim_data)
 
     return {'status': 'Run started', 'subscription': subscriber_path}, 200
 
