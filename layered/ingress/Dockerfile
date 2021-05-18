@@ -4,6 +4,13 @@ FROM python:3.9
 # Allow statements and log messages to immediately appear in the Cloud Run logs
 ENV PYTHONUNBUFFERED True
 
+# Disable interactive prompts
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install packages
+RUN apt-get update -y && \
+apt-get install -y python3-gdal libgdal-dev
+
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
 COPY requirements.txt ./

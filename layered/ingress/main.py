@@ -2,10 +2,12 @@ from flask import Flask, request
 from google.cloud import storage, pubsub_v1
 from google.api_core.exceptions import AlreadyExists
 from googleapiclient import discovery
+from datetime import timedelta
 import json
 import logging
 import os
 import shutil
+from estimate_run_size import SimulationSize, estimate_simulation_size
 
 
 app = Flask(__name__)
@@ -86,6 +88,15 @@ def download_blob(title, source_blob_name):
         "File %s downloaded to %s.",
         source_blob_name, destination_file_name
     )
+
+
+def estimate_size(project_dir):
+    try:
+        size = 'Large' if estimate_simulation_size(
+            project_dir) == SimulationSize.Large else 'Small'
+    except:
+        size = 'Small'
+    return {'size': size}
 
 
 @app.route('/gcbm/new', methods=['POST'])
@@ -194,6 +205,12 @@ def gcbm_upload():
     shutil.make_archive('input', 'zip', f'/input/{project_dir}')
     upload_blob(title, 'input.zip')
 
+    # Save information about the size of simulation
+    sim_size = estimate_size(f'/input/{project_dir}')
+    with open(f'size.json', 'w') as f:
+        json.dump(sim_size, f)
+    upload_blob(title, 'size.json')
+
     return {"data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
 
 
@@ -292,10 +309,110 @@ def gcbm_dynamic():
         'title': title,
         'subscription': subscriber_path
     }
-    small_run(sim_data)
-    # large_run(sim_data)
+
+    # Get simulation size details and forward to appropriate service
+    download_blob(title, 'size.json')
+    with open('size.json') as f:
+        sim_size = json.load(f)
+
+    if sim_size['size'] == 'Small':
+        small_run(sim_data)
+    else:
+        large_run(sim_data)
 
     return {'status': 'Run started', 'subscription': subscriber_path}, 200
+
+
+def generate_download_signed_url_v4(project_dir):
+    """Generates a v4 signed URL for downloading a blob.
+
+    Note that this method requires a service account key file. You can not use
+    this if you are using Application Default Credentials from Google Compute
+    Engine or from the Google Cloud SDK.
+    """
+
+    bucket_name = 'simulation_data_flint-cloud'
+    blob_path = 'simulations/simulation-'+project_dir + '/'
+
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob_input = bucket.blob(blob_path+"input.zip")
+
+    url_input = blob_input.generate_signed_url(
+        version="v4",
+        # This URL is valid for 30 minutes
+        expiration=timedelta(minutes=30),
+        # Allow GET requests using this URL.
+        method="GET",
+    )
+
+    blob_output = bucket.blob(blob_path+"output.zip")
+
+    url_output = blob_output.generate_signed_url(
+        version="v4",
+        # This URL is valid for 30 minutes
+        expiration=timedelta(minutes=30),
+        # Allow GET requests using this URL.
+        method="GET",
+    )
+
+    url = {}
+    url['input'] = url_input
+    url['output'] = url_output
+    url['message'] = 'These links are valid only upto 30 mins. Incase the links expire, you may create a new request.'
+    return url
+
+
+@app.route('/gcbm/download', methods=['POST'])
+def gcbm_download():
+    """
+            Download GCBM Input and Output
+            ---
+            tags:
+                    - gcbm
+            responses:
+                    200:
+            parameters:
+                            - in: body
+                    name: title
+                    required: true
+                    schema:
+                            type: string
+                    description: GCBM Download FLINT
+                """
+    # Default title = simulation
+    title = request.form.get('title') or 'simulation'
+    # Sanitize title
+    title = ''.join(c for c in title if c.isalnum())
+    project_dir = f'{title}'
+    url = generate_download_signed_url_v4(project_dir)
+
+    return url, 200
+
+
+@app.route('/gcbm/list', methods=['GET'])
+def gcbm_list_simulations():
+    """
+            Get GCBM Simulations List
+            ---
+            tags:
+                    - gcbm
+            responses:
+                    200:
+            description: GCBM Simulations List
+                """
+    storage_client = storage.Client()
+    bucket_name = 'simulation_data_flint-cloud'
+    blobs = storage_client.list_blobs(bucket_name, prefix='simulations/')
+    blob_map = {}
+    blob_list = []
+    for blob in blobs:
+        dir_name = blob.name.split('/')[1]
+        if dir_name not in blob_map:
+            blob_map[dir_name] = 1
+            blob_list.append(dir_name)
+
+    return {'data': blob_list, 'message': "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download."}, 200
 
 
 if __name__ == "__main__":
