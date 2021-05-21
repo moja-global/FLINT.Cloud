@@ -1,0 +1,6 @@
+Flask==1.1.4
+gunicorn==20.1.0
+google-cloud-storage
+google-cloud-pubsub
+google-api-python-client
+GDAL==2.4.0
