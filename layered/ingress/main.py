@@ -179,6 +179,13 @@ def gcbm_upload():
                 provider_config['Providers']['RasterTiled']['layers'] = layers
                 with open(f'/input/{project_dir}/provider_config.json', 'w') as pcf:
                     json.dump(provider_config, pcf)
+            # Fix paths in modules_output
+            elif file.filename == 'modules_output.json':
+                modules_output = json.load(file)
+                modules_output['Modules']['CBMAggregatorSQLiteWriter']['settings']['databasename'] = 'output/gcbm_output.db'
+                modules_output['Modules']['WriteVariableGeotiff']['settings']['output_path'] = 'output'
+                with open(f'/input/{project_dir}/modules_output.json', 'w') as mof:
+                    json.dump(modules_output, mof)
             else:
                 # Save file immediately
                 file.save(f'/input/{project_dir}/{file.filename}')
