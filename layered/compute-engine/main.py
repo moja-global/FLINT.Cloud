@@ -10,10 +10,11 @@ from google.api_core import retry
 from google.api_core.exceptions import AlreadyExists
 from googleapiclient import discovery
 
-
+project = os.environ.get('PROJECT_NAME') or 'flint-cloud'
+zone = os.environ.get('GCE_ZONE') or 'us-central1-a'
+instance = os.environ.get('GCE_NAME') or 'instance-1'
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-baec10f8dd27.json'
 publisher = pubsub_v1.PublisherClient()
-project = 'flint-cloud'
 
 
 def create_topic(name, project='flint-cloud'):
@@ -215,10 +216,6 @@ def process(data):
 def shutdown():
     """Stop GCE instance"""
     service = discovery.build('compute', 'v1')
-
-    project = 'flint-cloud'
-    zone = 'us-central1-a'
-    instance = 'instance-1'
 
     request = service.instances().stop(project=project, zone=zone, instance=instance)
     response = request.execute()
