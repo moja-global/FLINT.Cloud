@@ -211,6 +211,7 @@ resource "google_pubsub_subscription" "small-simulations-sub" {
 resource "google_storage_bucket" "simulation_data_flint-cloud" {
   name = "simulation_data_flint-cloud"
   location = var.region
+  force_destroy = true
 
   depends_on = [google_project_service.storage]
 }
@@ -287,7 +288,7 @@ resource "google_compute_instance" "fc-gce-processor" {
 
   scheduling {
     automatic_restart = false
-    preemptible = true
+    preemptible = false
   }
 
   service_account {
