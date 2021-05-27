@@ -15,7 +15,9 @@ from google.api_core.exceptions import AlreadyExists
 app = Flask(__name__)
 
 project = os.environ.get('PROJECT_NAME') or 'flint-cloud'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
+with open('service_account.json', 'w') as saf:
+    saf.write(os.environ.get('SERVICE_ACCOUNT') or 'ERROR')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'service_account.json'
 publisher = pubsub_v1.PublisherClient()
 
 

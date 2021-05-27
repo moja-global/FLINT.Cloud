@@ -77,6 +77,45 @@ resource "google_project_service" "iam" {
   disable_on_destroy = false
 }
 
+# Service Account
+resource "google_service_account" "fc-sa" {
+  account_id   = "flint-cloud-sa"
+  display_name = "FLINT Cloud Service Account"
+  project = var.project
+
+  depends_on = [google_project_service.iam]
+}
+
+resource "google_project_iam_member" "fc-sa-binding-storage" {
+  project = var.project
+  role    = "roles/storage.objectAdmin"
+  member  = "serviceAccount:${google_service_account.fc-sa.email}"
+
+  depends_on = [google_service_account.fc-sa]
+}
+
+resource "google_project_iam_member" "fc-sa-binding-pubsub" {
+  project = var.project
+  role    = "roles/pubsub.admin"
+  member  = "serviceAccount:${google_service_account.fc-sa.email}"
+
+  depends_on = [google_service_account.fc-sa]
+}
+
+resource "google_project_iam_member" "fc-sa-binding-compute" {
+  project = var.project
+  role    = "roles/compute.admin"
+  member  = "serviceAccount:${google_service_account.fc-sa.email}"
+
+  depends_on = [google_service_account.fc-sa]
+}
+
+resource "google_service_account_key" "fc-sa-key" {
+  service_account_id = "${google_service_account.fc-sa.id}"
+
+  depends_on = [google_service_account.fc-sa]
+}
+
 # Pub/Sub Topics
 resource "google_pubsub_topic" "small-simulations" {
   name = "small-simulations"
@@ -111,6 +150,10 @@ resource "google_cloud_run_service" "fc-ingress" {
           name = "GCE_NAME"
           value = var.gce_processor_name
         }
+        env {
+          name = "SERVICE_ACCOUNT"
+          value = "${base64decode(google_service_account_key.fc-sa-key.private_key)}"
+        }
       }
     }
   }
@@ -120,7 +163,7 @@ resource "google_cloud_run_service" "fc-ingress" {
     latest_revision = true
   }
   autogenerate_revision_name = true
-  depends_on = [google_project_service.run]
+  depends_on = [google_project_service.run, google_service_account_key.fc-sa-key]
 }
 
 output "ingress-url" {
@@ -166,6 +209,10 @@ resource "google_cloud_run_service" "fc-cr-processor" {
           name = "PROJECT_NAME"
           value = var.project
         }
+        env {
+          name = "SERVICE_ACCOUNT"
+          value = "${base64decode(google_service_account_key.fc-sa-key.private_key)}"
+        }
       }
       timeout_seconds = 3599
     }
@@ -176,7 +223,7 @@ resource "google_cloud_run_service" "fc-cr-processor" {
     latest_revision = true
   }
   autogenerate_revision_name = true
-  depends_on = [google_project_service.run]
+  depends_on = [google_project_service.run, google_service_account_key.fc-sa-key]
 }
 
 data "google_iam_policy" "noauth-cr-processor" {
@@ -246,27 +293,17 @@ module "gce-container" {
       {
         name = "GCE_NAME"
         value = var.gce_processor_name
+      },
+      {
+        name = "SERVICE_ACCOUNT"
+        value = "${base64decode(google_service_account_key.fc-sa-key.private_key)}"
       }
     ]
   }
 
   restart_policy = "OnFailure"
-}
 
-resource "google_service_account" "gce-sa" {
-  account_id   = "fc-gce-processor-service"
-  display_name = "FLINT Cloud GCE Service Account"
-  project = var.project
-
-  depends_on = [google_project_service.iam]
-}
-
-resource "google_project_iam_member" "gce-sa-binding" {
-  project = var.project
-  role    = "roles/storage.objectViewer"
-  member  = "serviceAccount:${google_service_account.gce-sa.email}"
-
-  depends_on = [google_service_account.gce-sa]
+  depends_on = [google_service_account_key.fc-sa-key]
 }
 
 resource "google_compute_instance" "fc-gce-processor" {
@@ -300,9 +337,9 @@ resource "google_compute_instance" "fc-gce-processor" {
   }
 
   service_account {
-    email  = google_service_account.gce-sa.email
+    email  = google_service_account.fc-sa.email
     scopes = ["cloud-platform"]
   }
 
-  depends_on = [google_project_service.compute, google_pubsub_subscription.large-simulations-sub, google_service_account.gce-sa]
+  depends_on = [google_project_service.compute, google_pubsub_subscription.large-simulations-sub, google_service_account.fc-sa]
 }

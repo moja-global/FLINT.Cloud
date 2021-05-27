@@ -15,7 +15,9 @@ app = Flask(__name__)
 project = os.environ.get('PROJECT_NAME') or 'flint-cloud'
 zone = os.environ.get('GCE_ZONE') or 'us-central1-a'
 instance = os.environ.get('GCE_NAME') or 'instance-1'
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-baec10f8dd27.json'
+with open('service_account.json', 'w') as saf:
+    saf.write(os.environ.get('SERVICE_ACCOUNT') or 'ERROR')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'service_account.json'
 publisher = pubsub_v1.PublisherClient()
 
 
