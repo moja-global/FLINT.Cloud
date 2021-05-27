@@ -217,6 +217,14 @@ resource "google_storage_bucket" "simulation_data_flint-cloud" {
 }
 
 # Compute Engine processor
+resource "google_pubsub_subscription" "large-simulations-sub" {
+  name  = "large-simulations-sub"
+  topic = google_pubsub_topic.large-simulations.name
+  ack_deadline_seconds = 10
+
+  depends_on = [google_pubsub_topic.large-simulations]
+}
+
 module "gce-container" {
   source = "terraform-google-modules/container-vm/google"
   version = "~> 2.0"
@@ -296,5 +304,5 @@ resource "google_compute_instance" "fc-gce-processor" {
     scopes = ["cloud-platform"]
   }
 
-  depends_on = [google_project_service.compute, google_pubsub_topic.large-simulations, google_service_account.gce-sa]
+  depends_on = [google_project_service.compute, google_pubsub_subscription.large-simulations-sub, google_service_account.gce-sa]
 }
