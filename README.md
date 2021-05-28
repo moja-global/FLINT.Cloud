@@ -15,7 +15,7 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 #### Disabling
 
-1. In the same directory as where `main.tf` is present, run `terraform destroy`.   
+1. In the same directory as where `main.tf` is present, run `terraform destroy`. In case this fails, simply run it again.     
 
 ### Flask.example REST API Setup  
 
