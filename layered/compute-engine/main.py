@@ -5,6 +5,7 @@ import shutil
 import time
 import subprocess
 from datetime import timedelta
+from collections import OrderedDict
 from google.cloud import storage, pubsub_v1
 from google.api_core import retry
 from google.api_core.exceptions import AlreadyExists
@@ -226,35 +227,48 @@ def shutdown():
 
 if __name__ == '__main__':
     topic_path = publisher.topic_path(project, 'large-simulations')
-    subscriber = pubsub_v1.SubscriberClient()
-    subscription_path = subscriber.subscription_path(
-        project, 'large-simulations-sub')
-    with subscriber:
-        try:
-            subscription = subscriber.create_subscription(
-                request={'name': subscription_path, 'topic': topic_path}
-            )
-        except AlreadyExists:
-            pass
-        response = subscriber.pull(
-            request={'subscription': subscription_path, 'max_messages': 10},
-            retry=retry.Retry(deadline=10),
-        )
+    queue = OrderedDict()
 
-        ack_ids = []
-        for msg in response.received_messages:
-            ack_ids.append(msg.ack_id)
-
-        # Ack all messages
-        if len(ack_ids) > 0:
-            subscriber.acknowledge(
-                request={'subscription': subscription_path, 'ack_ids': ack_ids}
+    def update_queue():
+        subscriber = pubsub_v1.SubscriberClient()
+        subscription_path = subscriber.subscription_path(
+            project, 'large-simulations-sub')
+        with subscriber:
+            try:
+                subscription = subscriber.create_subscription(
+                    request={'name': subscription_path, 'topic': topic_path}
+                )
+            except AlreadyExists:
+                pass
+            response = subscriber.pull(
+                request={'subscription': subscription_path,
+                         'max_messages': 10},
+                retry=retry.Retry(deadline=10),
             )
 
-    for msg in response.received_messages:
+            ack_ids = []
+            for msg in response.received_messages:
+                ack_ids.append(msg.ack_id)
+
+            # Ack all messages
+            if len(ack_ids) > 0:
+                subscriber.acknowledge(
+                    request={'subscription': subscription_path,
+                             'ack_ids': ack_ids}
+                )
+
+            for msg in response.received_messages:
+                data = json.loads(msg.message.data.decode('utf-8'))
+                queue[data['title']] = data
+
+    update_queue()
+    while queue:
+        title = list(queue)[0]
+        data = queue[title]
+        del queue[title]
         # Launch run
-        data = json.loads(msg.message.data.decode('utf-8'))
         logging.debug(data)
         process(data)
+        update_queue()
 
     shutdown()
