@@ -58,6 +58,27 @@ def upload_blob(title, source_file_name):
     )
 
 
+def delete_blob(title, source_file_name):
+    """Deletes a file to from the bucket."""
+    # The ID of your GCS bucket
+    bucket_name = "simulation_data_flint-cloud"
+    # The path to your file to upload
+    #source_file_name = "local/path/to/file"
+    # The ID of your GCS object
+    destination_blob_name = "simulations/simulation-"+title+"/"+source_file_name
+
+    storage_client = storage.Client()
+    bucket = storage_client.bucket(bucket_name)
+    blob = bucket.blob(destination_blob_name)
+
+    blob.delete()
+
+    logging.debug(
+        "Deleted %s.",
+        destination_blob_name
+    )
+
+
 def download_blob(title, source_blob_name):
     """Downloads a file from the bucket."""
     # The ID of your GCS bucket
@@ -120,21 +141,25 @@ def generate_download_signed_url_v4(project_dir):
     return url
 
 
-def cleanup(subscription_path):
-    subscriber = pubsub_v1.SubscriberClient()
-    with subscriber:
-        response = subscriber.pull(
-            request={'subscription': subscription_path, 'max_messages': 25},
-            retry=retry.Retry(deadline=15),
-        )
-        if len(response.received_messages) > 0:
-            # Simulation already started/finished, exit
-            ack_ids = []
-            for msg in response.received_messages:
-                ack_ids.append(msg.ack_id)
-            subscriber.acknowledge(
-                request={'subscription': subscription_path, 'ack_ids': ack_ids}
-            )
+def create_log(title):
+    """Create log file"""
+    with open('log.txt', 'w+') as lf:
+        lf.write(time.ctime() + '\n')
+    upload_blob(title, 'log.txt')
+
+
+def check_log(title):
+    """Check for log"""
+    storage_client = storage.Client()
+    bucket_name = 'simulation_data_flint-cloud'
+    bucket = storage_client.bucket(bucket_name)
+    blob_path = f'simulations/simulation-{title}/log.txt'
+    return storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)
+
+
+def cleanup_log(title):
+    """Erase log file"""
+    delete_blob(title, 'log.txt')
 
 
 @app.route('/', methods=['POST'])
@@ -158,38 +183,18 @@ def index():
         topic_name = data['topic']
         topic_path = publisher.topic_path(project, topic_name)
         title = data['title']
-        subscription_path = f"{data['subscription']}-internal"
-
-        internal_topic_name = f'{topic_name}-internal'
-        internal_topic_path = publisher.topic_path(
-            project, internal_topic_name)
-        create_topic(internal_topic_name)
 
         # Exit if input exists already
         if os.path.exists(f'/input/{title}'):
             return '', 204
 
-        subscriber = pubsub_v1.SubscriberClient()
-        with subscriber:
-            try:
-                subscription = subscriber.create_subscription(
-                    request={'name': subscription_path,
-                             'topic': internal_topic_path}
-                )
-            except AlreadyExists:
-                pass
-            response = subscriber.pull(
-                request={'subscription': subscription_path, 'max_messages': 1},
-                retry=retry.Retry(deadline=10),
-            )
-            if len(response.received_messages) > 0:
-                # Simulation already started/finished, ack trigger message and exit
-                return '', 204
+        if check_log(title):
+            return '', 204
+        create_log(title)
 
         # Publish info message
         info_msg = {'message': 'Simulation started'}
         publish_message(topic_name, info_msg)
-        publish_message(internal_topic_name, info_msg)
 
         # download input from bucket
         download_blob(title, 'input.zip')
@@ -232,7 +237,7 @@ def index():
         }
         logging.info(response)
         publish_message(topic_name, response)
-        cleanup(subscription_path)
+        cleanup_log(title)
 
     return '', 204
 

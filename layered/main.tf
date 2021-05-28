@@ -215,6 +215,7 @@ resource "google_cloud_run_service" "fc-cr-processor" {
         }
       }
       timeout_seconds = 3599
+      container_concurrency = 1
     }
   }
 
