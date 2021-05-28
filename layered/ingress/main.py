@@ -12,11 +12,16 @@ from estimate_run_size import SimulationSize, estimate_simulation_size
 
 app = Flask(__name__)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-baec10f8dd27.json'
+project = os.environ.get('PROJECT_NAME') or 'flint-cloud'
+zone = os.environ.get('GCE_ZONE') or 'us-central1-a'
+instance = os.environ.get('GCE_NAME') or 'instance-1'
+with open('service_account.json', 'w') as saf:
+    saf.write(os.environ.get('SERVICE_ACCOUNT') or 'ERROR')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'service_account.json'
 publisher = pubsub_v1.PublisherClient()
 
 
-def create_topic(name, project='flint-cloud'):
+def create_topic(name, project=project):
     """Create topic in the given project and subscribe to it. Returns subscription path"""
     topic_path = publisher.topic_path(project, name)
     try:
@@ -25,7 +30,7 @@ def create_topic(name, project='flint-cloud'):
         pass
 
 
-def create_sub(name, project='flint-cloud'):
+def create_sub(name, project=project):
     topic_path = publisher.topic_path(project, name)
     subscriber = pubsub_v1.SubscriberClient()
     subscription_path = subscriber.subscription_path(project, f'{name}-sub')
@@ -39,7 +44,7 @@ def create_sub(name, project='flint-cloud'):
     return subscription_path
 
 
-def publish_message(topic, data, project='flint-cloud'):
+def publish_message(topic, data, project=project):
     """Publish message in given topic"""
     create_topic(topic)
     msg = json.dumps(data).encode('utf-8')
@@ -260,10 +265,6 @@ def small_run(data):
 def large_run(data):
     """Start GCE instance and publish  message for large run on Pub/Sub"""
     service = discovery.build('compute', 'v1')
-
-    project = 'flint-cloud'
-    zone = 'us-central1-a'
-    instance = 'instance-1'
 
     request = service.instances().start(project=project, zone=zone, instance=instance)
     response = request.execute()

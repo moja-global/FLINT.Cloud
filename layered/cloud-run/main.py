@@ -14,12 +14,14 @@ from google.api_core.exceptions import AlreadyExists
 
 app = Flask(__name__)
 
-os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'flint-cloud-81ab3d7821f5.json'
+project = os.environ.get('PROJECT_NAME') or 'flint-cloud'
+with open('service_account.json', 'w') as saf:
+    saf.write(os.environ.get('SERVICE_ACCOUNT') or 'ERROR')
+os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'service_account.json'
 publisher = pubsub_v1.PublisherClient()
-project = 'flint-cloud'
 
 
-def create_topic(name, project='flint-cloud'):
+def create_topic(name, project=project):
     """Create topic in the given project and subscribe to it. Returns subscription path"""
     topic_path = publisher.topic_path(project, name)
     try:
@@ -28,7 +30,7 @@ def create_topic(name, project='flint-cloud'):
         pass
 
 
-def publish_message(topic, attribs, project='flint-cloud'):
+def publish_message(topic, attribs, project=project):
     """Publish message in given topic"""
     msg = json.dumps(attribs).encode('utf-8')
     topic_path = publisher.topic_path(project, topic)
