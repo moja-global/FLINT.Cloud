@@ -232,7 +232,7 @@ def index():
         }
         logging.info(response)
         publish_message(topic_name, response)
-        cleanup(subscription_path)
+        # cleanup(subscription_path)
 
     return '', 204
 
