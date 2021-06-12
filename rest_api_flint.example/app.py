@@ -7,9 +7,12 @@ import json
 from datetime import datetime
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, origins=[ 'http://127.0.0.1:8080/','http://127.0.0.1:8000','http://localhost:5000',r'^https://.+example.com$'])
 api = Api(app)
+
 
 ### swagger specific ###
 SWAGGER_URL = '/swagger'
