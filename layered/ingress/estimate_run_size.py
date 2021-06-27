@@ -33,15 +33,20 @@ def estimate_simulation_size(input_data_dir):
     age_layer_path = age_layer_path[0]
     with open_raster(age_layer_path) as layer:
         pixel_count = sum(layer.GetHistogram(approx_ok=0))
-        return SimulationSize.Small if pixel_count < 1e5 \
-            else SimulationSize.Medium if pixel_count < 1e6 \
+        return (
+            SimulationSize.Small
+            if pixel_count < 1e5
+            else SimulationSize.Medium
+            if pixel_count < 1e6
             else SimulationSize.Large
+        )
 
 
 if __name__ == "__main__":
     parser = ArgumentParser("Estimate GCBM simulation size.")
     parser.add_argument(
-        "input_data_dir", help="Path to simulation's tiled layers", type=os.path.abspath)
+        "input_data_dir", help="Path to simulation's tiled layers", type=os.path.abspath
+    )
     args = parser.parse_args()
 
     simulation_size = estimate_simulation_size(args.input_data_dir)
