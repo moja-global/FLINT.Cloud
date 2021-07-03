@@ -246,4 +246,4 @@ def index():
 
 if __name__ == "__main__":
     PORT = int(os.getenv("PORT")) if os.getenv("PORT") else 8080
-    app.run(host="0.0.0.0", port=PORT)
+    app.run(host="127.0.0.1", port=PORT)
