@@ -61,11 +61,11 @@ def help(arg):
     """
     s = time.time()
     if arg == "all":
-        res = subprocess.run(["moja.cli", "--help"], stdout=subprocess.PIPE)
+        res = subprocess.run(["moja.cli", "--help"], stdout=subprocess.PIPE, check=True)
     else:
         res = subprocess.run(
-            ["moja.cli", "--help-section", arg], stdout=subprocess.PIPE
-        )
+            ["moja.cli", "--help-section", arg], stdout=subprocess.PIPE, 
+        check=True)
     e = time.time()
 
     response = {
@@ -88,7 +88,7 @@ def version():
             description: Version
     """
     s = time.time()
-    res = subprocess.run(["moja.cli", "--version"], stdout=subprocess.PIPE)
+    res = subprocess.run(["moja.cli", "--version"], stdout=subprocess.PIPE, check=True)
     e = time.time()
 
     response = {
@@ -135,7 +135,7 @@ def point():
             logging_debug,
         ],
         stdout=f,
-    )
+    check=True)
     e = time.time()
     UPLOAD_DIRECTORY = "./"
     return (
@@ -182,7 +182,7 @@ def rothc():
             logging_debug,
         ],
         stdout=f,
-    )
+    check=True)
     e = time.time()
     UPLOAD_DIRECTORY = "./"
     return (

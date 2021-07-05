@@ -102,11 +102,11 @@ def help(arg):
     """
     s = time.time()
     if arg == "all":
-        res = subprocess.run(["/opt/gcbm/moja.cli", "--help"], stdout=subprocess.PIPE)
+        res = subprocess.run(["/opt/gcbm/moja.cli", "--help"], stdout=subprocess.PIPE, check=True)
     else:
         res = subprocess.run(
-            ["/opt/gcbm/moja.cli", "--help-section", arg], stdout=subprocess.PIPE
-        )
+            ["/opt/gcbm/moja.cli", "--help-section", arg], stdout=subprocess.PIPE, 
+        check=True)
     e = time.time()
 
     response = {
@@ -129,7 +129,7 @@ def version():
             description: Version
     """
     s = time.time()
-    res = subprocess.run(["/opt/gcbm/moja.cli", "--version"], stdout=subprocess.PIPE)
+    res = subprocess.run(["/opt/gcbm/moja.cli", "--version"], stdout=subprocess.PIPE, check=True)
     e = time.time()
 
     response = {
@@ -169,7 +169,7 @@ def gcbm():
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%H:%M:%S.%f - %b %d %Y")
     f = open(timestampStr + "point_example.csv", "w+")
-    subprocess.run(["pwd"], cwd="/gcbm_files/config")
+    subprocess.run(["pwd"], cwd="/gcbm_files/config", check=True)
     res = subprocess.Popen(
         [
             "/opt/gcbm/moja.cli",
