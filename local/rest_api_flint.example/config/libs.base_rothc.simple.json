@@ -1,0 +1,6 @@
+{
+  "Libraries": {
+    "moja.flint.example.base": "external",
+    "moja.flint.example.rothc": "external"
+  }
+}
