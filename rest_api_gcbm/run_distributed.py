@@ -93,7 +93,7 @@ def run_block(title, tile_idx, block_idx):
     dateTimeObj = datetime.now()
     timestampStr = dateTimeObj.strftime("%H:%M:%S.%f - %b %d %Y")
     f = open(timestampStr + "gcbm_logs.csv", "w+")
-    subprocess.run(["pwd"], cwd="/gcbm_files/config")
+    subprocess.run(["pwd"], cwd="/gcbm_files/config", check=True)
     res = subprocess.Popen(
         [
             "/opt/gcbm/moja.cli",
@@ -237,7 +237,7 @@ def final_run(title, gcbm_config, provider_config, project_dir):
     os.makedirs("output", exist_ok=True)
 
     f = open(f"/input/{project_dir}/gcbm_logs.csv", "w+")
-    subprocess.run(["pwd"], cwd="/gcbm_files/config")
+    subprocess.run(["pwd"], cwd="/gcbm_files/config", check=True)
     res = subprocess.Popen(
         [
             "/opt/gcbm/moja.cli",
