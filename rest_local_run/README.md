@@ -34,4 +34,4 @@ Currently the REST API has the following endpoints available for access:-
  
 - **\gcbm\list**: This endpoint retrieves the complete list of simulations that are created using /new.
  
-Sample collection is available here. Import the collection to Postman and run the endpoints.
+Sample collection is available [here](https://github.com/nynaalekhya/FLINT.Cloud/blob/local-gcbm-run/rest_local_run/local_run.postman_collection). Import the collection to Postman and run the endpoints.
