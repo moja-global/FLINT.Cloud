@@ -132,7 +132,6 @@ def gcbm_new():
         return {
             "data": "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
         }, 200
-    else:
         return {
             "data": "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
         }, 400
