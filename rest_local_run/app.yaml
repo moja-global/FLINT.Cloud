@@ -1,0 +1,16 @@
+runtime: custom
+env: flex
+entrypoint: "exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 app:app"
+env_variables:
+  LD_LIBRARY_PATH: "/opt/gcbm:/usr/local//lib:/usr/local//lib/x86_64-linux-gnu:/usr/local/lib:/usr/local/lib/x86_64-linux-gnu:/usr/local/lib:"
+liveness_check:
+  path: "/check"
+readiness_check:
+  path: "/check"
+  app_start_timeout_sec: 100
+resources:
+  cpu: 10
+  memory_gb: 9
+  disk_size_gb: 15
+automatic_scaling:
+  max_num_instances: 1

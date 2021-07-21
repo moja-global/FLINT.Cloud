@@ -1,0 +1,372 @@
+{
+	"info": {
+		"_postman_id": "5121f057-1cc4-4125-9544-b3d9817f68e4",
+		"name": "FLINT-Cloud",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "local-run",
+			"item": [
+				{
+					"name": "new",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "run4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/gcbm/new",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "upload",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/variables.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/spinup.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/provider_config.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/pools_cbm.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/modules_output.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/modules_cbm.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/localdomain.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/internal_variables.json"
+								},
+								{
+									"key": "config_files",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/gcbm_config.cfg"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/bounding_box.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/Classifier1_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/Classifier1_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/Classifier2_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/Classifier2_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2011_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2011_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2012_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2012_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2013_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2013_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2014_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2014_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2015_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2015_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2016_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2016_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2018_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/disturbances_2018_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/initial_age_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/initial_age_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/mean_annual_temperature_moja.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/mean_annual_temperature_moja.tiff"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/tiled/study_area.json"
+								},
+								{
+									"key": "input",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/input_database/gcbm_input.db"
+								},
+								{
+									"key": "db",
+									"type": "file",
+									"src": "/C:/Users/nynal/Downloads/FLINT.Cloud-master/FLINT.Cloud-master/GCBM/config/input_database/gcbm_input.db"
+								},
+								{
+									"key": "",
+									"type": "file",
+									"src": [],
+									"disabled": true
+								},
+								{
+									"key": "title",
+									"value": "run4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/gcbm/upload",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "dynamic",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "run4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/gcbm/dynamic",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"dynamic"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "run",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "run4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/gcbm/status",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "download",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "title",
+									"value": "run4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8080/gcbm/download",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"download"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/gcbm/list",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"gcbm",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

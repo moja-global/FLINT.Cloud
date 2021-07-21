@@ -1,0 +1,8 @@
+flask
+flask-restful
+gunicorn
+flask-swagger
+flask_swagger_ui
+flask_autoindex
+google-cloud-storage
+google-cloud-pubsub

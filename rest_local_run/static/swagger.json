@@ -1,0 +1,145 @@
+{
+    "definitions": {},
+    "info": {
+        "title": "FLINT-GCBM Rest Api",
+        "version": "1.0"
+    },
+    "paths": {
+        "/gcbm": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "GCBM Implementation FLINT"
+                    }
+                },
+                "summary": "Get GCBM implementation of FLINT",
+                "tags": [
+                    "point"
+                ]
+            }
+        },
+        "/gcbm/dynamic": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "GCBM Dynamic Implementation FLINT"
+                    }
+                },
+                "summary": "Get GCBM Dynamic implementation of FLINT",
+                "tags": [
+                    "gcbm"
+                ]
+            }
+        },
+        "/gcbm/list": {
+            "get": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "GCBM Implementation FLINT"
+                    }
+                },
+                "summary": "Get GCBM simulations list",
+                "tags": [
+                    "gcbm"
+                ]
+            }
+        },
+        "/gcbm/download": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Download GCBM input and output"
+                    }
+                },
+                "summary": "Download GCBM input and output",
+                "tags": [
+                    "gcbm"
+                ]
+            }
+        },
+        "/gcbm/upload": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Upload GCBM input"
+                    }
+                },
+                "summary": "Upload GCBM input",
+                "tags": [
+                    "gcbm"
+                ]
+            }
+        },
+        "/gcbm/new": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "New GCBM simulation"
+                    }
+                },
+                "summary": "Create New GCBM simulation",
+                "tags": [
+                    "gcbm"
+                ]
+            }
+        },
+        "/help/{arg}": {
+            "get": {
+                "description": "",
+                "parameters": [
+                    {
+                        "description": "Help info about named section. Pass all to get all info",
+                        "in": "path",
+                        "name": "arg",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Help"
+                    }
+                },
+                "summary": "Get Help Section",
+                "tags": [
+                    "help"
+                ]
+            }
+        },
+        "/rothc": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "RothC based example FLINT"
+                    }
+                },
+                "summary": "Get RothC example of FLINT",
+                "tags": [
+                    "rothc"
+                ]
+            }
+        },
+        "/version": {
+            "get": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Version"
+                    }
+                },
+                "summary": "Get Version of FLINT",
+                "tags": [
+                    "version"
+                ]
+            }
+        }
+    },
+    "swagger": "2.0"
+}
