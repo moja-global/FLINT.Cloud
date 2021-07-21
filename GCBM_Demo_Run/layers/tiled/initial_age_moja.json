@@ -1,0 +1,11 @@
+{
+    "layer_type": "GridLayer",
+    "layer_data": "Int16",
+    "nodata": 32767,
+    "tileLatSize": 1.0,
+    "tileLonSize": 1.0,
+    "blockLatSize": 0.1,
+    "blockLonSize": 0.1,
+    "cellLatSize": 0.00025,
+    "cellLonSize": 0.00025
+}
