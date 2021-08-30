@@ -18,13 +18,18 @@ jobs:
         working-directory: ./rest_api_gcbm
     steps:
       - uses: actions/checkout@v2
-      - name: Build FLINT UI Client container
+      - name: Build FLINT Cloud container
         run: docker build -t gcbm-api .
 
   linting-docs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+      - name: Upgrade pip version
+        run: |
+          python3 -m pip install --upgrade pip
       - name: Lint source with Flake8
         run: |
           pip3 install flake8

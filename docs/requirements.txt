@@ -1,2 +1,4 @@
 sphinx_copybutton==0.3.1
 sphinx-tabs
+recommonmark
+sphinx_rtd_theme
