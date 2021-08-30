@@ -1,14 +1,14 @@
+import json
 import os
 import shutil
-import json
+import subprocess
 import time
 from argparse import ArgumentParser
-from textwrap import dedent
-from glob import glob
 from contextlib import contextmanager
-from random import randint
-import subprocess
 from datetime import datetime
+from glob import glob
+from random import randint
+from textwrap import dedent
 
 EXAMPLE_STAGING_ROOT = os.path.abspath(
     os.path.join(os.path.dirname(__file__), "..", "local_files")
@@ -79,8 +79,7 @@ def run_block(title, tile_idx, block_idx):
     output_dir = os.path.join(working_dir, "output")
     os.makedirs(output_dir, exist_ok=True)
     batch_config_file = (
-        glob(os.path.join(block_working_dir, "*.cfg"))
-        + glob(os.path.join(block_working_dir, "gcbm_config.json"))
+        glob(os.path.join(block_working_dir, "*.cfg")) + glob(os.path.join(block_working_dir, "gcbm_config.json"))
     )[0]
 
     gcbm_args = [

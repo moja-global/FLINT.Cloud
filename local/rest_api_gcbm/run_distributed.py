@@ -79,8 +79,7 @@ def run_block(title, tile_idx, block_idx):
     output_dir = os.path.join(working_dir, "output")
     os.makedirs(output_dir, exist_ok=True)
     batch_config_file = (
-        glob(os.path.join(block_working_dir, "*.cfg"))
-        + glob(os.path.join(block_working_dir, "gcbm_config.json"))
+        glob(os.path.join(block_working_dir, "*.cfg")) + glob(os.path.join(block_working_dir, "gcbm_config.json"))
     )[0]
 
     gcbm_args = [

@@ -1,23 +1,23 @@
-from threading import Thread
-from run_distributed import *
-from flask_autoindex import AutoIndex
-from flask_swagger_ui import get_swaggerui_blueprint
-from flask_swagger import swagger
-from datetime import timedelta
-from datetime import datetime
-from google.cloud import storage, pubsub_v1
-from google.api_core.exceptions import AlreadyExists
-import logging
-import shutil
 import json
-import time
-import subprocess
+import logging
 import os
+import shutil
+import subprocess
+import time
+from datetime import datetime, timedelta
+from threading import Thread
+
 import flask.scaffold
+from flask_autoindex import AutoIndex
+from flask_swagger import swagger
+from flask_swagger_ui import get_swaggerui_blueprint
+from google.api_core.exceptions import AlreadyExists
+from google.cloud import pubsub_v1, storage
+from run_distributed import *
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
-from flask_restful import Resource, Api, reqparse
-from flask import Flask, send_from_directory, request, jsonify, redirect
+from flask import Flask, jsonify, redirect, request, send_from_directory
+from flask_restful import Api, Resource, reqparse
 
 app = Flask(__name__)
 # ppath = "/"
@@ -262,13 +262,19 @@ def gcbm_new():
     stats = storage.Blob(bucket=bucket, name=name).exists(storage_client)
 
     if not stats:
-        return {
-            "data": "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
-        }, 200
+        return (
+            {
+                "data": "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
+            },
+            200,
+        )
     else:
-        return {
-            "data": "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
-        }, 400
+        return (
+            {
+                "data": "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
+            },
+            400,
+        )
 
 
 @app.route("/gcbm/upload", methods=["POST"])
@@ -356,9 +362,12 @@ def gcbm_upload():
     shutil.make_archive("input", "zip", f"/input/{project_dir}")
     upload_blob(title, "input.zip")
 
-    return {
-        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
-    }, 200
+    return (
+        {
+            "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
+        },
+        200,
+    )
 
 
 @app.route("/gcbm/dynamic", methods=["POST"])
@@ -539,10 +548,13 @@ def gcbm_list_simulations():
             blob_map[dir_name] = 1
             blob_list.append(dir_name)
 
-    return {
-        "data": blob_list,
-        "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
-    }, 200
+    return (
+        {
+            "data": blob_list,
+            "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
+        },
+        200,
+    )
 
 
 @app.route("/gcbm/status", methods=["POST"])

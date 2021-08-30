@@ -20,3 +20,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build FLINT UI Client container
         run: docker build -t gcbm-api .
+
+  linting-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint source with Flake8
+        run: |
+          pip3 install flake8
+          flake8 .
