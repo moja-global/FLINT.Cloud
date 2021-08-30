@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [ master ]
+
+jobs:
+
+# Build the Flask-GCBM REST API Setup
+
+  build-gcbm-api:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./rest_api_gcbm
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build FLINT UI Client container
+        run: docker build -t gcbm-api .
