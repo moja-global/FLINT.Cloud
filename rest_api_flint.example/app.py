@@ -1,13 +1,14 @@
-from flask import Flask, send_from_directory, request, jsonify
-from flask_restful import Resource, Api, reqparse
+import json
 import os
 import subprocess
 import time
-import json
 from datetime import datetime
+
+from flask import Flask, jsonify, request, send_from_directory
+from flask_cors import CORS
+from flask_restful import Api, Resource, reqparse
 from flask_swagger import swagger
 from flask_swagger_ui import get_swaggerui_blueprint
-from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(

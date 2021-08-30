@@ -142,9 +142,9 @@ def gcbm_new():
         message = "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
     else:
         message = "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
-    
+
     return {'data': message}, 200
-   
+
 
 @app.route('/gcbm/upload', methods=['POST'])
 def gcbm_upload():
@@ -223,7 +223,7 @@ def gcbm_upload():
     else:
         return {'error': 'Missing database'}, 400
 
-    return {"data":"All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
+    return {"data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
 
 
 @app.route('/gcbm/dynamic', methods=['POST'])
@@ -253,15 +253,13 @@ def gcbm_dynamic():
     provider_config_path = 'provider_config.json'
 
     if not os.path.exists(f'{os.getcwd()}/input/{project_dir}'):
-      os.makedirs(f'{os.getcwd()}/input/{project_dir}')
-    
+        os.makedirs(f'{os.getcwd()}/input/{project_dir}')
 
     thread = Thread(target=launch_run, kwargs={
                     'title': title, 'project_dir': project_dir})
     thread.start()
-    #subscriber_path = create_topic_and_sub(title)
+    # subscriber_path = create_topic_and_sub(title)
     return {"status": "Run started"}, 200
-
 
 
 def launch_run(title, project_dir):
@@ -277,7 +275,7 @@ def launch_run(title, project_dir):
         logging.error(err)
         return 'OK'
     logging.debug('Output exists')
-    #returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
+    # returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
     shutil.make_archive(f'{os.getcwd()}/input/{project_dir}/output', 'zip', f'{os.getcwd()}/input/{project_dir}/output')
     logging.debug('Made archive')
     e = time.time()
@@ -288,7 +286,7 @@ def launch_run(title, project_dir):
         'execTime': e - s,
         'response': "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body."
     }
-    
+
 
 @app.route('/gcbm/download', methods=['POST'])
 def gcbm_download():
@@ -312,8 +310,8 @@ def gcbm_download():
     # Sanitize title
     title = ''.join(c for c in title if c.isalnum())
     project_dir = f'{title}'
-    return send_file(f'{os.getcwd()}/input/{project_dir}/output.zip',attachment_filename='output.zip')
-    
+    return send_file(f'{os.getcwd()}/input/{project_dir}/output.zip', attachment_filename='output.zip')
+
 
 @app.route('/gcbm/list', methods=['GET'])
 def gcbm_list_simulations():
@@ -326,8 +324,7 @@ def gcbm_list_simulations():
                     200:
             description: GCBM Simulations List
                 """
-    
-    
+
     list = []
     for file in os.listdir(f'{os.getcwd()}/input'):
         list.append(file)
@@ -362,7 +359,7 @@ def status():
     else:
         message = "In Progress"
 
-    return {"finished": message }
+    return {"finished": message}
 
 
 @app.route('/check', methods=['GET', 'POST'])
