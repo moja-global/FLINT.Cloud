@@ -1,5 +1,5 @@
 #FROM mojaglobal/flint
-FROM moja/flint.example:bionic
+FROM shubhamkarande13/flint.example:bionic
 
 #ENV APP_HOME /app
 WORKDIR /server
