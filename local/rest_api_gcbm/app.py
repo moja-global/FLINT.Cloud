@@ -17,8 +17,19 @@ import flask.scaffold
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
 from flask import Flask, send_from_directory, request, jsonify, redirect, send_file
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(
+    app,
+    origins=[
+        "http://127.0.0.1:8080/",
+        "http://127.0.0.1:8000",
+        "http://localhost:5000",
+        "http://localhost:8000",
+        r"^https://.+example.com$",
+    ],
+)
 # ppath = "/"
 # AutoIndex(app, browse_root=ppath)
 api = Api(app)
