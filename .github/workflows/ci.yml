@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rest_api_gcbm
+        working-directory: ./local/rest_api_gcbm
     steps:
       - uses: actions/checkout@v2
       - name: Build FLINT Cloud container
