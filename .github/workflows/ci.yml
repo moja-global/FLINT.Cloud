@@ -38,9 +38,14 @@ jobs:
         with:
           docs-folder: "docs/"
 
-      - name: Lint Dockerfiles
-        uses: jbergstroem/hadolint-gh-action@v1
-        with:
+
+    linting-docker:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2   
+    - name: Lint Dockerfiles   
+      uses: jbergstroem/hadolint-gh-action@v1
+      with:
           dockerfile: "./rest_api_gcbm/Dockerfile
             ./rest_api_flint.example/Dockerfile
             ./local/rest_api_flint.example/Dockerfile
