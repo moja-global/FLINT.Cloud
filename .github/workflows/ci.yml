@@ -39,20 +39,19 @@ jobs:
           docs-folder: "docs/"
 
 
-    linting-docker:
+  linting-docker:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2   
-    - name: Lint Dockerfiles   
+      - uses: actions/checkout@v2   
+      - name: Lint Dockerfiles   
       uses: jbergstroem/hadolint-gh-action@v1
       with:
-          dockerfile: "./rest_api_gcbm/Dockerfile
+        dockerfile: "./rest_api_gcbm/Dockerfile
             ./rest_api_flint.example/Dockerfile
             ./local/rest_api_flint.example/Dockerfile
             ./local/rest_api_gcbm/Dockerfile
             ./layered/cloud-run/Dockerfile
             ./layered/compute-engine/Dockerfile
             ./layered/ingress/Dockerfile"
-
-          error_level: 0
-          output_format: tty
+        error_level: 0
+        output_format: tty
