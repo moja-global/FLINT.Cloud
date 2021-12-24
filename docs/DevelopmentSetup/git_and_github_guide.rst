@@ -130,21 +130,4 @@ Incase your pull request needs further changes, you can update your pull request
 About Hadolint
 ------------------------
 
-Hadolint is a Dockerfile linter that helps you build best practice Docker images.
-
-To run Hadolint locally to lint Dockerfiles :
-::
-
-    hadolint <Dockerfile>
-    hadolint --ignore DL3003 --ignore DL3006 <Dockerfile> # exclude specific rules
-    hadolint --trusted-registry my-company.com:500 <Dockerfile> # Warn when using untrusted FROM images
-
-To pipe your Dockerfile to docker run :
-::
-
-    docker run --rm -i hadolint/hadolint < Dockerfile
-    
-
-
-
-  
+`Hadolint <https://hub.docker.com/r/hadolint/hadolint>`_ is a Dockerfile linter that helps you build best practice Docker images.
