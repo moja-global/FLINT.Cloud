@@ -126,3 +126,8 @@ Incase your pull request needs further changes, you can update your pull request
 ::
 
   git push origin <your-branch-name> --force
+
+About Hadolint
+------------------------
+
+`Hadolint <https://hub.docker.com/r/hadolint/hadolint>`_ is a Dockerfile linter that helps you build best practice Docker images.
