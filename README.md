@@ -1,7 +1,30 @@
-# FLINT.Cloud
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
-
+<div align="center">
+<h1>FLINT.Cloud</h1>
+<p>
 The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
+</p>
+
+<a href="#contributors"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square" /></a>
+</div>
+
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#layered-architecture-setup">Layered Architecture Setup on Google Cloud</a>
+      <ul>
+        <li><a href="#deploying">Deploying</a></li>
+        <li><a href="#disabling">Disabling</a></li>
+        <li><a href="#rest-api-sample">Flask.example REST API Setup</a>
+      </ul>
+    </li>
+    <li><a href="#faq-and-other-questions">FAQ and Other Questions</a></li>
+    <li><a href="#contributors">Contributors</a></li>
+    <li><a href="#maintainers-reviewers-ambassadors-coaches">Maintainers Reviewers Ambassadors Coaches</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+  </br>
+</details>
 
 ### Layered Architecture Setup on Google Cloud
 
