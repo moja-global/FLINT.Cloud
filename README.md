@@ -22,7 +22,6 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
     <li><a href="#faq-and-other-questions">FAQ and Other Questions</a></li>
     <li><a href="#contributors">Contributors</a></li>
     <li><a href="#maintainers-reviewers-ambassadors-coaches">Maintainers Reviewers Ambassadors Coaches</a></li>
-    <li><a href="#license">License</a></li>
   </ol>
   </br>
 </details>
