@@ -1,12 +1,13 @@
 <div align="center">
-<h1>FLINT.Cloud</h1>
-<p>
-The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
-</p>
-
-<a href="#contributors"><img src="https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square" /></a>
+    <h1>FLINT.Cloud</h1>
+    <img src="https://github.com/moja-global.png" width="15%" height="15%">
+    <p>
+    The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
+    </p>
 </div>
 
+
+<hr>
 <details>
   <summary>Table of Contents</summary>
   <ol>
@@ -25,6 +26,7 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
   </ol>
   </br>
 </details>
+</br>
 
 ### Layered Architecture Setup on Google Cloud
 
@@ -49,12 +51,13 @@ In order to run the REST API, please follow the following steps: -
 
 Currently the REST API has the following endpoints available for access:-
 
-- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
-- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
-- **\version**: This endpoint outputs the version number of moja.CLI.
-- **\point**: This endpoint runs point example and outputs point_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations.
-- **\rothc**: This endpoint runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
-
+| Endpoint       |  Functionality            |
+| :--------------| :------------------------ |
+| **\help\all**  | Produces a help message with information on all options for moja.CLI. |
+| **\help\arg**  | Produces a help message with information on option **arg** for moja.CLI. |
+| **\version**   | Outputs the version number of moja.CLI. |
+| **\point**     | Runs point example and outputs point_example.csv as an attachment to be downloaded.  Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations. |
+| **\rothc**    | Runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.  
 
