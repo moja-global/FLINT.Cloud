@@ -11,11 +11,12 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#layered-architecture-setup">Layered Architecture Setup on Google Cloud</a>
+      <a href="#layered-architecture-setup-on-google-cloud">Layered Architecture Setup on Google Cloud</a>
       <ul>
         <li><a href="#deploying">Deploying</a></li>
         <li><a href="#disabling">Disabling</a></li>
-        <li><a href="#rest-api-sample">Flask.example REST API Setup</a>
+        <li><a href="#flask-example-rest-api-setup">Flask example REST API Setup</a>
+        <li><a href="#flask-gcbm-rest-api-setup">Flask-GCBM REST API Setup</a>
       </ul>
     </li>
     <li><a href="#faq-and-other-questions">FAQ and Other Questions</a></li>
@@ -40,7 +41,7 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 1. In the same directory as where `main.tf` is present, run `terraform destroy`. In case this fails, simply run it again.     
 
-### Flask.example REST API Setup  
+### Flask example REST API Setup  
 
 In order to run the REST API, please follow the following steps: - 
 
@@ -58,7 +59,7 @@ Currently the REST API has the following endpoints available for access:-
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.  
 
-### Flask-GCBM REST API Setup  
+### Flask GCBM REST API Setup  
 
 In order to run the REST API, please follow the following steps: - 
 
