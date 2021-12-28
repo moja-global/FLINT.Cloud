@@ -1,11 +1,10 @@
 <div align="center">
+    <img src="https://github.com/moja-global.png" width="18%" height="18%">
     <h1>FLINT.Cloud</h1>
-    <img src="https://github.com/moja-global.png" width="15%" height="15%">
     <p>
     The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
     </p>
 </div>
-
 
 <hr>
 <details>
@@ -26,9 +25,13 @@
   </ol>
   </br>
 </details>
-</br>
 
-### Layered Architecture Setup on Google Cloud
+
+## Technology Stack
+
+- [Python](https://www.python.org/)
+
+## Layered Architecture Setup on Google Cloud
 
 #### Deploying
 
@@ -73,12 +76,23 @@ In the point 2 as you can see we have mounted the GCBM folder as gcbm_files onto
 
 Currently the REST API has the following endpoints available for access:-
 
-- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
-- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
-- **\version**: This endpoint outputs the version number of moja.CLI.
-- **\gcbm**: This endpoint runs flint-gcbm and outputs some files in the output directory along with the output db. Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
+| Endpoint      | Functionality     |
+| :------------ | :-----------------|
+| **\help\all** | This endpoint produces a help message with information on all options for moja.CLI. |
+| **\help\arg** | This endpoint produces a help message with information on option **arg** for moja.CLI.|
+| **\version**  | This endpoint outputs the version number of moja.CLI.|
+| **\gcbm**     | This endpoint runs flint-gcbm and outputs some files in the output directory along with the output db. |
+
+Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
+
+
+## Contributing
+
+To contribute to FLINT.Cloud:
+
+Go through our contributing guidelines over [here.](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
 
 ## How to Get Involved?  
 
@@ -122,3 +136,7 @@ The following people are Maintainers Reviewers Ambassadors or Coaches
 **Reviewers** check proposed changes before they go to the Maintainers  
 **Ambassadors** are available to provide training related to this repository  
 **Coaches** are available to provide information to new contributors to this repository  
+
+## License 
+
+This project is released under the [Mozilla Public License Version 2.0](https://github.com/moja-global/FLINT-UI/blob/master/LICENSE).
