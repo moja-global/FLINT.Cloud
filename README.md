@@ -11,6 +11,9 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
+        <a href="#technology-stack">Technology Stack</a>
+    </li>
+    <li>
       <a href="#layered-architecture-setup-on-google-cloud">Layered Architecture Setup on Google Cloud</a>
       <ul>
         <li><a href="#deploying">Deploying</a></li>
@@ -30,6 +33,7 @@
 ## Technology Stack
 
 - [Python](https://www.python.org/)
+- [Google Cloud Platform](https://cloud.google.com/)
 
 ## Layered Architecture Setup on Google Cloud
 
@@ -87,22 +91,20 @@ Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
 
+## How to Get Involved?  
 
-## Contributing
+<!--This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.-->
+
+Feel free to [join our Slack community](https://join.slack.com/t/mojaglobal/shared_invite/zt-lf2290hy-CGqpUvHFfGsqoIZnO8MXKQ) and get to know everyone.
+
+If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global. We'd love to have you involved.
+
+### Contributing
 
 To contribute to FLINT.Cloud:
 
 Go through our contributing guidelines over [here.](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
 
-## How to Get Involved?  
-
-This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.
-
-Feel free to [join our Slack community](https://join.slack.com/t/mojaglobal/shared_invite/zt-lf2290hy-CGqpUvHFfGsqoIZnO8MXKQ) and get to know everyone, or get help with your application.
-
-If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global. We'd love to have you involved.
-
-  
 ## FAQ and Other Questions  
 
 * You can find FAQs on the [Wiki](https://github.com/moja.global/.github/wiki).  
