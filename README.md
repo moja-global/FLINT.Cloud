@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/moja-global.png" width="18%" height="18%">
+    <a href="https://moja.global/"><img src="https://github.com/moja-global.png" width="18%" height="18%"></a>
     <h1>FLINT.Cloud</h1>
     <p>
     The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
@@ -82,10 +82,10 @@ Currently the REST API has the following endpoints available for access:-
 
 | Endpoint      | Functionality     |
 | :------------ | :-----------------|
-| **\help\all** | This endpoint produces a help message with information on all options for moja.CLI. |
-| **\help\arg** | This endpoint produces a help message with information on option **arg** for moja.CLI.|
-| **\version**  | This endpoint outputs the version number of moja.CLI.|
-| **\gcbm**     | This endpoint runs flint-gcbm and outputs some files in the output directory along with the output db. |
+| **\help\all** | Produces a help message with information on all options for moja.CLI. |
+| **\help\arg** | Produces a help message with information on option **arg** for moja.CLI.|
+| **\version**  | Outputs the version number of moja.CLI.|
+| **\gcbm**     | Runs flint-gcbm and outputs some files in the output directory along with the output db. |
 
 Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
 
@@ -119,9 +119,27 @@ Go through our contributing guidelines over [here.](https://github.com/moja-glob
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/arnav-t"><img src="https://avatars.githubusercontent.com/u/34343421?v=4" width="100px;" alt=""/><br /><sub><b>Arnav Tiwari</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/Tlazypanda"><img src="https://avatars.githubusercontent.com/u/33183263?v=4" width="100px;" alt=""/><br /><sub><b>Sneha Mishra</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/shubhamkarande13"><img src="https://avatars.githubusercontent.com/u/13800316?v=4" width="100px;" alt=""/><br><sub><b>Shubham Karande</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/HarshCasper"><img src="https://avatars.githubusercontent.com/u/47351025?v=4" width="100px;" alt=""/><br><sub><b>Harsh Bardhan Mishra</b></sub></a><br /></td>    
+    <td align="center"><a href="https://github.com/padmajabhol"><img src="https://avatars.githubusercontent.com/u/75530516?v=4" width="100px;" alt=""/><br><sub><b>Padmaja Bhol</b></sub></a><br /></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/aornugent"><img src="https://avatars.githubusercontent.com/u/20387761?v=4" width="100px;" alt=""/><br><sub><b>Andrew O'Reilly-Nugent</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/chicken-biryani"><img src="https://avatars.githubusercontent.com/u/41121520?v=4" width="100px;" alt=""/><br><sub><b>Shloka</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/mfellows"><img src="https://avatars.githubusercontent.com/u/8548157?v=4" width="100px;" alt=""/><br><sub><b>Max Fellows</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/iamrajiv"><img src="https://avatars.githubusercontent.com/u/42106787?v=4" width="100px;" alt=""/><br><sub><b>Rajiv Singh</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/nynaalekhya"><img src="https://avatars.githubusercontent.com/u/50094420?v=4" width="100px;" alt=""/><br><sub><b>Nynaalekhya</b></sub></a><br /></td>
+  </tr>
+</table>
+
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore -->
-<table><tr><td align="center"><a href="http://moja.global"><img src="https://avatars1.githubusercontent.com/u/19564969?v=4" width="100px;" alt="moja global"/><br /><sub><b>moja global</b></sub></a><br /><a href="#projectManagement-moja-global" title="Project Management">📆</a></td></tr></table>
+<!-- <table><tr><td align="center"><a href="http://moja.global"><img src="https://avatars1.githubusercontent.com/u/19564969?v=4" width="100px;" alt="moja global"/><br /><sub><b>moja global</b></sub></a><br /><a href="#projectManagement-moja-global" title="Project Management">📆</a></td></tr></table> -->
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
