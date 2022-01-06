@@ -9,14 +9,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install packages
 RUN apt-get update -y && \
-apt-get install -y python3-gdal libgdal-dev
+apt-get install -y --no-install-recommends python3-gdal libgdal-dev
 
 # Copy application dependency manifests to the container image.
 # Copying this separately prevents re-running pip install on every code change.
+WORKDIR /
 COPY requirements.txt ./
 
 # Install production dependencies.
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy local code to the container image.
 ENV APP_HOME /app
@@ -28,4 +29,4 @@ COPY . ./
 # For environments with multiple CPU cores, increase the number of workers
 # to be equal to the cores available.
 # Timeout is set to 0 to disable the timeouts of the workers to allow Cloud Run to handle instance scaling.
-CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 --timeout 0 main:app
+CMD ["exec", "gunicorn", "--bind", ":$PORT", "--workers", "1", "--threads", "8", "--timeout", "0", "main:app"]

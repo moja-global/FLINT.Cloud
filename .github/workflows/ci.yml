@@ -2,14 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
-    branches: [ master ]
+    branches: [master]
 
 jobs:
-
-# Build the Flask-GCBM REST API Setup
+  # Build the Flask-GCBM REST API Setup
 
   build-gcbm-api:
     runs-on: ubuntu-latest
@@ -38,3 +37,18 @@ jobs:
         uses: ammaraskar/sphinx-action@master
         with:
           docs-folder: "docs/"
+
+  linting-docker:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v2
+    - name: "Lint Dockerfile"
+      uses: jbergstroem/hadolint-gh-action@v1
+      with:
+        dockerfile: " ./local/rest_api_flint.example/Dockerfile
+          ./local/rest_api_gcbm/Dockerfile
+          ./layered/cloud-run/Dockerfile
+          ./layered/compute-engine/Dockerfile
+          ./layered/ingress/Dockerfile"
+        error_level: 0
+        output_format: tty
