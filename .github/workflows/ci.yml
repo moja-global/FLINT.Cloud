@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./rest_api_gcbm
+        working-directory: ./local/rest_api_gcbm
     steps:
       - uses: actions/checkout@v2
       - name: Build FLINT Cloud container
@@ -38,22 +38,17 @@ jobs:
         with:
           docs-folder: "docs/"
 
-
-  linting-docker: 
+  linting-docker:
   runs-on: ubuntu-latest
-  steps: 
-    - 
-      uses: actions/checkout@v2
-    - 
-      name: "Lint Dockerfile"
+  steps:
+    - uses: actions/checkout@v2
+    - name: "Lint Dockerfile"
       uses: jbergstroem/hadolint-gh-action@v1
-      with: 
-        dockerfile: "./rest_api_gcbm/Dockerfile 
-                     ./rest_api_flint.example/Dockerfile 
-                     ./local/rest_api_flint.example/Dockerfile 
-                     ./local/rest_api_gcbm/Dockerfile 
-                     ./layered/cloud-run/Dockerfile 
-                     ./layered/compute-engine/Dockerfile 
-                     ./layered/ingress/Dockerfile"
+      with:
+        dockerfile: "./local/rest_api_flint.example/Dockerfile
+          ./local/rest_api_gcbm/Dockerfile
+          ./layered/cloud-run/Dockerfile
+          ./layered/compute-engine/Dockerfile
+          ./layered/ingress/Dockerfile"
         error_level: 0
         output_format: tty
