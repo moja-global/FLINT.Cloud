@@ -4,6 +4,11 @@ variable "project" {
   default = "flint-cloud"
 }
 
+variable "gcs_bucket_name" {
+  type = string
+  default = "simulation_data_flint-cloud"
+}
+
 variable "region" {
   type = string
   default = "us-central1"
@@ -133,7 +138,7 @@ resource "google_pubsub_topic" "large-simulations" {
 resource "google_cloud_run_service" "fc-ingress" {
   name = var.ingress_name
   location = var.region
-  
+
   template {
     spec {
       containers {
@@ -190,7 +195,7 @@ resource "google_cloud_run_service_iam_policy" "noauth-ingress" {
 resource "google_cloud_run_service" "fc-cr-processor" {
   name = var.cr_processor_name
   location = var.region
-  
+
   template {
     spec {
       containers {
@@ -255,9 +260,20 @@ resource "google_pubsub_subscription" "small-simulations-sub" {
   depends_on = [google_pubsub_topic.small-simulations, google_cloud_run_service.fc-cr-processor]
 }
 
+# The following example shows how to generate a unique name for an GCS bucket
+
+resource "random_id" "server" {
+  keepers = {
+    gcs_bucket_id = "${var.gcs_bucket_id}"
+  }
+
+  byte_length = 8
+}
+
 # GCS bucket
 resource "google_storage_bucket" "simulation_data_flint-cloud" {
-  name = "simulation_data_flint-cloud"
+  gcs_bucket_name = "simulation_data_flint-cloud_${random_id.server.hex}"
+  name = gcs_bucket_name
   location = var.region
   force_destroy = true
 

@@ -15,6 +15,7 @@ from google.api_core.exceptions import AlreadyExists
 app = Flask(__name__)
 
 project = os.environ.get("PROJECT_NAME") or "flint-cloud"
+gcs_bucket_name = os.environ.get("gcs_bucket_name") or "simulation_data_flint-cloud"
 with open("service_account.json", "w") as saf:
     saf.write(os.environ.get("SERVICE_ACCOUNT") or "ERROR")
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "service_account.json"
@@ -40,7 +41,7 @@ def publish_message(topic, attribs, project=project):
 def upload_blob(title, source_file_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     # The path to your file to upload
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
@@ -58,7 +59,7 @@ def upload_blob(title, source_file_name):
 def delete_blob(title, source_file_name):
     """Deletes a file to from the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     # The path to your file to upload
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
@@ -76,7 +77,7 @@ def delete_blob(title, source_file_name):
 def download_blob(title, source_blob_name):
     """Downloads a file from the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     # The path to your file to download
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
@@ -100,7 +101,7 @@ def generate_download_signed_url_v4(project_dir):
     Engine or from the Google Cloud SDK.
     """
 
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     blob_path = "simulations/simulation-" + project_dir + "/"
 
     storage_client = storage.Client()
@@ -144,7 +145,7 @@ def create_log(title):
 def check_log(title):
     """Check for log"""
     storage_client = storage.Client()
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     bucket = storage_client.bucket(bucket_name)
     blob_path = f"simulations/simulation-{title}/log.txt"
     return storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)

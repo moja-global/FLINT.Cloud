@@ -13,6 +13,7 @@ from estimate_run_size import SimulationSize, estimate_simulation_size
 app = Flask(__name__)
 
 project = os.environ.get("PROJECT_NAME") or "flint-cloud"
+gcs_bucket_name = os.environ.get("gcs_bucket_name") or "simulation_data_flint-cloud"
 zone = os.environ.get("GCE_ZONE") or "us-central1-a"
 instance = os.environ.get("GCE_NAME") or "instance-1"
 with open("service_account.json", "w") as saf:
@@ -55,7 +56,7 @@ def publish_message(topic, data, project=project):
 def upload_blob(title, source_file_name):
     """Uploads a file to the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     # The path to your file to upload
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
@@ -73,7 +74,7 @@ def upload_blob(title, source_file_name):
 def download_blob(title, source_blob_name):
     """Downloads a file from the bucket."""
     # The ID of your GCS bucket
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     # The path to your file to download
     # source_file_name = "local/path/to/file"
     # The ID of your GCS object
@@ -124,7 +125,7 @@ def gcbm_new():
     title = "".join(c for c in title if c.isalnum())
     name = "simulations/simulation-" + title + "/input.zip"
     storage_client = storage.Client()
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     bucket = storage_client.bucket(bucket_name)
     stats = storage.Blob(bucket=bucket, name=name).exists(storage_client)
 
@@ -258,7 +259,7 @@ def status():
 
     # Verify output exists
     storage_client = storage.Client()
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     bucket = storage_client.bucket(bucket_name)
     blob_path = f"simulations/simulation-{title}/output.zip"
     stats = storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)
@@ -305,7 +306,7 @@ def gcbm_dynamic():
 
     # Verify simulation exists
     storage_client = storage.Client()
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     bucket = storage_client.bucket(bucket_name)
     blob_path = f"simulations/simulation-{title}/input.zip"
     stats = storage.Blob(bucket=bucket, name=blob_path).exists(storage_client)
@@ -343,7 +344,7 @@ def generate_download_signed_url_v4(project_dir):
     Engine or from the Google Cloud SDK.
     """
 
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     blob_path = "simulations/simulation-" + project_dir + "/"
 
     storage_client = storage.Client()
@@ -416,7 +417,7 @@ def gcbm_list_simulations():
     description: GCBM Simulations List
     """
     storage_client = storage.Client()
-    bucket_name = "simulation_data_flint-cloud"
+    bucket_name = gcs_bucket_name
     blobs = storage_client.list_blobs(bucket_name, prefix="simulations/")
     blob_map = {}
     blob_list = []
