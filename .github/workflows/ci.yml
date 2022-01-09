@@ -39,16 +39,16 @@ jobs:
           docs-folder: "docs/"
 
   linting-docker:
-  runs-on: ubuntu-latest
-  steps:
-    - uses: actions/checkout@v2
-    - name: "Lint Dockerfile"
-      uses: jbergstroem/hadolint-gh-action@v1
-      with:
-        dockerfile: "./local/rest_api_flint.example/Dockerfile
-          ./local/rest_api_gcbm/Dockerfile
-          ./layered/cloud-run/Dockerfile
-          ./layered/compute-engine/Dockerfile
-          ./layered/ingress/Dockerfile"
-        error_level: 0
-        output_format: tty
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Lint Dockerfile"
+        uses: jbergstroem/hadolint-gh-action@v1
+        with:
+          dockerfile: "./local/rest_api_flint.example/Dockerfile
+            ./local/rest_api_gcbm/Dockerfile
+            ./layered/cloud-run/Dockerfile
+            ./layered/compute-engine/Dockerfile
+            ./layered/ingress/Dockerfile"
+          error_level: 0
+          output_format: tty
