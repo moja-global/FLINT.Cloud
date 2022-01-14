@@ -34,6 +34,9 @@
 
 - [Python](https://www.python.org/)
 - [Google Cloud Platform](https://cloud.google.com/)
+- [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+- [Terraform](https://www.terraform.io/)
+- [Sphinx](https://www.sphinx-doc.org/en/master/)
 
 ## Layered Architecture Setup on Google Cloud
 
@@ -119,7 +122,7 @@ Go through our contributing guidelines over [here.](https://github.com/moja-glob
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-<table>
+<!-- <table>
   <tr>
     <td align="center"><a href="https://github.com/arnav-t"><img src="https://avatars.githubusercontent.com/u/34343421?v=4" width="100px;" alt=""/><br /><sub><b>Arnav Tiwari</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/Tlazypanda"><img src="https://avatars.githubusercontent.com/u/33183263?v=4" width="100px;" alt=""/><br /><sub><b>Sneha Mishra</b></sub></a><br /></td>
@@ -134,7 +137,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/iamrajiv"><img src="https://avatars.githubusercontent.com/u/42106787?v=4" width="100px;" alt=""/><br><sub><b>Rajiv Singh</b></sub></a><br /></td>
     <td align="center"><a href="https://github.com/nynaalekhya"><img src="https://avatars.githubusercontent.com/u/50094420?v=4" width="100px;" alt=""/><br><sub><b>Nynaalekhya</b></sub></a><br /></td>
   </tr>
-</table>
+</table> -->
 
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
