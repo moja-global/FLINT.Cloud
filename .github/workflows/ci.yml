@@ -8,17 +8,27 @@ on:
     branches: [master]
 
 jobs:
-  # Build the Flask-GCBM REST API Setup
-
-  build-gcbm-api:
+  # Build REST API FLINT Example
+  build-rest-api-flint-example:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./local/rest_api_gcbm
+        working-directory: ./local/rest_api_flint.example/
     steps:
       - uses: actions/checkout@v2
-      - name: Build FLINT Cloud container
-        run: docker build -t gcbm-api .
+      - name: Build REST API FLINT Example
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+  # Build REST API GCBM
+  build-rest-api-gcbm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./local/rest_api_gcbm/
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build REST API GCBM
+        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
   linting-docs:
     runs-on: ubuntu-latest
