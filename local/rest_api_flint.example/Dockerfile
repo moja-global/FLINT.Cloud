@@ -1,5 +1,5 @@
 #FROM mojaglobal/flint
-FROM shubhamkarande13/flint.example:bionic
+FROM ghcr.io/moja-global/flint.example:master
 
 #ENV APP_HOME /app
 WORKDIR /server
