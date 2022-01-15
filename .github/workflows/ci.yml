@@ -10,7 +10,7 @@ on:
 jobs:
   # Build the Flask-GCBM REST API Setup
 
-  build-gcbm-api:
+  build-rest-api-gcbm:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -18,7 +18,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build FLINT Cloud container
-        run: docker build -t gcbm-api .
+        run: docker build -t rest-api-gcbm .
+  
+  build-rest-api-flint-example:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./local/rest_api_flint.example
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build FLINT Cloud container
+        run: docker build -t rest-api-flint.example .
+
 
   linting-docs:
     runs-on: ubuntu-latest
