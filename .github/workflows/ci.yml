@@ -16,7 +16,7 @@ jobs:
         working-directory: ./local/rest_api_flint.example/
     steps:
       - uses: actions/checkout@v2
-      - name: Build REST API FLINT Example
+      - name: Build the rest_api_flint.example Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
   # Build REST API GCBM
@@ -27,7 +27,7 @@ jobs:
         working-directory: ./local/rest_api_gcbm/
     steps:
       - uses: actions/checkout@v2
-      - name: Build REST API GCBM
+      - name: Build the rest_api_gcbm Docker image
         run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
   linting-docs:
