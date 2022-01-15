@@ -54,7 +54,8 @@
 
 ### Flask example REST API Setup  
 
-In order to run the REST API, please follow the following steps: - 
+In order to run the REST API, navigate to the `local ` folder.
+Follow these steps: - 
 
 1. `docker build -t flint-api .`
 2. `docker run --rm -p 8080:8080 flint-api`

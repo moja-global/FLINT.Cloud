@@ -1,0 +1,34 @@
+{
+    "Variables": {
+        "spatialLocationInfo": {
+            "flintdata": {
+                "type": "SpatialLocationInfo",
+                "library": "internal.flint",
+                "settings": {}
+            }
+        },
+        "simulateLandUnit": true,
+        "is_decaying": true,
+        "spinup_moss_only": false,
+        "run_peatland": false,
+        "peatlandId": -1,
+        "is_forest": true,
+        "run_moss": false,
+        "run_delay": false,
+        "landUnitBuildSuccess": true,
+        "regen_delay": 0,
+        "age": 0,
+        "tileIndex": 0,
+        "blockIndex": 0,
+        "cellIndex": 0,
+        "LandUnitId": -1,
+        "landUnitArea": 0,
+        "classifier_set": {},
+        "localDomainId": 0,
+        "LocalDomainId": 1,
+        "age_class": 0,
+        "historic_land_class": "FL",
+        "current_land_class": "FL",
+        "unfccc_land_class": "UNFCCC_FL_R_FL"
+    }
+}

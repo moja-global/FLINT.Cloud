@@ -1,6 +1,7 @@
 from flask import Flask, send_from_directory, request, jsonify
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, current_app
 import os
+import werkzeug
 import subprocess
 import time
 import json
@@ -30,6 +31,10 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
 
+@app.route("/")
+def hello_world():
+    return '<h1>Hello world</h1>'
+
 @app.route("/spec")
 def spec():
     swag = swagger(app)
@@ -37,7 +42,7 @@ def spec():
     swag['info']['title'] = "FLINT Rest Api"
     f = open("./static/swagger.json", "w+")
     json.dump(swag, f)
-    return jsonify(swag)
+    return jsonify(swag, )
 
 
 @app.route('/help/<string:arg>', methods=['GET'])
@@ -186,6 +191,14 @@ def rothc():
 
     return send_from_directory(UPLOAD_DIRECTORY, timestampStr + "point_rothc_example.csv", as_attachment=True), 200
 
+
+@app.errorhandler(werkzeug.exceptions.NotFound)
+def handle_page_not_found(e):
+    return 'This page is not found', 400
+
+@app.errorhandler(werkzeug.exceptions.MethodNotAllowed)
+def handle_method_not_allowed(e):
+    return 'This method is not allowed on this route', 405
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
