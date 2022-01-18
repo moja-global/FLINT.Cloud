@@ -38,8 +38,7 @@
 - [Terraform](https://www.terraform.io/)
 - [Sphinx](https://www.sphinx-doc.org/en/master/)
 
-## Layered Architecture Setup on Google Cloud
-
+## Production Setup - Layered Architecture Setup on Google Cloud
 #### Deploying
 
 1. Create a service account with project owner permissions in your project. This is used by Terraform to provision all the necessary resources.
@@ -51,6 +50,11 @@
 #### Disabling
 
 1. In the same directory as where `main.tf` is present, run `terraform destroy`. In case this fails, simply run it again.     
+
+
+## Local Setup 
+
+These steps can be followed to locally setup the API endpoints. This is independent of the above mentioned production setup.
 
 ### Flask example REST API Setup  
 
@@ -77,10 +81,15 @@ This REST API is built using the `flask-restful` package and has been containeri
 In order to run the REST API, please follow the following steps: - 
 
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
-2. `docker run -v /home/kalilinux/Documents/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
-  
+2. `docker run -v path to the unzipped GCBM_Demo_Run.zip folder:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
-In the point 2 as you can see we have mounted the GCBM folder as gcbm_files onto our container. The zipped GCBM folder is available in the root of this repository for setup and use.  
+For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of the directory
+On unzipping, a folder `layers` is created, make note of the path of this folder
+We have mounted the `layers` folder as gcbm_files onto our container. 
+
+Example : 
+Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
+2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
 Currently the REST API has the following endpoints available for access:-
 
@@ -118,37 +127,11 @@ Go through our contributing guidelines over [here.](https://github.com/moja-glob
     * [submit a message](https://get.slack.help/hc/en-us/categories/200111606#send-messages) to the relevant channel on [moja global's Slack workspace](mojaglobal.slack.com). 
 * If you have other questions, please write to info@moja.global   
   
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-<!-- <table>
-  <tr>
-    <td align="center"><a href="https://github.com/arnav-t"><img src="https://avatars.githubusercontent.com/u/34343421?v=4" width="100px;" alt=""/><br /><sub><b>Arnav Tiwari</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/Tlazypanda"><img src="https://avatars.githubusercontent.com/u/33183263?v=4" width="100px;" alt=""/><br /><sub><b>Sneha Mishra</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/shubhamkarande13"><img src="https://avatars.githubusercontent.com/u/13800316?v=4" width="100px;" alt=""/><br><sub><b>Shubham Karande</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/HarshCasper"><img src="https://avatars.githubusercontent.com/u/47351025?v=4" width="100px;" alt=""/><br><sub><b>Harsh Bardhan Mishra</b></sub></a><br /></td>    
-    <td align="center"><a href="https://github.com/padmajabhol"><img src="https://avatars.githubusercontent.com/u/75530516?v=4" width="100px;" alt=""/><br><sub><b>Padmaja Bhol</b></sub></a><br /></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="https://github.com/aornugent"><img src="https://avatars.githubusercontent.com/u/20387761?v=4" width="100px;" alt=""/><br><sub><b>Andrew O'Reilly-Nugent</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/chicken-biryani"><img src="https://avatars.githubusercontent.com/u/41121520?v=4" width="100px;" alt=""/><br><sub><b>Shloka</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/mfellows"><img src="https://avatars.githubusercontent.com/u/8548157?v=4" width="100px;" alt=""/><br><sub><b>Max Fellows</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/iamrajiv"><img src="https://avatars.githubusercontent.com/u/42106787?v=4" width="100px;" alt=""/><br><sub><b>Rajiv Singh</b></sub></a><br /></td>
-    <td align="center"><a href="https://github.com/nynaalekhya"><img src="https://avatars.githubusercontent.com/u/50094420?v=4" width="100px;" alt=""/><br><sub><b>Nynaalekhya</b></sub></a><br /></td>
-  </tr>
-</table> -->
-
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<!-- <table><tr><td align="center"><a href="http://moja.global"><img src="https://avatars1.githubusercontent.com/u/19564969?v=4" width="100px;" alt="moja global"/><br /><sub><b>moja global</b></sub></a><br /><a href="#projectManagement-moja-global" title="Project Management">📆</a></td></tr></table> -->
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
 
 ## Maintainers Reviewers Ambassadors Coaches
 
