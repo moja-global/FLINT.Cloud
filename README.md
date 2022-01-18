@@ -89,6 +89,7 @@ We have mounted the `layers` folder as gcbm_files onto our container.
 
 Example : 
 Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
+
 2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
 Currently the REST API has the following endpoints available for access:-
