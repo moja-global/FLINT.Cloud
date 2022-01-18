@@ -30,11 +30,6 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-
-@app.route("/")
-def hello_world():
-    return '<h1>Hello world</h1>'
-
 @app.route("/spec")
 def spec():
     swag = swagger(app)
@@ -191,10 +186,9 @@ def rothc():
 
     return send_from_directory(UPLOAD_DIRECTORY, timestampStr + "point_rothc_example.csv", as_attachment=True), 200
 
-
 @app.errorhandler(werkzeug.exceptions.NotFound)
 def handle_page_not_found(e):
-    return 'This page is not found', 400
+    return 'This page is not found', 404
 
 @app.errorhandler(werkzeug.exceptions.MethodNotAllowed)
 def handle_method_not_allowed(e):
