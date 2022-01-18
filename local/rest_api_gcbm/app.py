@@ -9,6 +9,7 @@ from google.cloud import storage, pubsub_v1
 from google.api_core.exceptions import AlreadyExists
 import logging
 import shutil
+import werkzeug
 import json
 import time
 import subprocess
@@ -382,6 +383,13 @@ def check():
 def home():
     return 'FLINT.Cloud API'
 
+@app.errorhandler(werkzeug.exceptions.NotFound)
+def handle_page_not_found(e):
+    return 'This page is not found', 404
+
+@app.errorhandler(werkzeug.exceptions.MethodNotAllowed)
+def handle_method_not_allowed(e):
+    return 'This method is not allowed on this route', 405
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
