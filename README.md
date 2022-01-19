@@ -87,7 +87,7 @@ For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of t
 On unzipping, a folder `layers` is created, make note of the path of this folder
 We have mounted the `layers` folder as gcbm_files onto our container. 
 
-Example : 
+Example: 
 Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
 
 2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
