@@ -20,14 +20,6 @@ jobs:
           pip3 install flake8
           flake8 .
 
-  linting-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "docs/"
-
   linting-docker:
     runs-on: ubuntu-latest
     steps:
