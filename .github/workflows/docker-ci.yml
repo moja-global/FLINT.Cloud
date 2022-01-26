@@ -14,8 +14,14 @@ jobs:
         working-directory: ./local/rest_api_flint.example/
     steps:
       - uses: actions/checkout@v2
+
       - name: Build REST API FLINT Example
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build . --file Dockerfile --tag rest_api_flint.example
+
+      - name: Peform container scan for vulnerabilities
+        uses: azure/container-scan@v0
+        with:
+          image-name: rest_api_flint.example
 
   # Build REST API GCBM
   build-rest-api-gcbm:
@@ -25,5 +31,12 @@ jobs:
         working-directory: ./local/rest_api_gcbm/
     steps:
       - uses: actions/checkout@v2
+
       - name: Build REST API GCBM
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build . --file Dockerfile --tag rest_api_gcbm
+
+      # Disabled for now. Refer: https://github.com/Azure/container-scan/issues/109
+      # - name: Peform container scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: rest_api_gcbm
