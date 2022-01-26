@@ -1,0 +1,6 @@
+Docs:
+  - docs/**/*
+GCBM:
+  - local/rest_api_gcbm/**/*
+Flint.Example:
+  - local/rest_api_flint.example/**/*
