@@ -35,7 +35,8 @@ jobs:
       - name: Build REST API GCBM
         run: docker build . --file Dockerfile --tag rest_api_gcbm
 
-      - name: Peform container scan for vulnerabilities
-        uses: azure/container-scan@v0
-        with:
-          image-name: rest_api_gcbm
+      # Disabled for now. Refer: https://github.com/Azure/container-scan/issues/109
+      # - name: Peform container scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: rest_api_gcbm
