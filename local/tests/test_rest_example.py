@@ -1,16 +1,15 @@
 import pytest
 import requests
 
-'''
-    Unit test cases are written for the rest_api_flint.example
-'''
+class TestApiFlintExample:
 
-
-class TestApiFlint:
-
+    #this fixture is used to pass the base_endpoint to the other functions
     @pytest.fixture
     def base_endpoint(self):
-        #The port on which the docker container is running, is used here
+        '''Port 8080 of the docker container is mapped to 8080 
+            on the ubuntu machine running the action, api testing is 
+            performed at port 8080
+        '''
         self.ENDPOINT = "http://localhost:8080/"
         yield self.ENDPOINT
 

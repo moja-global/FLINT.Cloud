@@ -1,0 +1,23 @@
+name : Test FLINT API Example
+
+#the action runs on pushing code to the master branch
+on:
+  push:
+  
+jobs:
+  build:
+    runs-on: ubuntu-latest 
+    steps:
+    - uses: actions/checkout@v2
+    #the docker image is created and run in detached mode at port 8080
+    - name: docker build and run
+      run: |
+        cd local/rest_api_flint.example
+        docker build -t flint-api .
+        docker run -d -p 8080:8080 flint-api
+    - name: test endpoints
+      #tests run using pytest in verbose mode
+      run : |
+        pip install -U pytest
+        cd local
+        pytest tests -v
