@@ -58,7 +58,7 @@ These steps can be followed to locally setup the API endpoints. This is independ
 
 ### Flask example REST API Setup  
 
-In order to run the REST API, navigate to the `local ` folder.
+In order to run the REST API, navigate to the `local/rest_api_flint.example` folder.
 Follow these steps: - 
 
 1. `docker build -t flint-api .`
@@ -78,7 +78,7 @@ This REST API is built using the `flask-restful` package and has been containeri
 
 ### Flask GCBM REST API Setup  
 
-In order to run the REST API, please follow the following steps: - 
+In order to run the Flask GCBM API, navigate to the `local/rest_api_gcbm` please follow the following steps: - 
 
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
 2. `docker run -v path to the unzipped GCBM_Demo_Run.zip folder:/gcbm_files --rm -p 8080:8080 gcbm-api`
