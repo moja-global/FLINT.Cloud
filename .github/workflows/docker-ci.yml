@@ -23,12 +23,12 @@ jobs:
           docker run --rm -d -p 8080:8080 rest_api_flint.example:latest
         
       - name: Test endpoints
-        #tests run using pytest in verbose mode, tests are in /local/tests
+        #tests located at /local/tests, are run using pytest
         run: |
           cd ../
           pip install -U pytest
           pytest tests -v
-        
+
       - name: Peform container scan for vulnerabilities
         uses: azure/container-scan@v0
         with:
