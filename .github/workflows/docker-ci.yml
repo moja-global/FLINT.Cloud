@@ -1,12 +1,13 @@
-name: CI
+name: Build FLINT Cloud images
 
 on:
+  push:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [master]
 
 jobs:
-  # Build REST API FLINT Example
+  # Build REST API FLINT Example and Run tests
   build-rest-api-flint-example:
     runs-on: ubuntu-latest
     defaults:
@@ -14,8 +15,24 @@ jobs:
         working-directory: ./local/rest_api_flint.example/
     steps:
       - uses: actions/checkout@v2
+
       - name: Build REST API FLINT Example
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        #the docker image is created and run in detached mode at port 8080
+        run: |
+          docker build . --file Dockerfile --tag rest_api_flint.example
+          docker run --rm -d -p 8080:8080 rest_api_flint.example:latest
+        
+      - name: Test endpoints
+        #tests run using pytest in verbose mode, tests are in /local/tests
+        run: |
+          cd ../
+          pip install -U pytest
+          pytest tests -v
+        
+      - name: Peform container scan for vulnerabilities
+        uses: azure/container-scan@v0
+        with:
+          image-name: rest_api_flint.example
 
   # Build REST API GCBM
   build-rest-api-gcbm:
@@ -25,38 +42,12 @@ jobs:
         working-directory: ./local/rest_api_gcbm/
     steps:
       - uses: actions/checkout@v2
+
       - name: Build REST API GCBM
-        run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build . --file Dockerfile --tag rest_api_gcbm
 
-  linting-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-      - name: Upgrade pip version
-        run: |
-          python3 -m pip install --upgrade pip
-      - name: Lint source with Flake8
-        run: |
-          pip3 install flake8
-          flake8 .
-      - name: Checks the Documentation Build
-        uses: ammaraskar/sphinx-action@master
-        with:
-          docs-folder: "docs/"
-
-  linting-docker:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: "Lint Dockerfile"
-        uses: jbergstroem/hadolint-gh-action@v1
-        with:
-          dockerfile: "./local/rest_api_flint.example/Dockerfile
-            ./local/rest_api_gcbm/Dockerfile
-            ./layered/cloud-run/Dockerfile
-            ./layered/compute-engine/Dockerfile
-            ./layered/ingress/Dockerfile"
-          error_level: 0
-          output_format: tty
+      # Disabled for now. Refer: https://github.com/Azure/container-scan/issues/109
+      # - name: Peform container scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: rest_api_gcbm
