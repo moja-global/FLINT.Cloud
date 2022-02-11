@@ -24,6 +24,8 @@ general:
     - CVE-2021-3711
     - CVE-2021-33430
     - CVE-2020-27171
+    - CVE-2022-0492
+    
   bestPracticeViolations:
     - CIS-DI-0007
     - DKL-DI-0005
