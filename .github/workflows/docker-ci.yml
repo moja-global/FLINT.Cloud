@@ -1,12 +1,13 @@
 name: Build FLINT Cloud images
 
 on:
+  push:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [master]
 
 jobs:
-  # Build REST API FLINT Example
+  # Build REST API FLINT Example and Run tests
   build-rest-api-flint-example:
     runs-on: ubuntu-latest
     defaults:
@@ -16,8 +17,17 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build REST API FLINT Example
-        run: docker build . --file Dockerfile --tag rest_api_flint.example
-
+        #the docker image is created and run in detached mode at port 8080
+        run: |
+          docker build . --file Dockerfile --tag rest_api_flint.example
+          docker run --rm -d -p 8080:8080 rest_api_flint.example:latest
+        
+      - name: Test endpoints
+        #tests located at /local/tests, are run using pytest
+        run: |
+          cd ../
+          pip install -U pytest
+          pytest tests -v
       - name: Peform container scan for vulnerabilities
         uses: azure/container-scan@v0
         with:
