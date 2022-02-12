@@ -21,7 +21,7 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 In order to run the REST API, please follow the following steps: - 
 
-1. `docker build -t flint-api .`
+1. `cd local/rest_api_flint.example && docker build -t flint-api .`
 2. `docker run --rm -p 8080:8080 flint-api`
 
 Currently the REST API has the following endpoints available for access:-
