@@ -3,12 +3,26 @@
 
 The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
 
+### Layered Architecture Setup on Google Cloud
+
+#### Deploying
+
+1. Create a service account with project owner permissions in your project. This is used by Terraform to provision all the necessary resources.
+2. Copy `main.tf` from the `layered` directory of this repository to your Cloud Console machine.
+3. In `main.tf`, change the `project` variable to your project ID. Change any other variables if necessary. 
+4. Download the key for the service account created in step 1 (in JSON format) to your project's Cloud Console machine. Rename it as `service_account.json`.
+5. Run `terraform apply`. After this command finishes, it should output the URL to FLINT Cloud (ingress).
+
+#### Disabling
+
+1. In the same directory as where `main.tf` is present, run `terraform destroy`. In case this fails, simply run it again.     
+
 ### Flask.example REST API Setup  
 
 In order to run the REST API, please follow the following steps: - 
 
-1. `docker build -t FLINT-api .`
-2. `docker run --rm -p 8080:8080 FLINT-api`
+1. `docker build -t flint-api .`
+2. `docker run --rm -p 8080:8080 flint-api`
 
 Currently the REST API has the following endpoints available for access:-
 

@@ -1,0 +1,52 @@
+name: Build FLINT Cloud images
+
+on:
+  push:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    branches: [master]
+
+jobs:
+  # Build REST API FLINT Example and Run tests
+  build-rest-api-flint-example:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./local/rest_api_flint.example/
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build REST API FLINT Example
+        #the docker image is created and run in detached mode at port 8080
+        run: |
+          docker build . --file Dockerfile --tag rest_api_flint.example
+          docker run --rm -d -p 8080:8080 rest_api_flint.example:latest
+        
+      - name: Test endpoints
+        #tests located at /local/tests, are run using pytest
+        run: |
+          cd ../
+          pip install -U pytest
+          pytest tests -v
+      - name: Peform container scan for vulnerabilities
+        uses: azure/container-scan@v0
+        with:
+          image-name: rest_api_flint.example
+
+  # Build REST API GCBM
+  build-rest-api-gcbm:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./local/rest_api_gcbm/
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build REST API GCBM
+        run: docker build . --file Dockerfile --tag rest_api_gcbm
+
+      # Disabled for now. Refer: https://github.com/Azure/container-scan/issues/109
+      # - name: Peform container scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: rest_api_gcbm
