@@ -182,9 +182,8 @@ FROM base AS flint
 WORKDIR $ROOTDIR/src
 
 # hardcoded to develop
-#RUN git clone --recursive --depth 1 -b develop https://github.com/moja-global/FLINT.git flint \
-COPY FLINT flint
-RUN mkdir -p flint/Source/build \
+RUN git clone -b update-poco https://github.com/moja-global/FLINT.git flint \
+    && mkdir -p flint/Source/build \
     && cd flint/Source/build \
     && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE  \
             -DCMAKE_INSTALL_PREFIX=$ROOTDIR \
@@ -219,23 +218,21 @@ RUN git clone --recursive https://github.com/jtv/libpqxx.git \
     && mkdir libpqxx/build \
     && cd libpqxx/build \
     && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-        -DCMAKE_INSTALL_PREFIX=/usr/local \
-        -DSKIP_BUILD_TEST=ON \
-        -FSKIP_PQXX_STATIC=ON .. \
-        -DCMAKE_CXX_FLAGS=-fPIC \
-        -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql \
+            -DCMAKE_INSTALL_PREFIX=/usr/local \
+            -DSKIP_BUILD_TEST=ON \
+            -FSKIP_PQXX_STATIC=ON .. \
+            -DCMAKE_CXX_FLAGS=-fPIC \
+            -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql \
     && make --quiet -j $NUM_CPU install/strip \
     && make clean \
     && cd $ROOTDIR/src
 
 # moja.canada
-# RUN cd $ROOTDIR/src \
-#    && git clone -b develop https://github.com/moja-global/moja.canada
-COPY moja.canada moja.canada
-
-RUN mkdir -p moja.canada/Source/build \
-   && cd moja.canada/Source/build \
-   && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+RUN cd $ROOTDIR/src \
+    && git clone -b update-poco https://github.com/moja-global/moja.canada \
+    && mkdir -p moja.canada/Source/build \
+    && cd moja.canada/Source/build \
+    && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
             -DCMAKE_INSTALL_PREFIX=$ROOTDIR \
             -DENABLE_TESTS:BOOL=OFF \
             -DPostgreSQL_TYPE_INCLUDE_DIR=/usr/include/postgresql .. \
