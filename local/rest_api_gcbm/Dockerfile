@@ -198,12 +198,6 @@ RUN git clone -b update-poco https://github.com/moja-global/FLINT.git flint \
     && cd $ROOTDIR/src
 
 RUN ln -s $ROOTDIR/lib/libmoja.modules.* $ROOTDIR/bin
-
-RUN pip3 install setuptools
-RUN git clone --recursive --depth 1 -b develop  https://github.com/moja-global/FLINT.data.git FLINT.data \
-    && cd FLINT.data \
-    && pip3 install .
-
 RUN rm -Rf $ROOTDIR/src/* \
     && ldconfig
 
