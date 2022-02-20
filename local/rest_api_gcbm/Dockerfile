@@ -43,20 +43,20 @@ RUN apt-get update -y \
       git g++ make cmake libssl-dev openssl wget bash-completion nasm \
       pkg-config libtool automake  libcurl4-gnutls-dev \
       zlib1g-dev libpcre3-dev libxml2-dev libexpat-dev libxerces-c-dev \
-      # libpoppler-dev
+      doxygen doxygen-latex graphviz \
   	  python3-dev python3-numpy python3-pip \
       libproj-dev libgeos-dev \
       unixodbc unixodbc-dev \
       libspatialite-dev libsqlite3-dev sqlite3 \
-      libpq-dev postgresql-client-12 postgresql-server-dev-12 \
+      libpq-dev postgresql-client-12 postgresql-server-dev-12 postgis\
     && apt-get -y autoremove \
   	&& apt-get clean
 
-RUN apt-get install -y doxygen doxygen-latex graphviz postgis
+RUN apt-get install -y
 
 WORKDIR $ROOTDIR/src
 
-RUN wget https://github.com/pocoproject/poco/archive/refs/tags/poco-${POCO_VERSION}-release.tar.gz \
+RUN wget -q https://github.com/pocoproject/poco/archive/refs/tags/poco-${POCO_VERSION}-release.tar.gz \
     && tar -xzf poco-${POCO_VERSION}-release.tar.gz \
     && mkdir poco-poco-${POCO_VERSION}-release/cmake-build \
     && cd poco-poco-${POCO_VERSION}-release/cmake-build \
@@ -92,7 +92,7 @@ RUN wget https://github.com/pocoproject/poco/archive/refs/tags/poco-${POCO_VERSI
 # build user-config.jam files
 RUN echo "using python : 3.6 : /usr ;" > ~/user-config.jam
 
-RUN wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION_DOT}/source/boost_${BOOST_VERSION}.tar.bz2 \
+RUN wget -q https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION_DOT}/source/boost_${BOOST_VERSION}.tar.bz2 \
     && tar --bzip2 -xf boost_${BOOST_VERSION}.tar.bz2 \
     && cd boost_${BOOST_VERSION}  \
     && ./bootstrap.sh --prefix=$ROOTDIR \
@@ -100,7 +100,7 @@ RUN wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION_DOT}
     && ./b2 clean \
     && cd $ROOTDIR/src
 
-RUN wget https://github.com/fmtlib/fmt/archive/${FMT_VERSION}.tar.gz \
+RUN wget -q https://github.com/fmtlib/fmt/archive/${FMT_VERSION}.tar.gz \
     && mkdir libfmt-${FMT_VERSION} \
     && tar -xzf ${FMT_VERSION}.tar.gz -C libfmt-${FMT_VERSION} --strip-components=1 \
     && cd libfmt-${FMT_VERSION} \
@@ -113,7 +113,7 @@ RUN wget https://github.com/fmtlib/fmt/archive/${FMT_VERSION}.tar.gz \
     && make clean \
     && cd $ROOTDIR/src
 
-RUN wget http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz \
+RUN wget -q http://download.osgeo.org/gdal/${GDAL_VERSION}/gdal-${GDAL_VERSION}.tar.gz \
     && tar -xvf gdal-${GDAL_VERSION}.tar.gz && cd gdal-${GDAL_VERSION} \
     && ./configure \
         --without-libtool \
@@ -164,7 +164,7 @@ RUN apt-get update -y \
     && python3 setup.py install
 
 RUN	git clone --recursive https://github.com/sebastiandev/zipper.git \
-&& mkdir zipper/build \
+    && mkdir zipper/build \
     && cd zipper/build \
   	&& cmake .. \
   	&& make --quiet -j $NUM_CPU \
@@ -222,8 +222,7 @@ RUN git clone --recursive https://github.com/jtv/libpqxx.git \
     && cd $ROOTDIR/src
 
 # moja.canada
-RUN cd $ROOTDIR/src \
-    && git clone -b update-poco https://github.com/moja-global/moja.canada \
+RUN git clone -b update-poco https://github.com/moja-global/moja.canada \
     && mkdir -p moja.canada/Source/build \
     && cd moja.canada/Source/build \
     && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
