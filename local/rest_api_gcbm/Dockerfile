@@ -8,8 +8,8 @@
 FROM ubuntu:focal AS base
 
 # build args
-ARG NUM_CPU
-ARG BUILD_TYPE
+ARG NUM_CPU=1
+ARG BUILD_TYPE=RELEASE
 ARG DEBIAN_FRONTEND=noninteractive
 
 # env. variables
