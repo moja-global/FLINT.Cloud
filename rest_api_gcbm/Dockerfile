@@ -15,12 +15,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 # env. variables
 ENV ROOTDIR /usr/local
 ENV GDAL_VERSION 3.4.1
-ENV CMAKE_VERSION 3.22.2
 ENV POCO_VERSION 1.11.1
 ENV BOOST_VERSION 1_78_0
 ENV BOOST_VERSION_DOT 1.78.0
 ENV FMT_VERSION 8.1.1
-ENV SQLITE_VERSION 3.31.1
 
 ENV PATH $ROOTDIR/bin:$PATH
 ENV LD_LIBRARY_PATH $ROOTDIR/lib:$LD_LIBRARY_PATH
@@ -58,14 +56,6 @@ RUN apt-get install -y doxygen doxygen-latex graphviz postgis
 
 WORKDIR $ROOTDIR/src
 
-# RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}.tar.gz \
-#     && tar xzf cmake-${CMAKE_VERSION}.tar.gz \
-#     && cd cmake-${CMAKE_VERSION} \
-#     && ./bootstrap --system-curl --parallel=$NUM_CPU \
-#   	&& make --quiet -j $NUM_CPU install \
-#   	&& make clean \
-#     && cd ..
-
 RUN wget https://github.com/pocoproject/poco/archive/refs/tags/poco-${POCO_VERSION}-release.tar.gz \
     && tar -xzf poco-${POCO_VERSION}-release.tar.gz \
     && mkdir poco-poco-${POCO_VERSION}-release/cmake-build \
@@ -101,17 +91,6 @@ RUN wget https://github.com/pocoproject/poco/archive/refs/tags/poco-${POCO_VERSI
 
 # build user-config.jam files
 RUN echo "using python : 3.6 : /usr ;" > ~/user-config.jam
-
-RUN	git clone --recursive https://github.com/sebastiandev/zipper.git \
-	&& cd zipper \
-  && git checkout e9f150516cb55d194b5e01d21a9527783e98311d \
-  && mkdir build \
-  && cd build \
-	&& cmake .. \
-	&& make --quiet -j $NUM_CPU \
-  && make --quiet install \
-  && make clean \
-  && cd $ROOTDIR/src
 
 RUN wget https://boostorg.jfrog.io/artifactory/main/release/${BOOST_VERSION_DOT}/source/boost_${BOOST_VERSION}.tar.bz2 \
     && tar --bzip2 -xf boost_${BOOST_VERSION}.tar.bz2 \
@@ -183,6 +162,15 @@ RUN apt-get update -y \
     && cd $ROOTDIR/src/gdal-${GDAL_VERSION}/swig/python \
     && python3 setup.py build \
     && python3 setup.py install
+
+RUN	git clone --recursive https://github.com/sebastiandev/zipper.git \
+&& mkdir zipper/build \
+    && cd zipper/build \
+  	&& cmake .. \
+  	&& make --quiet -j $NUM_CPU \
+    && make --quiet install \
+    && make clean \
+    && cd $ROOTDIR/src
 
 RUN ldconfig
 RUN rm -r $ROOTDIR/src/*
