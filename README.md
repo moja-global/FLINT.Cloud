@@ -1,10 +1,44 @@
-# FLINT.Cloud
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors)
+<div align="center">
+    <a href="https://moja.global/"><img src="https://github.com/moja-global.png" width="18%" height="18%"></a>
+    <h1>FLINT.Cloud</h1>
+    <p>
+    The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
+    </p>
+</div>
 
-The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
+<hr>
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+        <a href="#technology-stack">Technology Stack</a>
+    </li>
+    <li>
+      <a href="#layered-architecture-setup-on-google-cloud">Layered Architecture Setup on Google Cloud</a>
+      <ul>
+        <li><a href="#deploying">Deploying</a></li>
+        <li><a href="#disabling">Disabling</a></li>
+        <li><a href="#flask-example-rest-api-setup">Flask example REST API Setup</a>
+        <li><a href="#flask-gcbm-rest-api-setup">Flask-GCBM REST API Setup</a>
+      </ul>
+    </li>
+    <li><a href="#faq-and-other-questions">FAQ and Other Questions</a></li>
+    <li><a href="#contributors">Contributors</a></li>
+    <li><a href="#maintainers-reviewers-ambassadors-coaches">Maintainers Reviewers Ambassadors Coaches</a></li>
+  </ol>
+  </br>
+</details>
 
-### Layered Architecture Setup on Google Cloud
 
+## Technology Stack
+
+- [Python](https://www.python.org/)
+- [Google Cloud Platform](https://cloud.google.com/)
+- [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+- [Terraform](https://www.terraform.io/)
+- [Sphinx](https://www.sphinx-doc.org/en/master/)
+
+## Production Setup - Layered Architecture Setup on Google Cloud
 #### Deploying
 
 1. Create a service account with project owner permissions in your project. This is used by Terraform to provision all the necessary resources.
@@ -17,52 +51,74 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 1. In the same directory as where `main.tf` is present, run `terraform destroy`. In case this fails, simply run it again.     
 
-### Flask.example REST API Setup  
 
-In order to run the REST API, please follow the following steps: - 
+## Local Setup 
+
+These steps can be followed to locally setup the API endpoints. This is independent of the above mentioned production setup.
+
+### Flask example REST API Setup  
+
+In order to run the REST API, navigate to the `local/rest_api_flint.example` folder.
+Follow these steps: - 
 
 1. `docker build -t flint-api .`
 2. `docker run --rm -p 8080:8080 flint-api`
 
 Currently the REST API has the following endpoints available for access:-
 
-- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
-- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
-- **\version**: This endpoint outputs the version number of moja.CLI.
-- **\point**: This endpoint runs point example and outputs point_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations.
-- **\rothc**: This endpoint runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
-
+| Endpoint       |  Functionality            |
+| :--------------| :------------------------ |
+| **\help\all**  | Produces a help message with information on all options for moja.CLI. |
+| **\help\arg**  | Produces a help message with information on option **arg** for moja.CLI. |
+| **\version**   | Outputs the version number of moja.CLI. |
+| **\point**     | Runs point example and outputs point_example.csv as an attachment to be downloaded.  Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations. |
+| **\rothc**    | Runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.  
 
-### Flask-GCBM REST API Setup  
+### Flask GCBM REST API Setup  
 
-In order to run the REST API, please follow the following steps: - 
+In order to run the Flask GCBM API, navigate to the `local/rest_api_gcbm` please follow the following steps: - 
 
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
-2. `docker run -v /home/kalilinux/Documents/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
-  
+2. `docker run -v path to the unzipped GCBM_Demo_Run.zip folder:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
-In the point 2 as you can see we have mounted the GCBM folder as gcbm_files onto our container. The zipped GCBM folder is available in the root of this repository for setup and use.  
+For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of the directory
+On unzipping, a folder `layers` is created, make note of the path of this folder
+We have mounted the `layers` folder as gcbm_files onto our container. 
+
+Example: 
+Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
+
+2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
 Currently the REST API has the following endpoints available for access:-
 
-- **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
-- **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
-- **\version**: This endpoint outputs the version number of moja.CLI.
-- **\gcbm**: This endpoint runs flint-gcbm and outputs some files in the output directory along with the output db. Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
+| Endpoint      | Functionality     |
+| :------------ | :-----------------|
+| **\help\all** | Produces a help message with information on all options for moja.CLI. |
+| **\help\arg** | Produces a help message with information on option **arg** for moja.CLI.|
+| **\version**  | Outputs the version number of moja.CLI.|
+| **\gcbm**     | Runs flint-gcbm and outputs some files in the output directory along with the output db. |
+
+Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
 
 ## How to Get Involved?  
 
-This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.
+<!--This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.-->
 
-Feel free to [join our Slack community](https://join.slack.com/t/mojaglobal/shared_invite/zt-lf2290hy-CGqpUvHFfGsqoIZnO8MXKQ) and get to know everyone, or get help with your application.
+Feel free to [join our Slack community](https://join.slack.com/t/mojaglobal/shared_invite/zt-lf2290hy-CGqpUvHFfGsqoIZnO8MXKQ) and get to know everyone.
 
 If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global. We'd love to have you involved.
 
-  
+### Contributing
+
+To contribute to FLINT.Cloud:
+
+Go through our contributing guidelines over [here](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
+
 ## FAQ and Other Questions  
 
 * You can find FAQs on the [Wiki](https://github.com/moja.global/.github/wiki).  
@@ -72,19 +128,11 @@ If you would like to volunteer as a mentor, or for any other questions, please c
     * [submit a message](https://get.slack.help/hc/en-us/categories/200111606#send-messages) to the relevant channel on [moja global's Slack workspace](mojaglobal.slack.com). 
 * If you have other questions, please write to info@moja.global   
   
-
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore -->
-<table><tr><td align="center"><a href="http://moja.global"><img src="https://avatars1.githubusercontent.com/u/19564969?v=4" width="100px;" alt="moja global"/><br /><sub><b>moja global</b></sub></a><br /><a href="#projectManagement-moja-global" title="Project Management">📆</a></td></tr></table>
-
-<!-- ALL-CONTRIBUTORS-LIST:END -->
-
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
-
 
 ## Maintainers Reviewers Ambassadors Coaches
 
@@ -96,3 +144,7 @@ The following people are Maintainers Reviewers Ambassadors or Coaches
 **Reviewers** check proposed changes before they go to the Maintainers  
 **Ambassadors** are available to provide training related to this repository  
 **Coaches** are available to provide information to new contributors to this repository  
+
+## License 
+
+This project is released under the [Mozilla Public License Version 2.0](https://github.com/moja-global/FLINT-UI/blob/master/LICENSE).
