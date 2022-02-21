@@ -117,7 +117,7 @@ If you would like to volunteer as a mentor, or for any other questions, please c
 
 To contribute to FLINT.Cloud:
 
-Go through our contributing guidelines over [here.](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
+Go through our contributing guidelines over [here](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
 
 ## FAQ and Other Questions  
 
