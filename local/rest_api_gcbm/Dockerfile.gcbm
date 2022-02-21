@@ -18,7 +18,7 @@ RUN git clone --recursive https://github.com/jtv/libpqxx.git \
     && cd $ROOTDIR/src
 
 # moja.canada
-RUN git clone -b update-poco https://github.com/moja-global/moja.canada \
+RUN git clone -b develop https://github.com/moja-global/moja.canada \
     && mkdir -p moja.canada/Source/build \
     && cd moja.canada/Source/build \
     && cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
