@@ -2,11 +2,13 @@ name: Publish FLINT Cloud images
 
 on:
   schedule:
-    - cron: '42 22 * * *'
+    - cron: "0 0 * * MON"
   push:
     branches: [ master ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
 env:
   REGISTRY: ghcr.io
@@ -40,7 +42,7 @@ jobs:
         with:
           context: ./local/rest_api_flint.example/
           file: "./local/rest_api_flint.example/Dockerfile"
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -72,6 +74,6 @@ jobs:
         with:
           context: ./local/rest_api_gcbm/
           file: "./local/rest_api_gcbm/Dockerfile"
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
