@@ -21,10 +21,11 @@ The project aims to build a continuous deployment pipeline to offer FLINT as a S
 
 In order to run the REST API, please follow the following steps: - 
 
-1. `cd local/rest_api_flint.example && docker build -t flint-api .`
-2. `docker run --rm -p 8080:8080 flint-api`
+1. Go to your terminal/command line and navigate to the root of this project.
+2. `cd local/rest_api_flint.example && docker build -t flint-api .`
+3. `docker run --rm -p 8080:8080 flint-api`
 
-Currently the REST API has the following endpoints available for access:-
+Currently, the REST API has the following endpoints available for access:-
 
 - **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
 - **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
@@ -39,13 +40,14 @@ This REST API is built using the `flask-restful` package and has been containeri
 
 In order to run the REST API, please follow the following steps: - 
 
-1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
-2. `docker run -v /home/kalilinux/Documents/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
+1. Go to your terminal/command line and navigate to the root of this project.
+2. `cd local/rest_api_gcbm && docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
+3. `docker run -v /home/kalilinux/Documents/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
   
 
 In the point 2 as you can see we have mounted the GCBM folder as gcbm_files onto our container. The zipped GCBM folder is available in the root of this repository for setup and use.  
 
-Currently the REST API has the following endpoints available for access:-
+Currently, the REST API has the following endpoints available for access:-
 
 - **\help\all**: This endpoint produces a help message with information on all options for moja.CLI.
 - **\help\arg**: This endpoint produces a help message with information on option **arg** for moja.CLI.
