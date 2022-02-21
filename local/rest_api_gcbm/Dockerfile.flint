@@ -1,5 +1,5 @@
 # Replace with ghcr.io/moja-global/flint.base:master
-FROM ghcr.io/harshcasper/flint
+FROM ghcr.io/harshcasper/flint:gh-builds
 
 WORKDIR $ROOTDIR/src
 
