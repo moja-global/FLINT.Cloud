@@ -1,54 +1,52 @@
-name: CI
+name: Build FLINT Cloud images
 
 on:
   push:
-    branches: [master]
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: [master]
 
 jobs:
-  # Build the Flask-GCBM REST API Setup
-
-  build-gcbm-api:
+  # Build REST API FLINT Example and Run tests
+  build-rest-api-flint-example:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./local/rest_api_gcbm
+        working-directory: ./local/rest_api_flint.example/
     steps:
       - uses: actions/checkout@v2
-      - name: Build FLINT Cloud container
-        run: docker build -t gcbm-api .
 
-  linting-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python
-        uses: actions/setup-python@v2
-      - name: Upgrade pip version
+      - name: Build REST API FLINT Example
+        #the docker image is created and run in detached mode at port 8080
         run: |
-          python3 -m pip install --upgrade pip
-      - name: Lint source with Flake8
+          docker build . --file Dockerfile --tag rest_api_flint.example
+          docker run --rm -d -p 8080:8080 rest_api_flint.example:latest
+        
+      - name: Test endpoints
+        #tests located at /local/tests, are run using pytest
         run: |
-          pip3 install flake8
-          flake8 .
-      - name: Checks the Documentation Build
-        uses: ammaraskar/sphinx-action@master
+          cd ../
+          pip install -U pytest
+          pytest tests -v
+      - name: Peform container scan for vulnerabilities
+        uses: azure/container-scan@v0
         with:
-          docs-folder: "docs/"
+          image-name: rest_api_flint.example
 
-  linting-docker:
+  # Build REST API GCBM
+  build-rest-api-gcbm:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./local/rest_api_gcbm/
     steps:
       - uses: actions/checkout@v2
-      - name: "Lint Dockerfile"
-        uses: jbergstroem/hadolint-gh-action@v1
-        with:
-          dockerfile: "./local/rest_api_flint.example/Dockerfile
-            ./local/rest_api_gcbm/Dockerfile
-            ./layered/cloud-run/Dockerfile
-            ./layered/compute-engine/Dockerfile
-            ./layered/ingress/Dockerfile"
-          error_level: 0
-          output_format: tty
+
+      - name: Build REST API GCBM
+        run: docker build . --file Dockerfile --tag rest_api_gcbm
+
+      # Disabled for now. Refer: https://github.com/Azure/container-scan/issues/109
+      # - name: Peform container scan for vulnerabilities
+      #   uses: azure/container-scan@v0
+      #   with:
+      #     image-name: rest_api_gcbm
