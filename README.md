@@ -81,16 +81,18 @@ This REST API is built using the `flask-restful` package and has been containeri
 In order to run the Flask GCBM API, navigate to the `local/rest_api_gcbm` please follow the following steps: - 
 
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
-2. `docker run -v path to the unzipped GCBM_Demo_Run.zip folder:/gcbm_files --rm -p 8080:8080 gcbm-api`
+2. `docker run -v Path-to-unzipped-GCBM_Demo_Run.zip:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
-For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of the directory
-On unzipping, a folder `layers` is created, make note of the path of this folder
-We have mounted the `layers` folder as gcbm_files onto our container. 
+For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of the directory.
+
+Make note of the path to the unzipped folder. Unzipping `GCBM_Demo_Run.zip` will give 3 folders : `config`, `input_database` and `layers`
 
 Example: 
-Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
+Assume the path to the unzipped folder is `/home/GCBM`, instruction 2 will be :
 
-2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
+2. `docker run -v /home/GCBM:/gcbm_files --rm -p 8080:8080 gcbm-api`
+
+The `GCBM` folder has been mounted as gcbm_files onto our container. 
 
 Currently the REST API has the following endpoints available for access:-
 
