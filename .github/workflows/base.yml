@@ -4,9 +4,9 @@ on:
   schedule:
     - cron: "0 0 * * MON"
 
-  # Just for testing
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
+  # This would be a one-time trigger; Remove after the images are pushed to GHCR!
+  push:
+    branches: [master]
 
 env:
   REGISTRY: ghcr.io
