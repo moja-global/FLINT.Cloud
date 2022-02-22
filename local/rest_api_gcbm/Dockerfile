@@ -1,4 +1,4 @@
-FROM ghcr.io/moja-global/flint.gcbm:master
+FROM ghcr.io/moja-global/gcbm:master
 
 WORKDIR /app
 
