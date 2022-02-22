@@ -1,15 +1,10 @@
-#FROM mojaglobal/flint
-FROM tlazypanda/gcbm
+# Replace with ghcr.io/moja-global/flint.gcbm:master
+FROM ghcr.io/harshcasper/flint.gcbm
 
-#ENTRYPOINT ["./moja.cli"]
-
-#ENV APP_HOME /app
 WORKDIR /app
 
-RUN set -xe \
-    && apt-get update \
-    && easy_install pip
-RUN pip install --no-cache-dir --upgrade pip
+RUN pip install --upgrade pip
+
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
