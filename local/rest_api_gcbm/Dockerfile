@@ -1,5 +1,4 @@
-# Replace with ghcr.io/moja-global/flint.gcbm:master
-FROM ghcr.io/harshcasper/flint.gcbm
+FROM ghcr.io/moja-global/flint.gcbm:master
 
 WORKDIR /app
 
