@@ -125,12 +125,11 @@ def generate_download_signed_url_v4(project_dir):
         method="GET",
     )
 
-    url = {}
-    url["input"] = url_input
-    url["output"] = url_output
-    url[
-        "message"
-    ] = "These links are valid only upto 30 mins. Incase the links expire, you may create a new request."
+    url = {
+        "input": url_input,
+        "output": url_output,
+        "message": "These links are valid only upto 30 mins. Incase the links expire, you may create a new request.",
+    }
     return url
 
 
