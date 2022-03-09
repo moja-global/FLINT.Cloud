@@ -1,8 +1,8 @@
 name: Build base images for FLINT and GCBM
 
-on:
-  schedule:
-    - cron: "0 0 * * MON"
+# on:
+#   schedule:
+#     - cron: "0 0 * * MON"
 
   # This would be a one-time trigger; Remove after the images are pushed to GHCR!
   push:
