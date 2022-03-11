@@ -1,8 +1,23 @@
 import pytest
 import requests
 import zipfile
-import tempfile
 import os
+
+@pytest.fixture(autouse=True)
+def create_demo_files():
+    """ This fixture creates a test_files under local/tests by extracting \
+        GCBM_Demo_Run.zip from /FLINT.CLOUD for testing """
+    path_parent = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(path_parent)
+    path_parent = os.path.dirname(path_parent)
+    os.chdir(path_parent)
+    path_parent = os.path.dirname(path_parent)
+    os.chdir(path_parent)
+    print("path_parent ", path_parent)
+    zip_dir = os.getcwd() + '/GCBM_Demo_Run.zip'
+    test_files_dir = os.path.dirname(os.path.realpath(__file__)) + '/tests_files'
+    unzipped_file = zipfile.ZipFile(zip_dir, 'r')
+    unzipped_file.extractall(test_files_dir)
 
 class TestApiFlintGCBM:
 
@@ -29,22 +44,6 @@ class TestApiFlintGCBM:
     def yield_title(self):
         """ This would yield a title for the test """
         yield "testtitle"
-
-    @pytest.fixture(autouse=True)
-    def create_demo_files(self):
-        """ This fixture creates a test_files under local/tests by extracting \
-            GCBM_Demo_Run.zip from /FLINT.CLOUD for testing """
-        path_parent = os.path.dirname(os.path.realpath(__file__))
-        os.chdir(path_parent)
-        path_parent = os.path.dirname(path_parent)
-        os.chdir(path_parent)
-        path_parent = os.path.dirname(path_parent)
-        os.chdir(path_parent)
-        print("path_parent ", path_parent)
-        zip_dir = os.getcwd() + '/GCBM_Demo_Run.zip'
-        test_files_dir = os.path.dirname(os.path.realpath(__file__)) + '/tests_files'
-        unzipped_file = zipfile.ZipFile(zip_dir, 'r')
-        unzipped_file.extractall(test_files_dir)
     
     @pytest.fixture
     def yield_config_files(self):
