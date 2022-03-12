@@ -1,8 +1,8 @@
 name: Test & publish FLINT Cloud images 
 
 on:
-#   schedule:
-#     - cron: "0 0 * * MON"
+  schedule:
+    - cron: "0 0 * * MON"
   push:
     branches: [ master ]
     # Publish semver tags as releases.
