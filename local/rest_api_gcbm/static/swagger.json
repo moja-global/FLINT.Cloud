@@ -5,20 +5,6 @@
         "version": "1.0"
     },
     "paths": {
-        "/gcbm": {
-            "post": {
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "GCBM Implementation FLINT"
-                    }
-                },
-                "summary": "Get GCBM implementation of FLINT",
-                "tags": [
-                    "point"
-                ]
-            }
-        },
         "/gcbm/dynamic": {
             "post": {
                 "description": "",

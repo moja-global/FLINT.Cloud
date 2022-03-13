@@ -81,16 +81,8 @@ This REST API is built using the `flask-restful` package and has been containeri
 In order to run the Flask GCBM API, navigate to the `local/rest_api_gcbm` please follow the following steps: - 
 
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
-2. `docker run -v path to the unzipped GCBM_Demo_Run.zip folder:/gcbm_files --rm -p 8080:8080 gcbm-api`
+2. `docker run --rm -p 8080:8080 gcbm-api`
 
-For instruction 2, unzip the folder `GCBM_Demo_Run.zip` present at the root of the directory
-On unzipping, a folder `layers` is created, make note of the path of this folder
-We have mounted the `layers` folder as gcbm_files onto our container. 
-
-Example: 
-Assume the path to the unzipped folder is `/home/layers`, instruction 2 will be :
-
-2. `docker run -v /home/layers:/gcbm_files --rm -p 8080:8080 gcbm-api`
 
 Currently the REST API has the following endpoints available for access:-
 
@@ -99,9 +91,7 @@ Currently the REST API has the following endpoints available for access:-
 | **\help\all** | Produces a help message with information on all options for moja.CLI. |
 | **\help\arg** | Produces a help message with information on option **arg** for moja.CLI.|
 | **\version**  | Outputs the version number of moja.CLI.|
-| **\gcbm**     | Runs flint-gcbm and outputs some files in the output directory along with the output db. |
 
-Parameters (multipart-form data) `file` for gcbm_config and `input_db` for input sqlite db can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
 
