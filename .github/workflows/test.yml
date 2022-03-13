@@ -31,7 +31,7 @@ jobs:
         with:
           image-name: rest_api_flint.example
 
-    test-rest-api-flint-example:
+  test-rest-api-gcbm:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -44,7 +44,7 @@ jobs:
         # Docker container is created and run in detached mode at port 8080
         run: |
           docker-compose up -d
-        
+          
       - name: Test endpoints
         run: |
           cd ../
