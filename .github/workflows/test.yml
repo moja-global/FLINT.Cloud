@@ -49,5 +49,4 @@ jobs:
         run: |
           cd ../
           pip install -U pytest
-          sleep 150
           pytest tests/test_rest_gcbm.py
