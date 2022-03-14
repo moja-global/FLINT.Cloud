@@ -7,8 +7,6 @@ on:
     branches: [ master ]
     # Publish semver tags as releases.
     tags: [ 'v*.*.*' ]
-  pull_request:
-    types: [opened, synchronize, reopened, ready_for_review]
 
 env:
   REGISTRY: ghcr.io
@@ -49,7 +47,7 @@ jobs:
         with:
           context: ./local/rest_api_flint.example/
           file: "./local/rest_api_flint.example/Dockerfile"
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
@@ -86,7 +84,7 @@ jobs:
         with:
           context: ./local/rest_api_gcbm/
           file: "./local/rest_api_gcbm/Dockerfile"
-          push: ${{ github.event_name != 'pull_request' }}
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
