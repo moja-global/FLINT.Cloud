@@ -44,6 +44,12 @@ c_handler.setFormatter(c_format)
 logger.addHandler(c_handler)
 
 
+# The path of the volume is referenced here
+INPUT_FOLDER = "../gcbm_files/"
+LAYERS = os.path.join(INPUT_FOLDER, "layers/tiled")
+INPUT_DATABASE = os.path.join(INPUT_FOLDER, "input_database")
+CONFIG = os.path.join(INPUT_FOLDER, "config")
+
 ### swagger specific ###
 SWAGGER_URL = '/swagger'
 API_URL = '/static/swagger.json'
@@ -157,7 +163,7 @@ def gcbm_new():
     return {'data': message}, 200
 
 
-@app.route('/gcbm/upload', methods=['POST'])
+@app.route("/gcbm/upload", methods=["POST"])
 def gcbm_upload():
     """
             Upload files for GCBM Dynamic implementation of FLINT
@@ -179,7 +185,6 @@ def gcbm_upload():
     title = request.form.get('title') or 'simulation'
     # Sanitize title
     title = ''.join(c for c in title if c.isalnum())
-
     # Create project directory
     project_dir = f'{title}'
     if not os.path.exists(f'{os.getcwd()}/input/{project_dir}'):
@@ -189,51 +194,48 @@ def gcbm_upload():
     # Function to flatten paths
     def fix_path(path):
         return os.path.basename(path.replace('\\', '/'))
-
     # Process configuration files
-    if 'config_files' in request.files:
-        for file in request.files.getlist('config_files'):
+    if os.path.isdir(CONFIG):
+        for file in os.listdir(CONFIG):
             # Fix paths in provider_config
-            if file.filename == 'provider_config.json':
-                provider_config = json.load(file)
-                provider_config['Providers']['SQLite']['path'] = fix_path(
-                    provider_config['Providers']['SQLite']['path'])
-                layers = []
-                for layer in provider_config['Providers']['RasterTiled']['layers']:
-                    layer['layer_path'] = fix_path(layer['layer_path'])
-                    layers.append(layer)
-                provider_config['Providers']['RasterTiled']['layers'] = layers
-                with open(f'{os.getcwd()}/input/{project_dir}/provider_config.json', 'w') as pcf:
-                    json.dump(provider_config, pcf)
-            # Fix paths in modules_output
-            elif file.filename == 'modules_output.json':
-                modules_output = json.load(file)
-                modules_output['Modules']['CBMAggregatorSQLiteWriter']['settings']['databasename'] = 'output/gcbm_output.db'
-                modules_output['Modules']['WriteVariableGeotiff']['settings']['output_path'] = 'output'
-                with open(f'{os.getcwd()}/input/{project_dir}/modules_output.json', 'w') as mof:
-                    json.dump(modules_output, mof)
-            else:
-                # Save file immediately
-                file.save(f'{os.getcwd()}/input/{project_dir}/{file.filename}')
+            if os.path.isfile(os.path.join(CONFIG, file)):
+                file_reader = open(os.path.join(CONFIG, file))
+                if file == 'provider_config.json':
+                    provider_config = json.load(file_reader)
+                    provider_config['Providers']['SQLite']['path'] = fix_path(
+                        provider_config['Providers']['SQLite']['path'])
+                    layers = []
+                    for layer in provider_config['Providers']['RasterTiled']['layers']:
+                        layer['layer_path'] = fix_path(layer['layer_path'])
+                        layers.append(layer)
+                    provider_config['Providers']['RasterTiled']['layers'] = layers
+                    with open(f'{os.getcwd()}/input/{project_dir}/provider_config.json', 'w') as pcf:
+                        json.dump(provider_config, pcf, indent=4)
+                # Fix paths in modules_output
+                elif file == 'modules_output.json':
+                    modules_output = json.load(file_reader)
+                    modules_output['Modules']['CBMAggregatorSQLiteWriter']['settings']['databasename'] = 'output/gcbm_output.db'
+                    modules_output['Modules']['WriteVariableGeotiff']['settings']['output_path'] = 'output'
+                    with open(f'{os.getcwd()}/input/{project_dir}/modules_output.json', 'w') as mof:
+                        json.dump(modules_output, mof, indent=4)
+                else:
+                    # Copy file immediately to the new location from the mounted volume
+                    shutil.copy(os.path.join(CONFIG, file), f'{os.getcwd()}/input/{project_dir}/{file}')
+                file_reader.close()
     else:
         return {'error': 'Missing configuration file'}, 400
-
-    # Save input
-    if 'input' in request.files:
-        for file in request.files.getlist('input'):
-            # Save file immediately
-            file.save(f'{os.getcwd()}/input/{project_dir}/{file.filename}')
+    if os.path.isdir(LAYERS):
+        for file in os.listdir(LAYERS):
+            # Copy file immediately to the new location from the mounted volume
+            shutil.copy(os.path.join(LAYERS, file), f'{os.getcwd()}/input/{project_dir}/{file}')
     else:
         return {'error': 'Missing input'}, 400
-
-    # Save db
-    if 'db' in request.files:
-        for file in request.files.getlist('db'):
-            # Save file immediately
-            file.save(f'{os.getcwd()}/input/{project_dir}/{file.filename}')
+    if os.path.isdir(INPUT_DATABASE):
+        for file in os.listdir(INPUT_DATABASE):
+            # Copy file immediately to the new location from the mounted volume
+            shutil.copy(os.path.join(INPUT_DATABASE, file), f'{os.getcwd()}/input/{project_dir}/{file}')
     else:
         return {'error': 'Missing database'}, 400
-
     return {"data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."}, 200
 
 
