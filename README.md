@@ -2,7 +2,7 @@
     <a href="https://moja.global/"><img src="https://github.com/moja-global.png" width="18%" height="18%"></a>
     <h1>FLINT.Cloud</h1>
     <p>
-    The project aims to build a continuous deployment pipeline to offer FLINT as a SaaS over cloud. The project also aims to simplify the process of installation by supporting a single command or step installation process.
+    The project aims to build a continuous deployment pipeline to offer FLINT on cloud resources. The project also aims to simplify the process of installation by supporting a single command or step installation process. This is not offered as a service (Saas) but rather provides deployment templates for new users to install on common infrastructure architectures.        
     </p>
 </div>
 
