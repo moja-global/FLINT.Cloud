@@ -83,7 +83,6 @@ In order to run the Flask GCBM API, navigate to the `local/rest_api_gcbm` please
 1. `docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .`
 2. `docker run --rm -p 8080:8080 gcbm-api`
 
-
 Currently the REST API has the following endpoints available for access:-
 
 | Endpoint      | Functionality     |
