@@ -4,9 +4,9 @@
 
     The title of a new simulation can be passed or the default title `simulation` will be used. (i.e the default title of the simulation is `simulation`, here the title `run4` is used)
 
-```
-    curl -d "title=run4" -X POST http://localhost:8080/gcbm/new
-````
+    ```
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/new
+    ````
 
 2. `/gcbm/upload`
 
@@ -60,21 +60,21 @@
     ```
 3. `/gcbm/dynamic`
 
-```
-    curl -d "title=run4" -X POST http://localhost:8080/gcbm/dynamic
-```
+    ```
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/dynamic
+    ```
 
 4. `/gcbm/status`
-```
-    curl -d "title=run4" -X POST http://localhost:8080/gcbm/status
-```
+    ```
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/status
+    ```
 5. `/gcbm/download`
     A file named `output.zip` will be obtained. This file contains the outputs generated, which can be analysed on unzipping.
     
-```
-    curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
-```
+    ```
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
+    ```
 6. `/gcbm/list`
-```
-    curl http://localhost:8080/gcbm/list
-```
+    ```
+        curl http://localhost:8080/gcbm/list
+    ```
