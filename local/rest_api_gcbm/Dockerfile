@@ -1,4 +1,4 @@
-FROM ghcr.io/moja-global/gcbm:master
+FROM ghcr.io/moja-global/moja.canada:develop
 
 WORKDIR /app
 
