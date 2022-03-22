@@ -43,8 +43,8 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./local/rest_api_gcbm/
-          file: "./local/rest_api_gcbm/Dockerfile.base"
+          context: ./docker
+          file: "./docker/Dockerfile.base"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -82,14 +82,10 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
-          context: ./local/rest_api_gcbm/
-          file: "./local/rest_api_gcbm/Dockerfile.flint"
+          context: ./docker
+          file: "./docker/Dockerfile.flint"
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  
-  ## The next job should be ideally to build the GCBM image but due to the
-  ## memory constraints of the GitHub Actions runners, it is not possible to build
-  ## the GCBM image right now. Manual build and push is required.

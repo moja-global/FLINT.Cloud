@@ -29,9 +29,8 @@ jobs:
         with:
           dockerfile: "./local/rest_api_flint.example/Dockerfile
             ./local/rest_api_gcbm/Dockerfile
-            ./local/rest_api_gcbm/Dockerfile.base
-            ./local/rest_api_gcbm/Dockerfile.flint
-            ./local/rest_api_gcbm/Dockerfile.gcbm
+            ./docker/Dockerfile.base
+            ./docker/Dockerfile.flint
             ./layered/cloud-run/Dockerfile
             ./layered/compute-engine/Dockerfile
             ./layered/ingress/Dockerfile"
