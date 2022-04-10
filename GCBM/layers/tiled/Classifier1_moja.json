@@ -1,0 +1,21 @@
+{
+    "layer_type": "GridLayer",
+    "layer_data": "Byte",
+    "nodata": 255,
+    "tileLatSize": 1.0,
+    "tileLonSize": 1.0,
+    "blockLatSize": 0.1,
+    "blockLonSize": 0.1,
+    "cellLatSize": 0.00025,
+    "cellLonSize": 0.00025,
+    "attributes": {
+        "1": "TA",
+        "2": "BP",
+        "3": "BS",
+        "4": "JP",
+        "5": "WS",
+        "6": "WB",
+        "7": "BF",
+        "8": "GA"
+    }
+}
