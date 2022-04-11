@@ -16,8 +16,7 @@ jobs:
         python create_cml_report.py
         # This means that summary txt files should be in the below directory
         cd ../rest_api_gcbm
-        echo ##  > report.md
-        cat *_summary.txt >> report.md
+        cat *_summary.txt > report.md
         cml-send-comment report.md
         
 
