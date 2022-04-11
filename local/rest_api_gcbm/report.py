@@ -18,7 +18,7 @@ for sim in simulation_paths:
     sim_name = os.path.basename(sim)
     s = {"Input Files":input_files,"Config files":config_files,"Logs":logs,"Output":output_msg}
     with open(f"{sim_name}_summary.txt","w") as outfile:
-        outfile.write(f"## Sim name:{sim_name}\n\n")
+        outfile.write(f"## Simulation name:{sim_name}\n\n")
         outfile.write(input_files.to_markdown()+"\n\n")
         outfile.write(config_files.to_markdown()+"\n\n")
         outfile.write(logs.to_markdown())
