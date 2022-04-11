@@ -27,6 +27,6 @@ jobs:
         echo "## GCBM Model" > report.md
         echo "After you reproduce the GCBM Demo Run your structure will be:" >> report.md
         cat GCBM_summary.txt >> report.md
-        echo "Your output configuration will be in ```@/input/simulation_name/output.zip```" > report.md
+        echo "Your output configuration will be in ```@/input/simulation_name/output.zip```" >> report.md
         cml-send-comment report.md
 
