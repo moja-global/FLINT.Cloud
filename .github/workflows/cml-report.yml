@@ -64,4 +64,3 @@ jobs:
          echo "## Total Biomass Curve" >> report.md
          cml-publish tests/output/total_biomass_mt.png --md >> report.md
          cml-send-comment --pr report.md
-
