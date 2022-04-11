@@ -1,24 +1,16 @@
 import os
 import pandas as pd
 
-TEST_ROOT = "local/rest_api_gcbm"
-file_paths = os.path.join(TEST_ROOT,'input')
-simulations = os.listdir(file_paths)
-simulation_paths = [os.path.join(file_paths,s) for s in simulations]
-
-for sim in simulation_paths:
-    input_files = pd.DataFrame({"Input Files":[match for match in os.listdir(sim) if ".tiff" in match]})
-    config_files = pd.DataFrame({"Config Files":[match for match in os.listdir(sim) if "config" in match]})
-    logs = pd.DataFrame({"Log Files":[match for match in os.listdir(sim) if "log" in match]})
-    output = os.path.join(sim,'output')
-    if os.path.exists(output):
-        output_msg = "Output files located in " + output
-    else:
-        output_msg = "We have to run the simulation first check README.md"
-    sim_name = os.path.basename(sim)
-    s = {"Input Files":input_files,"Config files":config_files,"Logs":logs,"Output":output_msg}
-    with open(f"{sim_name}_summary.txt","w") as outfile:
-        outfile.write(f"## Simulation name:{sim_name}\n\n")
-        outfile.write(input_files.to_markdown()+"\n\n")
-        outfile.write(config_files.to_markdown()+"\n\n")
-        outfile.write(logs.to_markdown())
+GCBM_template_path = os.path.join('..','..','GCBM')
+docker_path = os.path.join('app','input','your_sim_name')
+inputs = os.listdir(os.path.join(GCBM_template_path,'layers','tiled'))
+api_inputs = pd.DataFrame({"Data Files":[os.path.join('@','input','simulation_name',file) for file in inputs]})
+configs = os.listdir(os.path.join(GCBM_template_path,'config'))
+api_configs = pd.DataFrame({"Config files":[os.path.join('@','input','simulation_name',file) for file in os.listdir(configs)]})
+with open("GCBM_summary.txt",'w') as outfile:
+    outfile.write("## GCBM Model"+'\n')
+    outfile.write("### After your reproduce the GCBM Demo Run you docker image will have this structure"+'\n')
+    outfile.write(api_inputs.to_markdown()+"\n\n")
+    outfile.write(api_configs.to_markdown()+"\n\n")
+    outfile.write(f"your output configuration will be in {os.path.join('@','input','output.zip')}")
+    
