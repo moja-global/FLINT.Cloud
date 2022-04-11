@@ -10,8 +10,6 @@ jobs:
       env:
         repot_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-       pip install --upgrade pip
-       pip install -r pandas
        python report.py
        echo "## Simulation Summary" > report.md
        cat local/rest_api_gcbm/*_summary.txt >> report.md
