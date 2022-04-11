@@ -1,18 +1,16 @@
 name: perturbation-test
- on: [push]
- jobs:
+on: [push]
+jobs:
   run:
     runs-on: [ubuntu-latest]
     container: docker://dvcorg/cml-py3:latest
     steps:
-      - uses: actions/checkout@v2
-      - name: cml_run
-        env:
-          repot_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-
-        pip install -r pandas
-        python report.py
-        echo "## Simulation Summary" > report.md
-        cat local/rest_api_gcbm/input/summaries/*.txt >> report.md
-        cml-send-comment report.md
+    - uses: actions/checkout@v2
+    - name: cml_run
+      env:
+        repot_token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+       python report.py
+       echo "## Simulation Summary" > report.md
+       cat local/rest_api_gcbm/*_summary.txt >> report.md
+       cml-send-comment report.md
