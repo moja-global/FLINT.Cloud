@@ -8,7 +8,6 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     
-    container: docker://dvcorg/cml-py3:latest
     - name: cml_run
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
