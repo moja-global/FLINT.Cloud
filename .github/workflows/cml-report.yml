@@ -7,6 +7,13 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
+
+    - name: Setup cml
+      uses: iterative/setup-cml@v1
+    - name: Setup python
+      uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
     
     - name: cml_run
       env:
@@ -18,7 +25,9 @@ jobs:
         python create_cml_report.py
         # This means that summary txt files should be in the below directory
         cd ../rest_api_gcbm
-        cat *_summary.txt > report.md
+        echo "## GCBM Model" > report.md
+        echo "After you reproduce the GCBM Demo Run your structure will be:" >> report.md
+        cat GCBM_summary.txt >> report.md
+        echo "Your output configuration will be in ```@/input/simulation_name/output.zip```" > report.md
         cml-send-comment report.md
-        
 
