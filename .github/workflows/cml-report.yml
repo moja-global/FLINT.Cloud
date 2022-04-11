@@ -1,18 +1,23 @@
 name: simulation-report
 on: [push]
 jobs:
-  run:
+  sim-summary:
     runs-on: [ubuntu-latest]
     container: docker://dvcorg/cml-py3:latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+    
     - name: cml_run
       env:
-        repot_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-       python -m pip install --upgrade pip
-       pip install pandas
-       python local/tests/create_cml_report.py
-       echo "## Simulation Summary" > report.md
-       cat local/rest_api_gcbm/*_summary.txt >> report.md
-       cml-send-comment report.md
+        cd ../tests
+        python create_cml_report.py
+        # This means that summary txt files should be in the below directory
+        cd ../rest_api_gcbm
+        echo ##  > report.md
+        cat *_summary.txt >> report.md
+        cml-send-comment report.md
+        
+
