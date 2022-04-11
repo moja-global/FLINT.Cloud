@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 name: Generate CML Report
 on:
   pull_request:
