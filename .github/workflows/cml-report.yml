@@ -1,4 +1,4 @@
-name: perturbation-test
+name: simulation-report
 on: [push]
 jobs:
   run:
