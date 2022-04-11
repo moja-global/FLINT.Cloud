@@ -1,6 +1,6 @@
-from operator import index
 import os
 import pandas as pd
+import tabulate
 
 GCBM_template_path = os.path.join('..','..','GCBM')
 docker_path = os.path.join('app','input','your_sim_name')

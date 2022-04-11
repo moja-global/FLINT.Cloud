@@ -20,6 +20,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pandas
+        pip install tabulate
         cd local/tests
         python create_cml_report.py
         # This means that summary txt files should be in the below directory
