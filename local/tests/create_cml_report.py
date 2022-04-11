@@ -8,7 +8,7 @@ inputs = os.listdir(os.path.join(GCBM_template_path,'layers','tiled'))
 api_inputs = pd.DataFrame({"Data Files":[os.path.join('@','input','simulation_name',file) for file in inputs]})
 configs = os.listdir(os.path.join(GCBM_template_path,'config'))
 api_configs = pd.DataFrame({"Config files":[os.path.join('@','input','simulation_name',file) for file in configs]})
-md = pd.concat([api_inputs,api_configs])
 with open(os.path.join('..','rest_api_gcbm',"GCBM_summary.txt"),'w') as outfile:
-    outfile.write(md.to_markdown(index=False))
+    outfile.write(api_inputs.to_markdown(index=False)+'\n\n')
+    outfile.write(api_configs.to_markdown(index=False)+'\n\n')
     
