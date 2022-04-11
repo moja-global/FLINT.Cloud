@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 name: Generate CML Report
 on:
   pull_request:
@@ -65,21 +64,4 @@ jobs:
          echo "## Total Biomass Curve" >> report.md
          cml-publish tests/output/total_biomass_mt.png --md >> report.md
          cml-send-comment --pr report.md
-=======
-name: perturbation-test
-on: [push]
-jobs:
-  run:
-    runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: cml_run
-      env:
-        repot_token: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-       python local/rest_api_gcbm/report.py
-       echo "## Simulation Summary" > report.md
-       cat local/rest_api_gcbm/*_summary.txt >> report.md
-       cml-send-comment report.md
->>>>>>> 4991cf4 (Update cml-report.yml)
+
