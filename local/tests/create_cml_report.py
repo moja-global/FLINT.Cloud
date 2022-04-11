@@ -1,15 +1,15 @@
 import os
 import pandas as pd
 
-TEST_ROOT = "./local/rest_api_gcbm"
+TEST_ROOT = "local/rest_api_gcbm"
 file_paths = os.path.join(TEST_ROOT,'input')
 simulations = os.listdir(file_paths)
 simulation_paths = [os.path.join(file_paths,s) for s in simulations]
 
 for sim in simulation_paths:
-    input_files = pd.DataFrame({"Input Files":[os.path.join(sim,match) for match in os.listdir(sim) if ".tiff" in match]})
-    config_files = pd.DataFrame({"Config Files":[os.path.join(sim,match) for match in os.listdir(sim) if "config" in match]})
-    logs = pd.DataFrame({"Log Files":[os.path.join(sim,match) for match in os.listdir(sim) if "log" in match]})
+    input_files = pd.DataFrame({"Input Files":[match for match in os.listdir(sim) if ".tiff" in match]})
+    config_files = pd.DataFrame({"Config Files":[match for match in os.listdir(sim) if "config" in match]})
+    logs = pd.DataFrame({"Log Files":[match for match in os.listdir(sim) if "log" in match]})
     output = os.path.join(sim,'output')
     if os.path.exists(output):
         output_msg = "Output files located in " + output
