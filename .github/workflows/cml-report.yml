@@ -10,7 +10,7 @@ jobs:
       env:
         repot_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-       python report.py
+       python local/rest_api_gcbm/report.py
        echo "## Simulation Summary" > report.md
        cat local/rest_api_gcbm/*_summary.txt >> report.md
        cml-send-comment report.md
