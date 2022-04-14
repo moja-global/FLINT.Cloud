@@ -21,6 +21,7 @@ jobs:
           flake8 .
       - name: Black Formatting
         run: |
+          pip3 install black
           black --version
           black local/
 
