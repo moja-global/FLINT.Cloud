@@ -19,6 +19,11 @@ jobs:
         run: |
           pip3 install flake8
           flake8 .
+      - name: Black Formatting
+        run: |
+          pip3 install black
+          black --version
+          black local/
 
   linting-docker:
     runs-on: ubuntu-latest
