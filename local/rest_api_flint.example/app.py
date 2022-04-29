@@ -11,8 +11,7 @@ from flask_cors import CORS
 from shutil import copyfile
 
 app = Flask(__name__)
-CORS(app, origins=['http://127.0.0.1:8080/', 'http://127.0.0.1:8000',
-     'http://localhost:5000', r'^https://.+example.com$'])
+CORS(app, origins= os.getenv('CORS_ORIGINS'))
 api = Api(app)
 
 
