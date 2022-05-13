@@ -11,7 +11,6 @@ from flask_cors import CORS
 from shutil import copyfile
 
 app = Flask(__name__)
-<<<<<<< HEAD
 CORS(
     app,
     origins=[
@@ -21,9 +20,8 @@ CORS(
         r"^https://.+example.com$",
     ],
 )
-=======
+app = Flask(__name__)
 CORS(app, origins= os.getenv('CORS_ORIGINS'))
->>>>>>> Addressing issue #97
 api = Api(app)
 
 
