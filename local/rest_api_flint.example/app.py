@@ -20,9 +20,9 @@ CORS(
         r"^https://.+example.com$",
     ],
 )
-app = Flask(__name__)
-CORS(app, origins= os.getenv('CORS_ORIGINS'))
-api = Api(app)
+# app = Flask(__name__)
+# CORS(app, origins= os.getenv('CORS_ORIGINS'))
+# api = Api(app)
 
 
 ### swagger specific ###
