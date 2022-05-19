@@ -13,11 +13,21 @@
       "contributions": [
         "projectManagement"
       ]
+    },
+    {
+      "login": "akashthedeveloper",
+      "name": "Akash Jha",
+      "avatar_url": "https://avatars.githubusercontent.com/u/49565671?v=4",
+      "profile": "https://bit.ly/3bx3G7r",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "projectName": "Import-Me",
+  "projectName": "FLINT.Cloud",
   "projectOwner": "moja-global",
   "repoType": "github",
-  "repoHost": "https://github.com"
+  "repoHost": "https://github.com",
+  "skipCi": true
 }
