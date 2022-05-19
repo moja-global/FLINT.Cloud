@@ -11,3 +11,5 @@ flask-cors
 simplejson
 sqlalchemy
 psutil
+pandas
+matplotlib
