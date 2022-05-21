@@ -181,67 +181,104 @@ def gcbm_upload():
     if not os.path.exists(f"{os.getcwd()}/input/{project_dir}"):
         os.makedirs(f"{os.getcwd()}/input/{project_dir}")
     logging.debug(os.getcwd())
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/disturbances"):
+        os.makedirs(f"{os.getcwd()}/input/{project_dir}/disturbances")
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/classifiers"):
+        os.makedirs(f"{os.getcwd()}/input/{project_dir}/classifiers")
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/db"):
+        os.makedirs(f"{os.getcwd()}/input/{project_dir}/db")
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/miscellaneous"):
+        os.makedirs(f"{os.getcwd()}/input/{project_dir}/miscellaneous")
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/config"):
+        os.makedirs(f"{os.getcwd()}/input/{project_dir}/templates")
 
     # Function to flatten paths
     def fix_path(path):
         return os.path.basename(path.replace("\\", "/"))
 
-    # Process configuration files
-    if "config_files" in request.files:
-        for file in request.files.getlist("config_files"):
-            # Fix paths in provider_config
-            if file.filename == "provider_config.json":
-                provider_config = json.load(file)
-                provider_config["Providers"]["SQLite"]["path"] = fix_path(
-                    provider_config["Providers"]["SQLite"]["path"]
-                )
-                layers = []
-                for layer in provider_config["Providers"]["RasterTiled"]["layers"]:
-                    layer["layer_path"] = fix_path(layer["layer_path"])
-                    layers.append(layer)
-                provider_config["Providers"]["RasterTiled"]["layers"] = layers
-                with open(
-                    f"{os.getcwd()}/input/{project_dir}/provider_config.json", "w"
-                ) as pcf:
-                    json.dump(provider_config, pcf)
-            # Fix paths in modules_output
-            elif file.filename == "modules_output.json":
-                modules_output = json.load(file)
-                modules_output["Modules"]["CBMAggregatorSQLiteWriter"]["settings"][
-                    "databasename"
-                ] = "output/gcbm_output.db"
-                modules_output["Modules"]["WriteVariableGeotiff"]["settings"][
-                    "output_path"
-                ] = "output"
-                with open(
-                    f"{os.getcwd()}/input/{project_dir}/modules_output.json", "w"
-                ) as mof:
-                    json.dump(modules_output, mof)
-            else:
-                # Save file immediately
-                file.save(f"{os.getcwd()}/input/{project_dir}/{file.filename}")
+    if "disturbances" in request.files:
+      for file in request.files.getlist("disturbances"):
+          file.save(f"{os.getcwd()}/input/{project_dir}/disturbances/{file.filename}")
     else:
-        return {"error": "Missing configuration file"}, 400
+      return{"error": "Missing configuration file"}, 400
 
-    # Save input
-    if "input" in request.files:
-        for file in request.files.getlist("input"):
-            # Save file immediately
-            file.save(f"{os.getcwd()}/input/{project_dir}/{file.filename}")
+    if "classifiers" in request.files:
+        for file in request.files.getlist("classifiers"):
+          file.save(f"{os.getcwd()}/input/{project_dir}/classifiers/{file.filename}")
     else:
-        return {"error": "Missing input"}, 400
+      return{"error": "Missing configuration file"}, 400
 
-    # Save db
     if "db" in request.files:
         for file in request.files.getlist("db"):
-            # Save file immediately
-            file.save(f"{os.getcwd()}/input/{project_dir}/{file.filename}")
+            file.save(f"{os.getcwd()}/input/{project_dir}/db/{file.filename}")
     else:
-        return {"error": "Missing database"}, 400
+      return{"error": "Missing configuration file"}, 400
+
+    if "miscellaneous" in request.files:
+        for file in request.files.getlist("miscellaneous"):
+            file.save(f"{os.getcwd()}/input/{project_dir}/miscellaneous/{file.filename}")
+    else:
+        return{"error": "Missing configuration file"}, 400
+    
+    if "miscellaneous" in request.files:
+        for file in request.files.getlist("templates"):
+            file.save(f"{os.getcwd()}/input/{project_dir}/templates/{file.filename}")
+    else:
+        return{"error": "Missing configuration file"}, 400
+
+    get_modules_cbm(project_dir)
 
     return {
-        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
-    }, 200
+       "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
+  }
+
+	def get_modules_cbm(project_dir):
+   with open(f"{os.getcwd()}/input/{project_dir}/templates/modules_cbm.json", "r+") as pcf:
+        disturbances = []
+        data = json.load(pcf)
+        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
+            disturbances.append(file.split('.')[0])    
+        pcf.seek(0)
+        data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
+        json.dump(data, pcf, indent=4)
+        pcf.truncate()
+
+def get_provider_config(project_dir):
+   with open(f"{os.getcwd()}/input/{project_dir}/templates/provider_config.json", "r+") as gpc:
+        lst = []
+
+        data = json.load(gpc)
+        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
+            d = dict()
+            d["name"] = file[:-10]
+            d["layer_path"] = "../layers/tiles" + file
+            d["layer_prefix"] = file[:-5]
+            lst.append(d)    
+        gpc.seek(0)
+        data["Providers"]["RasterTiled"]["layers"] = lst
+
+        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/classifiers/"):
+            d = dict()
+            d["name"] = file[:-10]
+            d["layer_path"] = "../layers/tiles" + file
+            d["layer_prefix"] = file[:-5]
+            lst.append(d)    
+        gpc.seek(0)
+        data["Providers"]["RasterTiled"]["layers"] = lst
+
+        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"):
+            d = dict()
+            d["name"] = file[:-10]
+            d["layer_path"] = "../layers/tiles" + file
+            d["layer_prefix"] = file[:-5]
+            lst.append(d)    
+        gpc.seek(0)
+        data["Providers"]["RasterTiled"]["layers"] = lst
+
+        json.dump(data, gpc, indent=4)
+        gpc.truncate()
+
+
 
 
 @app.route("/gcbm/dynamic", methods=["POST"])
