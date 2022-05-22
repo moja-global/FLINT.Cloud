@@ -277,7 +277,6 @@ def get_provider_config(project_dir):
             lst.append(d)    
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
-        
 
         Rasters = []
         cellLatSize = []
@@ -326,12 +325,8 @@ def get_provider_config(project_dir):
         data["Providers"]["RasterTiled"]["tileLatSize"] = tileLat
         data["Providers"]["RasterTiled"]["LonSize"] = tileLon
 
-
         json.dump(data, gpc, indent=4)
         gpc.truncate()
-
-
-
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
