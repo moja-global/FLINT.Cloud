@@ -1,6 +1,8 @@
 name: Build base images for FLINT and GCBM
 
 on:
+  push:
+    branches: [ master ]
   schedule:
     # “At 00:00 on day-of-month 1.”
     - cron: "0 0 1 * *"
@@ -92,7 +94,7 @@ jobs:
 
   publish-gcbm-image:
     name: Build FLINT
-    needs: publish-base-image
+    needs: publish-flint-image
     runs-on: ubuntu-latest
     permissions:
       contents: read
