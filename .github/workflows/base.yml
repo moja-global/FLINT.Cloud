@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   publish-base-image:
-    name: Build base images for FLINT
+    name: Build base images
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -93,7 +93,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   publish-gcbm-image:
-    name: Build FLINT
+    name: Build GCBM
     needs: publish-flint-image
     runs-on: ubuntu-latest
     permissions:
