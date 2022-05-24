@@ -94,6 +94,52 @@ Currently the REST API has the following endpoints available for access:-
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
 
+## Contributing
+
+### Commit Convention
+
+Before you create a Pull Request, please check whether your commits comply with
+the commit conventions used in this repository.
+
+When you create a commit we kindly ask you to follow the convention
+`category(scope or module): message` in your commit message while using one of
+the following categories:
+
+- `feat / feature`: all changes that introduce completely new code or new
+  features
+- `fix`: changes that fix a bug (ideally you will additionally reference an
+  issue if present)
+- `refactor`: any code related change that is not a fix nor a feature
+- `docs`: changing existing or creating new documentation (i.e. README, docs for
+  usage of a lib or cli usage)
+- `build`: all changes regarding the build of the software, changes to
+  dependencies or the addition of new dependencies
+- `test`: all changes regarding tests (adding new tests or changing existing
+  ones)
+- `ci`: all changes regarding the configuration of continuous integration (i.e.
+  github actions, ci system)
+- `chore`: all changes to the repository that do not fit into any of the above
+  categories
+
+If you are interested in the detailed specification you can visit
+https://www.conventionalcommits.org/
+
+The project is configured with [husky](https://typicode.github.io/husky/#/) git-hook which on every successive commits checks for linting errors in the codebase and commit convention.
+
+To ease writing conventional commit messages, this repository contains [commitizen](https://github.com/commitizen/cz-cli) that assists with that. To commit your changes, run `yarn commit` in the root of the repository.
+
+### Branch-name Convention
+
+We follow the convention `[type/scope]`. For example `fix/lint-error` or `docs/component-api`. `type` can be either `docs`, `fix`, `feat`, `build`, or any other conventional commit type. `scope` is just a short id that describes the scope of work.
+
+### Development notes
+
+For the developer environment setup, project structure, best practices etc. you can go through the Development Notes [here.](https://github.com/moja-global/FLINT-UI/blob/master/docs/DevelopmentGuide/DevelopmentNotes.rst).
+
+### Read More
+
+Find more comprehensive details about Moja Global Contributing Guidelines [here.](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
+
 ## How to Get Involved?  
 
 <!--This project will be open for applications from Jan 30 to Feb 12, 2021 - please see the [LFX Mentorship Program proposal](https://mentorship.lfx.linuxfoundation.org/project/d70e1f9e-abde-403f-8389-52a122301500) to apply.-->
@@ -101,12 +147,6 @@ This REST API is built using the `flask-restful` package and has been containeri
 Feel free to [join our Slack community](https://join.slack.com/t/mojaglobal/shared_invite/zt-lf2290hy-CGqpUvHFfGsqoIZnO8MXKQ) and get to know everyone.
 
 If you would like to volunteer as a mentor, or for any other questions, please contact andrew@moja.global. We'd love to have you involved.
-
-### Contributing
-
-To contribute to FLINT.Cloud:
-
-Go through our contributing guidelines over [here](https://github.com/moja-global/About_moja_global/tree/master/Contributing#community-contributions).
 
 ## FAQ and Other Questions  
 
@@ -120,6 +160,8 @@ Go through our contributing guidelines over [here](https://github.com/moja-globa
 ## Contributors
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<table><tr><td align="center"><a href="http://moja.global"><img src="https://avatars1.githubusercontent.com/u/19564969?v=4" width="100px;" alt="moja global"/><br /><sub><b>moja global</b></sub></a><br /><a href="#projectManagement-moja-global" title="Project Management">📆</a></td></tr></table>
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
