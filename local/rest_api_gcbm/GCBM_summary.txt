@@ -1,0 +1,37 @@
+| Data Files                                                |
+|:----------------------------------------------------------|
+| @\input\simulation_name\bounding_box.tiff                 |
+| @\input\simulation_name\Classifier1_moja.json             |
+| @\input\simulation_name\Classifier1_moja.tiff             |
+| @\input\simulation_name\Classifier2_moja.json             |
+| @\input\simulation_name\Classifier2_moja.tiff             |
+| @\input\simulation_name\disturbances_2011_moja.json       |
+| @\input\simulation_name\disturbances_2011_moja.tiff       |
+| @\input\simulation_name\disturbances_2012_moja.json       |
+| @\input\simulation_name\disturbances_2012_moja.tiff       |
+| @\input\simulation_name\disturbances_2013_moja.json       |
+| @\input\simulation_name\disturbances_2013_moja.tiff       |
+| @\input\simulation_name\disturbances_2014_moja.json       |
+| @\input\simulation_name\disturbances_2014_moja.tiff       |
+| @\input\simulation_name\disturbances_2015_moja.json       |
+| @\input\simulation_name\disturbances_2015_moja.tiff       |
+| @\input\simulation_name\disturbances_2016_moja.json       |
+| @\input\simulation_name\disturbances_2016_moja.tiff       |
+| @\input\simulation_name\disturbances_2018_moja.json       |
+| @\input\simulation_name\disturbances_2018_moja.tiff       |
+| @\input\simulation_name\initial_age_moja.json             |
+| @\input\simulation_name\initial_age_moja.tiff             |
+| @\input\simulation_name\mean_annual_temperature_moja.json |
+| @\input\simulation_name\mean_annual_temperature_moja.tiff |
+| @\input\simulation_name\study_area.json                   || Config files                                    |
+|:------------------------------------------------|
+| @\input\simulation_name\gcbm_config.cfg         |
+| @\input\simulation_name\internal_variables.json |
+| @\input\simulation_name\localdomain.json        |
+| @\input\simulation_name\logging.conf            |
+| @\input\simulation_name\modules_cbm.json        |
+| @\input\simulation_name\modules_output.json     |
+| @\input\simulation_name\pools_cbm.json          |
+| @\input\simulation_name\provider_config.json    |
+| @\input\simulation_name\spinup.json             |
+| @\input\simulation_name\variables.json          |
