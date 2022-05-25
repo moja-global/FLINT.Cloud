@@ -15,6 +15,7 @@ import subprocess
 import os
 import flask.scaffold
 import rasterio as rst
+from flask import jsonify
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
@@ -230,6 +231,7 @@ def gcbm_upload():
 
     get_modules_cbm(project_dir)
     get_provider_config(project_dir)
+    # layers(project_dir)
 
     return {
        "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
@@ -327,6 +329,59 @@ def get_provider_config(project_dir):
 
         json.dump(data, gpc, indent=4)
         gpc.truncate()
+
+        dictionary = {
+        "layer_type": "GridLayer",
+        "layer_data": "Byte",
+        "nodata": 255,
+        "tileLatSize": tileLat,
+        "tileLonSize": tileLon,
+        "blockLatSize": blockLat,
+        "blockLonSize": blockLon,
+        "cellLatSize": cellLat,
+        "cellLonSize": cellLon,
+        "attributes": {
+          "1": "TA",
+          "2": "BP",
+          "3": "BS",
+          "4": "JP",
+          "5": "WS",
+          "6": "WB",
+          "7": "BF",
+          "8": "GA"
+    }
+    }
+
+        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file:
+           json.dump(dictionary, json_file, indent = 4)
+
+# def layers(project_dir):
+    
+#     dictionary = {
+#         "layer_type": "GridLayer",
+#     "layer_data": "Byte",
+#     "nodata": 255,
+#     "tileLatSize": 1.0,
+#     "tileLonSize": 1.0,
+#     "blockLatSize": 0.1,
+#     "blockLonSize": 0.1,
+#     "cellLatSize": 0.00025,
+#     "cellLonSize": 0.00025,
+#     "attributes": {
+#         "1": "TA",
+#         "2": "BP",
+#         "3": "BS",
+#         "4": "JP",
+#         "5": "WS",
+#         "6": "WB",
+#         "7": "BF",
+#         "8": "GA"
+#     }
+#     }
+
+#     with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1.json", 'w', encoding ='utf8') as json_file:
+#         json.dump(dictionary, json_file, indent = 4)
+
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
