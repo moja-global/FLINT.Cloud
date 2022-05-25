@@ -3,23 +3,26 @@ on: [push]
 jobs:
   sim-summary:
     runs-on: [ubuntu-latest]
-    env:
-      working-directory: ./local
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
-    
-    - name: cml_report
-      env:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        # cd ./tests
-        # python create_cml_report.py
-        # # This means that summary txt files should be in the below directory
-        # cd ../rest_api_gcbm
-        # echo "## GCBM model"  > report.md
-        # cat *_summary.txt >> report.md
-        # cml-send-comment report.md
-        ls -R
-        
 
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: iterative/setup-cml@v1
+
+      - uses: actions/setup-python@v3
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+      
+      - name: Create report
+        run: |
+          cd ./local/tests
+          python create_cml_report.py
+
+      - name: Publish report
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # echo "## GCBM model"  > report.md
+          # cat *_summary.txt >> report.md
+          # cml-send-comment report.md
