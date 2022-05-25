@@ -8,7 +8,7 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
     
-    - name: cml_run
+    - name: cml_report
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
@@ -16,7 +16,7 @@ jobs:
         python create_cml_report.py
         # This means that summary txt files should be in the below directory
         cd ../rest_api_gcbm
-        echo ##  > report.md
+        echo "## GCBM model"  > report.md
         cat *_summary.txt >> report.md
         cml-send-comment report.md
         
