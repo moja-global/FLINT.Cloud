@@ -13,12 +13,13 @@ jobs:
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        cd ./tests
-        python create_cml_report.py
-        # This means that summary txt files should be in the below directory
-        cd ../rest_api_gcbm
-        echo "## GCBM model"  > report.md
-        cat *_summary.txt >> report.md
-        cml-send-comment report.md
+        # cd ./tests
+        # python create_cml_report.py
+        # # This means that summary txt files should be in the below directory
+        # cd ../rest_api_gcbm
+        # echo "## GCBM model"  > report.md
+        # cat *_summary.txt >> report.md
+        # cml-send-comment report.md
+        ls -R
         
 
