@@ -1,4 +1,6 @@
 from threading import Thread
+
+from numpy import append
 from run_distributed import *
 from flask_autoindex import AutoIndex
 from flask_swagger_ui import get_swaggerui_blueprint
@@ -294,11 +296,6 @@ def get_provider_config(project_dir):
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
-            for file in files:
-                fp2 = os.path.join(root, file)
-                Rasters.append(fp2)
-
         for nd in Rasters:
             img = rst.open(nd)
             t = img.transform
@@ -340,20 +337,136 @@ def get_provider_config(project_dir):
         "blockLonSize": blockLon,
         "cellLatSize": cellLat,
         "cellLonSize": cellLon,
-        "attributes": {
-          "1": "TA",
-          "2": "BP",
-          "3": "BS",
-          "4": "JP",
-          "5": "WS",
-          "6": "WB",
-          "7": "BF",
-          "8": "GA"
-    }
     }
 
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
+            mis_img = []
+            for file in files:
+                fp2 = os.path.join(root, file)
+                mis_img.append(fp2)
+                for i in mis_img:
+                  imgs = rst.open(i)
+                  nodata_m = imgs.nodata
+                  with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/intial_age_moja.json", 'w', encoding ='utf8') as json_file1:
+                    dictionary["layer_type"] = "GridLayer"
+                    dictionary["layer_data"] = "Int16"
+                    dictionary["nodata"] = nodata_m
+                    json.dump(dictionary, json_file1, indent = 4)
+
+                  with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file:
+                    dictionary["layer_type"] = "GridLayer"
+                    dictionary["layer_data"] = "Float32"
+                    dictionary["nodata"] = nodata_m
+                    json.dump(dictionary, json_file, indent = 4)
+
         with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file:
-           json.dump(dictionary, json_file, indent = 4)
+            dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"} 
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier2_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {"1": "5", "2": "6","3": "7",
+        "4": "8"} 
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2011,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          }  
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] =  {
+        "1": {
+            "year": 2012,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          } 
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] =  {
+        "1": {
+            "year": 2012,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2014,
+            "disturbance_type": "Mountain pine beetle — Very severe impact",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2015,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2015_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2016,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2016_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2016,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2018,
+            "disturbance_type": "Mountain pine beetle — Low impact",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["attributes"] = {
+        "1": {
+            "year": 2018,
+            "disturbance_type": "Mountain pine beetle — Low impact",
+            "transition": 1
+            }
+          }
+            json.dump(dictionary, json_file, indent = 4)
+
+        
+        
+
+
+        
+
+
+
+        
 
 # def layers(project_dir):
     
