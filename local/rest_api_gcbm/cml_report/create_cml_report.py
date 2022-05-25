@@ -3,7 +3,6 @@ import os
 import pandas as pd
 import tabulate
 import zipfile
-import glob
 
 #  Unzip file
 zip = os.path.join('..','..','..','GCBM_Demo_Run.zip')
