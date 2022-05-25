@@ -3,7 +3,8 @@ on: [push]
 jobs:
   sim-summary:
     runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
+    env:
+      working-directory: ./local
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
@@ -12,7 +13,7 @@ jobs:
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        cd ../tests
+        cd tests
         python create_cml_report.py
         # This means that summary txt files should be in the below directory
         cd ../rest_api_gcbm
