@@ -30,4 +30,3 @@ jobs:
         cat GCBM_summary.txt >> report.md
         echo "Your output configuration will be in ```@/input/simulation_name/output.zip```" >> report.md
         cml-send-comment report.md
-
