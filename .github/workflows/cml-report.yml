@@ -14,16 +14,12 @@ jobs:
           python-version: '3.x'
           architecture: 'x64'
       
-      - name: Create report
-        run: |
-          cd local/tests
-          python create_cml_report.py
-
       - name: Publish report
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          cd local/rest_api_gcbm
+          python create_cml_report.py
           echo "## GCBM model"  > report.md
-          cd ../rest_api_gcbm
           cat *_summary.txt >> report.md
           cml-send-comment report.md
