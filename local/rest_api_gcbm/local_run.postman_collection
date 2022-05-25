@@ -250,7 +250,7 @@
 					"response": []
 				},
 				{
-					"name": "dynamic",
+					"name": "run",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -265,7 +265,7 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/gcbm/dynamic",
+							"raw": "http://localhost:8080/gcbm/run",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -273,7 +273,7 @@
 							"port": "8080",
 							"path": [
 								"gcbm",
-								"dynamic"
+								"run"
 							],
 							"query": [
 								{

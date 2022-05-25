@@ -240,11 +240,11 @@ def gcbm_upload():
         return {"error": "Missing database"}, 400
 
     return {
-        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
+        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/run."
     }, 200
 
 
-@app.route("/gcbm/dynamic", methods=["POST"])
+@app.route("/gcbm/run", methods=["POST"])
 def gcbm_dynamic():
     """
     Get GCBM Dynamic implementation of FLINT

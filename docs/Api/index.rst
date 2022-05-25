@@ -134,7 +134,7 @@ Upload input files for the GCBM simulation by passing the files as request FormD
     .. sourcecode:: json
 
         {
-            "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
+            "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/run."
         }
 
     :Request FormData Object:
@@ -145,10 +145,10 @@ Upload input files for the GCBM simulation by passing the files as request FormD
         * **input** (*string*) -- required input files (tiff and json files in layers/tiled folder).
 
 
-GCBM: Run dynamic simulation
+GCBM: Run simulation
 ============================
 
-.. http:get:: /gcbm/dynamic/
+.. http:post:: /gcbm/run/
 
 Run the GCBM simulation by passing the files as request FormData. 
 
@@ -158,7 +158,7 @@ Run the GCBM simulation by passing the files as request FormData.
 
         .. code-tab:: bash
 
-            $ curl --location --request POST 'http://0.0.0.0:8080/gcbm/dynamic' \
+            $ curl --location --request POST 'http://0.0.0.0:8080/gcbm/run' \
             --header 'Content-Type: application/json' \
             --header 'accept: application/json' \
             --form 'title="example_new_1"'

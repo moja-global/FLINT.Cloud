@@ -58,10 +58,10 @@
             http://localhost:8080/gcbm/upload
 
     ```
-3. `/gcbm/dynamic`
+3. `/gcbm/run`
 
     ```
-        curl -d "title=run4" -X POST http://localhost:8080/gcbm/dynamic
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/run
     ```
 
 4. `/gcbm/status`

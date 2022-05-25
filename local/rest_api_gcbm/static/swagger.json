@@ -5,7 +5,7 @@
         "version": "1.0"
     },
     "paths": {
-        "/gcbm/dynamic": {
+        "/gcbm/run": {
             "post": {
                 "description": "",
                 "responses": {

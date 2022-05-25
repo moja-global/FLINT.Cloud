@@ -240,8 +240,8 @@ class TestApiFlintGCBM:
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
 
-    def test_dynamic(self, gcbm_endpoint, yield_title):
-        """ This test would check whether the dynamic endpoint \
+    def test_run(self, gcbm_endpoint, yield_title):
+        """ This test would check whether the run endpoint \
             is working or not with the title provided by the \
             yield_title fixture. This test would start the GCBM \
             Dynamic Implementation of FLINT under the title provided \
@@ -249,10 +249,10 @@ class TestApiFlintGCBM:
         data = {
             "title": yield_title,
         }
-        dynamic_endpoint = gcbm_endpoint + "dynamic"
-        dynamic_response = requests.post(dynamic_endpoint, data=data)
-        assert dynamic_response.status_code == 200
-        assert dynamic_response.json().get("status") == "Run started"
+        run_endpoint = gcbm_endpoint + "run"
+        run_response = requests.post(run_endpoint, data=data)
+        assert run_response.status_code == 200
+        assert run_response.json().get("status") == "Run started"
 
     def test_status(self, gcbm_endpoint, yield_title):
         """ This test would check whether the status endpoint \

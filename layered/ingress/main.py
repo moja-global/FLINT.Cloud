@@ -230,7 +230,7 @@ def gcbm_upload():
     upload_blob(title, "size.json")
 
     return {
-        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/dynamic."
+        "data": "All files uploaded sucessfully. Proceed to the next step of the API at gcbm/run."
     }, 200
 
 
@@ -281,7 +281,7 @@ def large_run(data):
     publish_message("large-simulations", data)
 
 
-@app.route("/gcbm/dynamic", methods=["POST"])
+@app.route("/gcbm/run", methods=["POST"])
 def gcbm_dynamic():
     """
     Get GCBM Dynamic implementation of FLINT
