@@ -6,6 +6,7 @@ from flask_swagger import swagger
 from datetime import timedelta
 from datetime import datetime
 from google.cloud import storage, pubsub_v1
+from decouple import config
 from google.api_core.exceptions import AlreadyExists
 import logging
 import shutil
@@ -23,13 +24,7 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(
     app,
-    origins=[
-        "http://127.0.0.1:8080/",
-        "http://127.0.0.1:8000",
-        "http://localhost:5000",
-        "http://localhost:8000",
-        r"^https://.+example.com$",
-    ],
+    origins= config('CORS_ORIGINS'),
 )
 # ppath = "/"
 # AutoIndex(app, browse_root=ppath)

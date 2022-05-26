@@ -11,3 +11,4 @@ flask-cors
 simplejson
 sqlalchemy
 psutil
+python-decouple==3.6
