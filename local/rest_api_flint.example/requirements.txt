@@ -6,3 +6,4 @@ flask-swagger==0.2.14
 flask_swagger_ui==3.36.0
 flask-cors==3.0.10
 pytest==7.0.1
+python-decouple==3.6 

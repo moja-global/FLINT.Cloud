@@ -1,5 +1,6 @@
 from flask import Flask, send_from_directory, request, jsonify
 from flask_restful import Resource, Api, reqparse
+from decouple import config
 import os
 import subprocess
 import time
@@ -13,16 +14,9 @@ from shutil import copyfile
 app = Flask(__name__)
 CORS(
     app,
-    origins=[
-        "http://127.0.0.1:8080/",
-        "http://127.0.0.1:8000",
-        "http://localhost:5000",
-        r"^https://.+example.com$",
-    ],
+    origins= config('CORS_ORIGINS'),
 )
-# app = Flask(__name__)
-# CORS(app, origins= os.getenv('CORS_ORIGINS'))
-# api = Api(app)
+
 
 
 ### swagger specific ###
