@@ -17,6 +17,7 @@ CORS(
     origins= config('CORS_ORIGINS'),
 )
 
+api = Api(app)
 
 
 ### swagger specific ###
