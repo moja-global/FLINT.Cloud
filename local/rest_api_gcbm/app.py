@@ -283,6 +283,9 @@ def get_provider_config(project_dir):
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         Rasters = []
+        Rastersm = []
+        nodatam = []
+        nodata = []
         cellLatSize = []
         cellLonSize = []
 
@@ -340,24 +343,27 @@ def get_provider_config(project_dir):
     }
 
         for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
-            mis_img = []
             for file in files:
                 fp2 = os.path.join(root, file)
-                mis_img.append(fp2)
-                for i in mis_img:
-                  imgs = rst.open(i)
-                  nodata_m = imgs.nodata
-                  with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/intial_age_moja.json", 'w', encoding ='utf8') as json_file1:
-                    dictionary["layer_type"] = "GridLayer"
-                    dictionary["layer_data"] = "Int16"
-                    dictionary["nodata"] = nodata_m
-                    json.dump(dictionary, json_file1, indent = 4)
+                Rastersm.append(fp2)
 
-                  with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file:
-                    dictionary["layer_type"] = "GridLayer"
-                    dictionary["layer_data"] = "Float32"
-                    dictionary["nodata"] = nodata_m
-                    json.dump(dictionary, json_file, indent = 4)
+            for i in Rastersm:
+                img = rst.open(i)
+                d = img.nodata
+                nodatam.append(d)
+
+
+        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/intial_age_moja.json", 'w', encoding ='utf8') as json_file1:
+            dictionary["layer_type"] = "GridLayer"
+            dictionary["layer_data"] = "Int16"
+            dictionary["nodata"] = nodatam[1]
+            json.dump(dictionary, json_file1, indent = 4)
+
+        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file:
+            dictionary["layer_type"] = "GridLayer"
+            dictionary["layer_data"] = "Float32"
+            dictionary["nodata"] = nodatam[0]
+            json.dump(dictionary, json_file, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file:
             dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"} 
@@ -458,43 +464,50 @@ def get_provider_config(project_dir):
           }
             json.dump(dictionary, json_file, indent = 4)
 
-        
-        
+        study_area = {
+            "tile_size": tileLat,
+            "block_size": blockLat,
+            "tiles": [{
+               "x": t[2],
+               "y": t[5],
+               "index": 12674
+            }],
+            "pixel_size": cellLat,
+            "layers": [
 
+            ]
+        }
 
-        
+        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/study_area.json", 'w', encoding = 'utf') as json_file:
 
+            list = []
 
+            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"):
+                d1 = dict()
+                d1["name"] = file[:-10]
+                d1["type"] = "VectorLayer"
+                list.append(d1)
+            study_area["layers"] = list
 
-        
+            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/classifiers/"):
+                d1 = dict()
+                d1["name"] = file[:-10]
+                d1["type"] = "VectorLayer"
+                d1["tags"] = ["classifier"]
+                list.append(d1)
+            study_area["layers"] = list
 
-# def layers(project_dir):
-    
-#     dictionary = {
-#         "layer_type": "GridLayer",
-#     "layer_data": "Byte",
-#     "nodata": 255,
-#     "tileLatSize": 1.0,
-#     "tileLonSize": 1.0,
-#     "blockLatSize": 0.1,
-#     "blockLonSize": 0.1,
-#     "cellLatSize": 0.00025,
-#     "cellLonSize": 0.00025,
-#     "attributes": {
-#         "1": "TA",
-#         "2": "BP",
-#         "3": "BS",
-#         "4": "JP",
-#         "5": "WS",
-#         "6": "WB",
-#         "7": "BF",
-#         "8": "GA"
-#     }
-#     }
+            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
+                d1 = dict()
+                d1["name"] = file[:-10]
+                d1["type"] = "DisturbanceLayer"
+                d1["tags"] = ["disturbance"]
+                list.append(d1)
+            study_area["layers"] = list
 
-#     with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1.json", 'w', encoding ='utf8') as json_file:
-#         json.dump(dictionary, json_file, indent = 4)
+            
 
+            json.dump(study_area, json_file, indent=4)
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
