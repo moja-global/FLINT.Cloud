@@ -308,13 +308,16 @@ def get_provider_config(project_dir):
             t = img.transform
             x = t[0]
             y = -t[4]
+            n = img.nodata
             cellLatSize.append(x)
             cellLonSize.append(y)
+            nodata.append(n)
     
         result = all(element == cellLatSize[0] for element in cellLatSize)
         if(result):
             cellLat = x
             cellLon = y
+            nd = n
             blockLat = x*400
             blockLon = y*400
             tileLat = x*4000
@@ -337,7 +340,7 @@ def get_provider_config(project_dir):
         dictionary = {
         "layer_type": "GridLayer",
         "layer_data": "Byte",
-        "nodata": 255,
+        "nodata": nd,
         "tileLatSize": tileLat,
         "tileLonSize": tileLon,
         "blockLatSize": blockLat,
@@ -363,22 +366,24 @@ def get_provider_config(project_dir):
             dictionary["nodata"] = nodatam[1]
             json.dump(dictionary, json_file1, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file2:
             dictionary["layer_type"] = "GridLayer"
             dictionary["layer_data"] = "Float32"
             dictionary["nodata"] = nodatam[0]
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file2, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file3:
             dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"} 
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file3, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier2_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier2_moja.json", 'w', encoding ='utf8') as json_file4:
             dictionary["attributes"] = {"1": "5", "2": "6","3": "7",
         "4": "8"} 
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file4, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file5:
+            dictionary["layer_data"] = "Byte"
+            dictionary["nodata"] = nd
             dictionary["attributes"] = {
         "1": {
             "year": 2011,
@@ -386,9 +391,9 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           }  
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file5, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file6:
             dictionary["attributes"] =  {
         "1": {
             "year": 2012,
@@ -396,19 +401,24 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           } 
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file6, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file7:
             dictionary["attributes"] =  {
         "1": {
-            "year": 2012,
+            "year": 2013,
+            "disturbance_type": "Mountain pine beetle — Very severe impact",
+            "transition": 1
+        },
+        "2": {
+            "year": 2013,
             "disturbance_type": "Wildfire",
             "transition": 1
-            }
-          }
-            json.dump(dictionary, json_file, indent = 4)
+        }
+    }
+            json.dump(dictionary, json_file7, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file8:
             dictionary["attributes"] = {
         "1": {
             "year": 2014,
@@ -416,19 +426,10 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           }
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file8, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file:
-            dictionary["attributes"] = {
-        "1": {
-            "year": 2015,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-            }
-          }
-            json.dump(dictionary, json_file, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2015_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2015_moja.json", 'w', encoding ='utf8') as json_file9:
             dictionary["attributes"] = {
         "1": {
             "year": 2016,
@@ -436,9 +437,9 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           }
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file9, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2016_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2016_moja.json", 'w', encoding ='utf8') as json_file10:
             dictionary["attributes"] = {
         "1": {
             "year": 2016,
@@ -446,9 +447,9 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           }
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file10, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file:
+        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file11:
             dictionary["attributes"] = {
         "1": {
             "year": 2018,
@@ -456,17 +457,8 @@ def get_provider_config(project_dir):
             "transition": 1
             }
           }
-            json.dump(dictionary, json_file, indent = 4)
+            json.dump(dictionary, json_file11, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file:
-            dictionary["attributes"] = {
-        "1": {
-            "year": 2018,
-            "disturbance_type": "Mountain pine beetle — Low impact",
-            "transition": 1
-            }
-          }
-            json.dump(dictionary, json_file, indent = 4)
 
         study_area = {
             "tile_size": tileLat,
