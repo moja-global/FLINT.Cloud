@@ -289,16 +289,19 @@ def get_provider_config(project_dir):
         nodata = []
         cellLatSize = []
         cellLonSize = []
+        paths = []
 
         for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
                 Rasters.append(fp)
+                paths.append(fp)
 
         for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
+                paths.append(fp1)
 
         for nd in Rasters:
             img = rst.open(nd)
@@ -509,6 +512,44 @@ def get_provider_config(project_dir):
             
 
             json.dump(study_area, json_file, indent=4)
+
+
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/disturbances/")):
+            for file in files:
+                fp = os.path.join(root, file)
+                Rasters.append(fp)
+                paths.append(fp)
+
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/classifiers/")):
+            for file in files:
+                fp1 = os.path.join(root, file)
+                Rasters.append(fp1)
+                paths.append(fp1)
+
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscllaneous/")):
+            for file in files:
+                fp2 = os.path.join(root, file)
+                paths.append(fp2)
+
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/templates/")):
+            for file in files:
+                fp3 = os.path.join(root, file)
+                paths.append(fp3)
+
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/db/")):
+            for file in files:
+                fp4 = os.path.join(root, file)
+                paths.append(fp4)
+
+            for i in paths:
+                print(i)
+                shutil.copy2(i, (f"{os.getcwd()}/input/{project_dir}"))
+
+        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/disturbances/"))
+        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/templates/"))
+        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/classifiers/"))
+        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/miscellaneous/"))
+        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/db/"))
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():

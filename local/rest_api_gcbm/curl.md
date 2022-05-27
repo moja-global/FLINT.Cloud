@@ -40,7 +40,6 @@
             -F templates='@templates/spinup.json' \
             -F templates='@templates/variables.json' \
             -F templates='@templates/gcbm_config.cfg' \
-            -F templates='@templates/output' \
             -F title="run4" \
             http://localhost:8080/gcbm/upload
 
