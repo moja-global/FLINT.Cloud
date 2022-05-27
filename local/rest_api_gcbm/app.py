@@ -193,7 +193,7 @@ def gcbm_upload():
         os.makedirs(f"{os.getcwd()}/input/{project_dir}/db")
     if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/miscellaneous"):
         os.makedirs(f"{os.getcwd()}/input/{project_dir}/miscellaneous")
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/config"):
+    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/templates"):
         os.makedirs(f"{os.getcwd()}/input/{project_dir}/templates")
 
     # Function to flatten paths
@@ -225,11 +225,12 @@ def gcbm_upload():
     else:
         return{"error": "Missing configuration file"}, 400
     
-    if "miscellaneous" in request.files:
+    if "templates" in request.files:
         for file in request.files.getlist("templates"):
             file.save(f"{os.getcwd()}/input/{project_dir}/templates/{file.filename}")
     else:
         return{"error": "Missing configuration file"}, 400
+        
 
     get_modules_cbm(project_dir)
     get_provider_config(project_dir)
