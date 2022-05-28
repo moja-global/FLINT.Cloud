@@ -518,7 +518,7 @@ def get_provider_config(project_dir):
                 Rasters.append(fp1)
                 paths.append(fp1)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscllaneous/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
             for file in files:
                 fp2 = os.path.join(root, file)
                 paths.append(fp2)
