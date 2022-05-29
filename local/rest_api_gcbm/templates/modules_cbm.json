@@ -14,13 +14,7 @@
             "library": "moja.modules.cbm",
             "settings": {
                 "vars": [
-                    "disturbances_2012_moja",
-                    "disturbances_2015_moja",
-                    "disturbances_2014_moja",
-                    "disturbances_2018_moja",
-                    "disturbances_2016_moja",
-                    "disturbances_2013_moja",
-                    "disturbances_2011_moja"
+                 
                 ]
             }
         },
