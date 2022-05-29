@@ -1,6 +1,6 @@
 <h3> Endpoints </h3>
 
-1.  `/gcbm/new/` 
+1.  `/gcbm/new/`
 
     The title of a new simulation can be passed or the default title `simulation` will be used. (i.e the default title of the simulation is `simulation`, here the title `run4` is used)
 
@@ -31,15 +31,6 @@
             -F db='@db/gcbm_input.db' \
             -F miscellaneous='@miscellaneous/initial_age_moja.tiff' \
             -F miscellaneous='@miscellaneous/mean_annual_temperature_moja.tiff' \
-            -F templates='@templates/internal_variables.json' \
-            -F templates='@templates/localdomain.json' \
-            -F templates='@templates/modules_cbm.json' \
-            -F templates='@templates/modules_output.json' \
-            -F templates='@templates/pools_cbm.json' \
-            -F templates='@templates/provider_config.json' \
-            -F templates='@templates/spinup.json' \
-            -F templates='@templates/variables.json' \
-            -F templates='@templates/gcbm_config.cfg' \
             -F title="run4" \
             http://localhost:8080/gcbm/upload
 
@@ -56,7 +47,7 @@
     ```
 5. `/gcbm/download`
     A file named `output.zip` will be obtained. This file contains the outputs generated, which can be analysed on unzipping.
-    
+
     ```
         curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
     ```

@@ -147,9 +147,9 @@ def gcbm_new():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-    project_dir = f"{title}"
-    if not os.path.exists(f"{os.getcwd()}/input/{project_dir}"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}")
+    input_dir = f"{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
         message = "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
     else:
         message = "Simulation already exists. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
@@ -181,103 +181,108 @@ def gcbm_upload():
     title = "".join(c for c in title if c.isalnum())
 
     # Create project directory
-    project_dir = f"{title}"
-    if not os.path.exists(f"{os.getcwd()}/input/{project_dir}"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}")
+    input_dir = f"{os.getcwd()}/input/{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
     logging.debug(os.getcwd())
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/disturbances"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}/disturbances")
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/classifiers"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}/classifiers")
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/db"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}/db")
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/miscellaneous"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}/miscellaneous")
-    if os.path.exists(f"{os.getcwd()}/input/{project_dir}") and not os.path.exists(f"{os.getcwd()}/input/{project_dir}/templates"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}/templates")
 
-    # Function to flatten paths
-    def fix_path(path):
-        return os.path.basename(path.replace("\\", "/"))
+    # input files follow a strict structure
+    if not os.path.exists(f"{input_dir}/disturbances"):
+        os.makedirs(f"{input_dir}/disturbances")
+    if not os.path.exists(f"{input_dir}/classifiers"):
+        os.makedirs(f"{input_dir}/classifiers")
+    if not os.path.exists(f"{input_dir}/db"):
+        os.makedirs(f"{input_dir}/db")
+    if not os.path.exists(f"{input_dir}/miscellaneous"):
+        os.makedirs(f"{input_dir}/miscellaneous")
 
 
+    # store files following structure defined in curl.md
     if "disturbances" in request.files:
       for file in request.files.getlist("disturbances"):
-          file.save(f"{os.getcwd()}/input/{project_dir}/disturbances/{file.filename}")
+          file.save(f"{input_dir}/disturbances/{file.filename}")
     else:
       return{"error": "Missing configuration file"}, 400
 
     if "classifiers" in request.files:
         for file in request.files.getlist("classifiers"):
-          file.save(f"{os.getcwd()}/input/{project_dir}/classifiers/{file.filename}")
+          file.save(f"{input_dir}/classifiers/{file.filename}")
     else:
       return{"error": "Missing configuration file"}, 400
 
     if "db" in request.files:
         for file in request.files.getlist("db"):
-            file.save(f"{os.getcwd()}/input/{project_dir}/db/{file.filename}")
+            file.save(f"{input_dir}/db/{file.filename}")
     else:
       return{"error": "Missing configuration file"}, 400
 
     if "miscellaneous" in request.files:
         for file in request.files.getlist("miscellaneous"):
-            file.save(f"{os.getcwd()}/input/{project_dir}/miscellaneous/{file.filename}")
+            file.save(f"{input_dir}/miscellaneous/{file.filename}")
     else:
         return{"error": "Missing configuration file"}, 400
 
-    if "templates" in request.files:
-        for file in request.files.getlist("templates"):
-            file.save(f"{os.getcwd()}/input/{project_dir}/templates/{file.filename}")
-    else:
-        return{"error": "Missing configuration file"}, 400
-
-
-    get_modules_cbm(project_dir)
-    get_provider_config(project_dir)
-    # layers(project_dir)
+    get_config_templates(input_dir)
+    get_modules_cbm_config(input_dir)
+    get_provider_config(input_dir)
 
     return {
        "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
   }
 
-def get_modules_cbm(project_dir):
-   with open(f"{os.getcwd()}/input/{project_dir}/templates/modules_cbm.json", "r+") as pcf:
+def get_config_templates(input_dir):
+    if not os.path.exists(f"{input_dir}/templates"):
+        shutil.copytree(f"{os.getcwd()}/templates", f"{input_dir}/templates", dirs_exist_ok=False)
+
+
+# TODO: there needs to be a link between the files configured here append
+# the ["vars"] attribute of modules_cbm.json -> CBMDisturbanceListener
+# current hack is to drop the last five characters, but thats very fragile
+def get_modules_cbm_config(input_dir):
+   with open(f"{input_dir}/templates/modules_cbm.json", "r+") as pcf:
         disturbances = []
         data = json.load(pcf)
-        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
-            disturbances.append(file.split('.')[0])
+        for file in os.listdir(f"{input_dir}/disturbances/"):
+            disturbances.append(file.split('.')[0][:-5]) # drop `_moja` to match modules_cbm.json template
         pcf.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, pcf, indent=4)
         pcf.truncate()
 
-def get_provider_config(project_dir):
-   with open(f"{os.getcwd()}/input/{project_dir}/templates/provider_config.json", "r+") as gpc:
+def get_provider_config(input_dir):
+   with open(f"{input_dir}/templates/provider_config.json", "r+") as gpc: # why gpc?
         lst = []
         data = json.load(gpc)
 
-        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
+        for file in os.listdir(f"{input_dir}/db/"):
+            d = dict()
+            d["path"] = file
+            d["type"] = "SQLite"
+            data["Providers"]["SQLite"] = d
+        gpc.seek(0)
+
+        for file in os.listdir(f"{input_dir}/disturbances/"):
             d = dict()
             d["name"] = file[:-10]
-            d["layer_path"] = "../layers/tiles" + file
+            d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
-        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/classifiers/"):
+        for file in os.listdir(f"{input_dir}/classifiers/"):
             d = dict()
             d["name"] = file[:-10]
-            d["layer_path"] = "../layers/tiles" + file
+            d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
-        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"):
+        for file in os.listdir(f"{input_dir}/miscellaneous/"):
             d = dict()
             d["name"] = file[:-10]
-            d["layer_path"] = "../layers/tiles" + file
+            d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
         gpc.seek(0)
@@ -291,13 +296,13 @@ def get_provider_config(project_dir):
         cellLonSize = []
         paths = []
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/disturbances/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
                 Rasters.append(fp)
                 paths.append(fp)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/classifiers/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
@@ -332,7 +337,7 @@ def get_provider_config(project_dir):
         data["Providers"]["RasterTiled"]["blockLonSize"] = blockLon
         data["Providers"]["RasterTiled"]["blockLatSize"] = blockLat
         data["Providers"]["RasterTiled"]["tileLatSize"] = tileLat
-        data["Providers"]["RasterTiled"]["LonSize"] = tileLon
+        data["Providers"]["RasterTiled"]["tileLonSize"] = tileLon
 
         json.dump(data, gpc, indent=4)
         gpc.truncate()
@@ -349,7 +354,10 @@ def get_provider_config(project_dir):
         "cellLonSize": cellLon,
     }
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
+        # TODO: refactor into get_input_layer_config
+        # should be able to accept variable number of inputs, but requires
+        # means for user to specify/verify correct ["attributes"]
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/miscellaneous/")):
             for file in files:
                 fp2 = os.path.join(root, file)
                 Rastersm.append(fp2)
@@ -359,114 +367,120 @@ def get_provider_config(project_dir):
                 d = img.nodata
                 nodatam.append(d)
 
-
-        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/intial_age_moja.json", 'w', encoding ='utf8') as json_file1:
+        with open(f"{input_dir}/initial_age_moja.json", 'w', encoding ='utf8') as json_file1:
             dictionary["layer_type"] = "GridLayer"
             dictionary["layer_data"] = "Int16"
             dictionary["nodata"] = nodatam[1]
             json.dump(dictionary, json_file1, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file2:
+        with open(f"{input_dir}/mean_annual_temperature_moja.json", 'w', encoding ='utf8') as json_file2:
             dictionary["layer_type"] = "GridLayer"
             dictionary["layer_data"] = "Float32"
             dictionary["nodata"] = nodatam[0]
             json.dump(dictionary, json_file2, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file3:
+        with open(f"{input_dir}/Classifier1_moja.json", 'w', encoding ='utf8') as json_file3:
+            dictionary["layer_type"] = "GridLayer"
+            dictionary["layer_data"] = "Byte"
+            dictionary["nodata"] = nd
             dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"}
             json.dump(dictionary, json_file3, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier2_moja.json", 'w', encoding ='utf8') as json_file4:
+        with open(f"{input_dir}/Classifier2_moja.json", 'w', encoding ='utf8') as json_file4:
+            dictionary["layer_type"] = "GridLayer"
+            dictionary["layer_data"] = "Byte"
+            dictionary["nodata"] = nd
             dictionary["attributes"] = {"1": "5", "2": "6","3": "7",
         "4": "8"}
             json.dump(dictionary, json_file4, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file5:
+        with open(f"{input_dir}/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file5:
             dictionary["layer_data"] = "Byte"
             dictionary["nodata"] = nd
             dictionary["attributes"] = {
-        "1": {
-            "year": 2011,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2011,
+                                            "disturbance_type": "Wildfire",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file5, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file6:
+        with open(f"{input_dir}/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file6:
             dictionary["attributes"] =  {
-        "1": {
-            "year": 2012,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2012,
+                                            "disturbance_type": "Wildfire",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file6, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file7:
+        with open(f"{input_dir}/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file7:
             dictionary["attributes"] =  {
-        "1": {
-            "year": 2013,
-            "disturbance_type": "Mountain pine beetle — Very severe impact",
-            "transition": 1
-        },
-        "2": {
-            "year": 2013,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-        }
-    }
+                                        "1": {
+                                            "year": 2013,
+                                            "disturbance_type": "Mountain pine beetle — Very severe impact",
+                                            "transition": 1
+                                        },
+                                        "2": {
+                                            "year": 2013,
+                                            "disturbance_type": "Wildfire",
+                                            "transition": 1
+                                        }
+                                    }
             json.dump(dictionary, json_file7, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file8:
+        with open(f"{input_dir}/disturbances_2014_moja.json", 'w', encoding ='utf8') as json_file8:
             dictionary["attributes"] = {
-        "1": {
-            "year": 2014,
-            "disturbance_type": "Mountain pine beetle — Very severe impact",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2014,
+                                            "disturbance_type": "Mountain pine beetle — Very severe impact",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file8, indent = 4)
 
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2015_moja.json", 'w', encoding ='utf8') as json_file9:
+        with open(f"{input_dir}/disturbances_2015_moja.json", 'w', encoding ='utf8') as json_file9:
             dictionary["attributes"] = {
-        "1": {
-            "year": 2016,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2016,
+                                            "disturbance_type": "Wildfire",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file9, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2016_moja.json", 'w', encoding ='utf8') as json_file10:
+        with open(f"{input_dir}/disturbances_2016_moja.json", 'w', encoding ='utf8') as json_file10:
             dictionary["attributes"] = {
-        "1": {
-            "year": 2016,
-            "disturbance_type": "Wildfire",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2016,
+                                            "disturbance_type": "Wildfire",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file10, indent = 4)
 
-        with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file11:
+        with open(f"{input_dir}/disturbances_2018_moja.json", 'w', encoding ='utf8') as json_file11:
             dictionary["attributes"] = {
-        "1": {
-            "year": 2018,
-            "disturbance_type": "Mountain pine beetle — Low impact",
-            "transition": 1
-            }
-          }
+                                        "1": {
+                                            "year": 2018,
+                                            "disturbance_type": "Mountain pine beetle — Low impact",
+                                            "transition": 1
+                                            }
+                                          }
             json.dump(dictionary, json_file11, indent = 4)
 
 
+        # TODO: Refactor into get_study_area_config
         study_area = {
             "tile_size": tileLat,
             "block_size": blockLat,
             "tiles": [{
-               "x": t[2],
-               "y": t[5],
-               "index": 12674
+               "x": int(t[2]), # FLINT is strongly typed, but maybe it doesnt matter, just following format in GCBM_Demo_Run
+               "y": int(t[5]),
+               "index": 12674 # verify source of this number
             }],
             "pixel_size": cellLat,
             "layers": [
@@ -474,18 +488,17 @@ def get_provider_config(project_dir):
             ]
         }
 
-        with open(f"{os.getcwd()}/input/{project_dir}/miscellaneous/study_area.json", 'w', encoding = 'utf') as json_file:
-
+        with open(f"{input_dir}/study_area.json", 'w', encoding = 'utf') as json_file:
             list = []
 
-            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"):
+            for file in os.listdir(f"{input_dir}/miscellaneous/"):
                 d1 = dict()
                 d1["name"] = file[:-10]
                 d1["type"] = "VectorLayer"
                 list.append(d1)
             study_area["layers"] = list
 
-            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/classifiers/"):
+            for file in os.listdir(f"{input_dir}/classifiers/"):
                 d1 = dict()
                 d1["name"] = file[:-10]
                 d1["type"] = "VectorLayer"
@@ -493,7 +506,7 @@ def get_provider_config(project_dir):
                 list.append(d1)
             study_area["layers"] = list
 
-            for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
+            for file in os.listdir(f"{input_dir}/disturbances/"):
                 d1 = dict()
                 d1["name"] = file[:-10]
                 d1["type"] = "DisturbanceLayer"
@@ -501,47 +514,45 @@ def get_provider_config(project_dir):
                 list.append(d1)
             study_area["layers"] = list
 
-
-
             json.dump(study_area, json_file, indent=4)
 
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/disturbances/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
                 Rasters.append(fp)
                 paths.append(fp)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/classifiers/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
                 paths.append(fp1)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/miscellaneous/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/miscellaneous/")):
             for file in files:
                 fp2 = os.path.join(root, file)
                 paths.append(fp2)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/templates/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/templates/")):
             for file in files:
                 fp3 = os.path.join(root, file)
                 paths.append(fp3)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{os.getcwd()}/input/{project_dir}/db/")):
+        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/db/")):
             for file in files:
                 fp4 = os.path.join(root, file)
                 paths.append(fp4)
 
             for i in paths:
                 print(i)
-                shutil.copy2(i, (f"{os.getcwd()}/input/{project_dir}"))
+                shutil.copy2(i, (f"{input_dir}"))
 
-        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/disturbances/"))
-        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/templates/"))
-        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/classifiers/"))
-        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/miscellaneous/"))
-        shutil.rmtree((f"{os.getcwd()}/input/{project_dir}/db/"))
+        shutil.rmtree((f"{input_dir}/disturbances/"))
+        shutil.rmtree((f"{input_dir}/templates/"))
+        shutil.rmtree((f"{input_dir}/classifiers/"))
+        shutil.rmtree((f"{input_dir}/miscellaneous/"))
+        shutil.rmtree((f"{input_dir}/db/"))
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
@@ -562,28 +573,29 @@ def gcbm_dynamic():
     """
     # Default title = simulation
     title = request.form.get("title") or "simulation"
+
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-    project_dir = f"{title}"
+    input_dir = f"{os.getcwd()}/input/{title}"
 
     gcbm_config_path = "gcbm_config.cfg"
     provider_config_path = "provider_config.json"
 
-    if not os.path.exists(f"{os.getcwd()}/input/{project_dir}"):
-        os.makedirs(f"{os.getcwd()}/input/{project_dir}")
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
 
     thread = Thread(
-        target=launch_run, kwargs={"title": title, "project_dir": project_dir}
+        target=launch_run, kwargs={"title": title, "input_dir": input_dir}
     )
     thread.start()
     # subscriber_path = create_topic_and_sub(title)
     return {"status": "Run started"}, 200
 
 
-def launch_run(title, project_dir):
+def launch_run(title, input_dir):
     s = time.time()
     logging.debug("Starting run")
-    with open(f"{os.getcwd()}/input/{project_dir}/gcbm_logs.csv", "w+") as f:
+    with open(f"{input_dir}/gcbm_logs.csv", "w+") as f:
         res = subprocess.Popen(
             [
                 "/opt/gcbm/moja.cli",
@@ -593,20 +605,23 @@ def launch_run(title, project_dir):
                 "provider_config.json",
             ],
             stdout=f,
-            cwd=f"{os.getcwd()}/input/{project_dir}",
+            cwd=f"{input_dir}",
         )
     logging.debug("Communicating")
     (output, err) = res.communicate()
     logging.debug("Communicated")
-    if not os.path.exists(f"{os.getcwd()}/input/{project_dir}/output"):
+
+    # TODO: this should go in `output/title/` but will need updating in 
+    # get_modules_cbm_config and download()
+    if not os.path.exists(f"{input_dir}/output"):
         logging.error(err)
         return "OK"
     logging.debug("Output exists")
-    # returncode = final_run(title, gcbm_config_path, provider_config_path, project_dir)
+    # returncode = final_run(title, gcbm_config_path, provider_config_path, input_dir)
     shutil.make_archive(
-        f"{os.getcwd()}/input/{project_dir}/output",
+        f"{input_dir}/output",
         "zip",
-        f"{os.getcwd()}/input/{project_dir}/output",
+        f"{input_dir}/output",
     )
     logging.debug("Made archive")
     e = time.time()
@@ -640,9 +655,9 @@ def gcbm_download():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-    project_dir = f"{title}"
+    input_dir = f"{title}"
     return send_file(
-        f"{os.getcwd()}/input/{project_dir}/output.zip",
+        f"{input_dir}/output.zip",
         attachment_filename="output.zip",
     )
 
