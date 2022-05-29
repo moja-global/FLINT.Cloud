@@ -199,7 +199,7 @@ def gcbm_upload():
     # Function to flatten paths
     def fix_path(path):
         return os.path.basename(path.replace("\\", "/"))
-    
+
 
     if "disturbances" in request.files:
       for file in request.files.getlist("disturbances"):
@@ -224,13 +224,13 @@ def gcbm_upload():
             file.save(f"{os.getcwd()}/input/{project_dir}/miscellaneous/{file.filename}")
     else:
         return{"error": "Missing configuration file"}, 400
-    
+
     if "templates" in request.files:
         for file in request.files.getlist("templates"):
             file.save(f"{os.getcwd()}/input/{project_dir}/templates/{file.filename}")
     else:
         return{"error": "Missing configuration file"}, 400
-        
+
 
     get_modules_cbm(project_dir)
     get_provider_config(project_dir)
@@ -245,7 +245,7 @@ def get_modules_cbm(project_dir):
         disturbances = []
         data = json.load(pcf)
         for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
-            disturbances.append(file.split('.')[0])    
+            disturbances.append(file.split('.')[0])
         pcf.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, pcf, indent=4)
@@ -255,13 +255,13 @@ def get_provider_config(project_dir):
    with open(f"{os.getcwd()}/input/{project_dir}/templates/provider_config.json", "r+") as gpc:
         lst = []
         data = json.load(gpc)
-        
+
         for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/disturbances/"):
             d = dict()
             d["name"] = file[:-10]
             d["layer_path"] = "../layers/tiles" + file
             d["layer_prefix"] = file[:-5]
-            lst.append(d)    
+            lst.append(d)
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
@@ -270,16 +270,16 @@ def get_provider_config(project_dir):
             d["name"] = file[:-10]
             d["layer_path"] = "../layers/tiles" + file
             d["layer_prefix"] = file[:-5]
-            lst.append(d)    
+            lst.append(d)
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
-        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"): 
+        for file in os.listdir(f"{os.getcwd()}/input/{project_dir}/miscellaneous/"):
             d = dict()
             d["name"] = file[:-10]
             d["layer_path"] = "../layers/tiles" + file
             d["layer_prefix"] = file[:-5]
-            lst.append(d)    
+            lst.append(d)
         gpc.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
@@ -312,7 +312,7 @@ def get_provider_config(project_dir):
             cellLatSize.append(x)
             cellLonSize.append(y)
             nodata.append(n)
-    
+
         result = all(element == cellLatSize[0] for element in cellLatSize)
         if(result):
             cellLat = x
@@ -324,7 +324,7 @@ def get_provider_config(project_dir):
             tileLon = y*4000
         else:
              print("Corrupt files")
-        
+
         gpc.seek(0)
 
         data["Providers"]["RasterTiled"]["cellLonSize"] = cellLon
@@ -373,12 +373,12 @@ def get_provider_config(project_dir):
             json.dump(dictionary, json_file2, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier1_moja.json", 'w', encoding ='utf8') as json_file3:
-            dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"} 
+            dictionary["attributes"] = {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"}
             json.dump(dictionary, json_file3, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/classifiers/Classifier2_moja.json", 'w', encoding ='utf8') as json_file4:
             dictionary["attributes"] = {"1": "5", "2": "6","3": "7",
-        "4": "8"} 
+        "4": "8"}
             json.dump(dictionary, json_file4, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2011_moja.json", 'w', encoding ='utf8') as json_file5:
@@ -390,7 +390,7 @@ def get_provider_config(project_dir):
             "disturbance_type": "Wildfire",
             "transition": 1
             }
-          }  
+          }
             json.dump(dictionary, json_file5, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2012_moja.json", 'w', encoding ='utf8') as json_file6:
@@ -400,7 +400,7 @@ def get_provider_config(project_dir):
             "disturbance_type": "Wildfire",
             "transition": 1
             }
-          } 
+          }
             json.dump(dictionary, json_file6, indent = 4)
 
         with open(f"{os.getcwd()}/input/{project_dir}/disturbances/disturbances_2013_moja.json", 'w', encoding ='utf8') as json_file7:
@@ -501,7 +501,7 @@ def get_provider_config(project_dir):
                 list.append(d1)
             study_area["layers"] = list
 
-            
+
 
             json.dump(study_area, json_file, indent=4)
 
