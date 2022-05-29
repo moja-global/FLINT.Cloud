@@ -64,7 +64,7 @@
             ],
             "blockLonSize": 0.1,
             "tileLatSize": 1.0,
-            "tileLonSize": 0,
+            "tileLonSize": 1.0,
             "cellLatSize": 0.00025,
             "cellLonSize": 0.00025,
             "blockLatSize": 0.1,

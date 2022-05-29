@@ -4,7 +4,7 @@ services:
     # - when developing use local builds
     # build: .
     # - or deploy using our CI
-    image: ghcr.io/moja-global/rest_api_gcbm:master
+    image: ghcr.io/moja-global/rest_api_flint.example:master
     container_name: flint.example
     ports:
       - "8080:8080"
