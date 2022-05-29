@@ -139,3 +139,5 @@ cython_debug/
 
 # Input files
 local/rest_api_gcbm/input/
+GCBM_Demo_Run/
+GCBM_New_Demo_Run/
