@@ -29,7 +29,7 @@ class TestApiFlintExample:
         assert base_response.status_code == 200
 
     def test_help_random_arg(self, base_endpoint):
-        """This would test the help endpoint with a random argument"""
+    
         random_arg = "cli"
         base_endpoint = base_endpoint + random_arg
         base_response = requests.get(base_endpoint)
