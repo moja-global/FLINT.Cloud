@@ -29,7 +29,6 @@ class TestApiFlintExample:
         assert base_response.status_code == 200
 
     def test_help_random_arg(self, base_endpoint):
-    
         random_arg = "cli"
         base_endpoint = base_endpoint + random_arg
         base_response = requests.get(base_endpoint)
@@ -38,6 +37,3 @@ class TestApiFlintExample:
             help_response.json()["data"]["response"]
             == f"Unknown section '{random_arg}' in the --help-section option\n"
         )
-
-    
-
