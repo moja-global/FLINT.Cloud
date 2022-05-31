@@ -255,16 +255,16 @@ def get_modules_cbm_config(input_dir):
 
 
 def get_provider_config(input_dir):
-    with open(f"{input_dir}/templates/provider_config.json", "r+") as gpc:  # why gpc?
+    with open(f"{input_dir}/templates/provider_config.json", "r+") as p_config:  # why gpc?
         lst = []
-        data = json.load(gpc)
+        data = json.load(p_config)
 
         for file in os.listdir(f"{input_dir}/db/"):
             d = dict()
             d["path"] = file
             d["type"] = "SQLite"
             data["Providers"]["SQLite"] = d
-        gpc.seek(0)
+        p_config.seek(0)
 
         for file in os.listdir(f"{input_dir}/disturbances/"):
             d = dict()
@@ -272,7 +272,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        gpc.seek(0)
+        p_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/classifiers/"):
@@ -281,7 +281,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        gpc.seek(0)
+        p_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/miscellaneous/"):
@@ -290,7 +290,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        gpc.seek(0)
+        p_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         Rasters = []
@@ -335,7 +335,7 @@ def get_provider_config(input_dir):
         else:
             print("Corrupt files")
 
-        gpc.seek(0)
+        p_config.seek(0)
 
         data["Providers"]["RasterTiled"]["cellLonSize"] = cellLon
         data["Providers"]["RasterTiled"]["cellLatSize"] = cellLat
@@ -344,8 +344,8 @@ def get_provider_config(input_dir):
         data["Providers"]["RasterTiled"]["tileLatSize"] = tileLat
         data["Providers"]["RasterTiled"]["tileLonSize"] = tileLon
 
-        json.dump(data, gpc, indent=4)
-        gpc.truncate()
+        json.dump(data, p_config, indent=4)
+        p_config.truncate()
 
         dictionary = {
             "layer_type": "GridLayer",
@@ -502,7 +502,7 @@ def get_provider_config(input_dir):
                     {
                         "x": int(t[2]),
                         "y": int(t[5]),
-                        "index": 12674,  # verify source of this number
+                        "index": 12674, 
                     }
                 ],
                 "pixel_size": cellLat,
