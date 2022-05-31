@@ -23,7 +23,6 @@ class TestApiFlintExample:
         assert version_response.status_code == 200
 
     def test_help_all(self, base_endpoint):
-        """This would test the help endpoint with 'all' argument"""
         base_endpoint = base_endpoint + "all"
         base_response = request.get(base_endpoint)
         assert base_response.status_code == 200
