@@ -16,6 +16,7 @@ CORS(
     origins=[
         "http://127.0.0.1:8080/",
         "http://127.0.0.1:8000",
+        "http://localhost:8000",
         "http://localhost:5000",
         r"^https://.+example.com$",
     ],
@@ -32,7 +33,10 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-
+@app.route('/', methods=['GET'])
+def home():
+    return 'FLINT.Example API'
+    
 @app.route("/spec")
 def spec():
     swag = swagger(app)
