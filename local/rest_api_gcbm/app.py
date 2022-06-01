@@ -682,7 +682,7 @@ def gcbm_download():
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{title}"
     return send_file(
-        f"{input_dir}/output.zip",
+         f"{os.getcwd()}/input/{input_dir}/output.zip",
         attachment_filename="output.zip",
     )
 
