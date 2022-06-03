@@ -278,7 +278,7 @@ def gcbm_dynamic():
     )
     thread.start()
     # subscriber_path = create_topic_and_sub(title)
-    return {"status": "Run started"}, 200
+    return {"Status": "Run started"}, 200
 
 
 def launch_run(title, project_dir):
