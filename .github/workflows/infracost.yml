@@ -20,4 +20,3 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         path: layered/
-        terraform_plan_flags: -var-file=my.tfvars
