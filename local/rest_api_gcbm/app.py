@@ -349,6 +349,7 @@ def gcbm_download():
         attachment_filename="output.zip",
     )
 
+
 @app.route("/gcbm/list", methods=["GET"])
 def gcbm_list_simulations():
     """
