@@ -343,7 +343,7 @@ def gcbm_download():
     title = "".join(c for c in title if c.isalnum())
     project_dir = f"{title}"
     if not os.path.exists(f"{os.getcwd()}/input/{project_dir}"):
-        return {"error": "No such simulation exist for this title"}, 400
+        return {"error": "No such simulation exist for this {title}"}, 400
     return send_file(
         f"{os.getcwd()}/input/{project_dir}/output.zip",
         attachment_filename="output.zip",
