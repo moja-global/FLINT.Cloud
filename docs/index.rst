@@ -9,5 +9,6 @@ This Documentation is meant for Developers wishing to contribute to FLINT.Cloud 
 .. toctree::
    :hidden:
 
-   Api/index
-   DevelopmentSetup/index
+   api/index
+   development/index
+   deployment/index
