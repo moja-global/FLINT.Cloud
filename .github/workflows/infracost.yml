@@ -1,0 +1,23 @@
+name: Infrastructure Cost breakdown
+
+on:
+  pull_request:
+    paths:
+    - 'layered/main.tf'
+
+jobs:
+  infracost:
+    name: Show Infracost diff
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Run infracost diff
+      uses: infracost/infracost-gh-action@master
+      env:
+        INFRACOST_API_KEY: ${{ secrets.INFRACOST_API_KEY }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        path: layered/
+        terraform_plan_flags: -var-file=my.tfvars
