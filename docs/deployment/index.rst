@@ -4,22 +4,22 @@ FLINT.Cloud Deployment
 ####################
 
 This section guides you through the process of deploying FLINT.Cloud to
-your own server, through a public cloud service provider. We are using
-Google Cloud Platform (GCP) and Azure, as of now, to deploy FLINT.Cloud
-APIs to be consumed for your FLINT-specific applications, like FLINT-UI.
-This guide assumes that you have some preliminary understanding of the
-concepts of GCP and Azure and have deployed an application before.
+your own server, through a public cloud service provider. We use
+Google Cloud Platform (GCP) and Azure to deploy FLINT.Cloud
+APIs that are used by FLINT-specific applications, like FLINT-UI.
+This guide assumes that you have some knowledge of the
+concepts of GCP and Azure, and that you have successfully deployed an application before.
 
 Google Cloud Platform
 ---------------------
 
-To deploy FLINT.Cloud to Google Cloud Platform, we provide a
-production-grade setup with a Layered Architecture Setup on top of the
-Google Cloud. This setup includes the usage of `Terraform`_, an
+To deploy FLINT.Cloud to GCP, we provide a
+production grade setup using a Layered Architecture setup on top of the
+Google Cloud. In this setup we use `Terraform`_, an
 Infrastructure-as-a-Code tool, to deploy the infrastructure and the
-application to be used.
+applications we want to use.
 
-To deploy the FLINT.Cloud to Google Cloud Platform, follow these steps:
+To deploy the FLINT.Cloud to GCP, follow these steps:
 
 1. Create a GCP service account with project owner permissions in your
    project. This is used by Terraform to provision all the necessary
@@ -27,16 +27,16 @@ To deploy the FLINT.Cloud to Google Cloud Platform, follow these steps:
 2. Copy ``main.tf`` from the ``layered`` directory of this repository to
    your Cloud Console machine.
 3. In ``main.tf``, change the project variable to your ``project ID``.
-   Change any other variables if necessary.
-4. Download the key for the service account created in the ``Step 1``
-   (in JSON format) to your project's Cloud Console machine. Rename it
-   as ``service_account.json``.
+   Change any other variables, if necessary.
+4. Download the key in JSON format for the service account created in ``Step 1``
+   to your project's Cloud Console machine. Rename it
+   to ``service_account.json``.
 5. Run ``terraform apply``. After this command finishes, it should
    output the URL to FLINT Cloud (ingress).
 
-To teardown the infrastructure and delete the application, run
-``terraform destroy`` in the same directory as where ``main.tf`` is
-present. In case this fails, simply run it again.
+To tear down the infrastructure and delete the application, run
+``terraform destroy`` in the same directory where ``main.tf`` is
+present. If this fails, run it again.
 
 .. _Terraform: https://www.terraform.io/
 
@@ -44,13 +44,12 @@ Azure
 -----
 
 To deploy FLINT.Cloud to Azure, we recommend using the Azure App Service
-using a custom Microsoft Container Registry container, built from our
-``local`` directory. This setup includes the usage of `Azure CLI`_ to
-deploy the infrastructure and the application to be used. You will also
-need to sign in to the Azure CLI by using the ``az login`` command. To
+with a custom Microsoft Container Registry container built from our
+``local`` directory. This setup uses `Azure CLI`_ to
+deploy the infrastructure and the applications to be used. You need to 
+sign in to the Azure CLI by using the ``az login`` command. To
 finish the authentication process, follow the steps displayed in your
-terminal. To build the images, we would be using `Docker`_ and would be
-pushing them to `Azure Container Registry`_.
+terminal. To build images, we use `Docker`_ and then push them to `Azure Container Registry`_.
 
 Download the project
 ~~~~~~~~~~~~~~~~~~~~
@@ -90,9 +89,9 @@ command:
 Create a resource group
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-You can now prepare resources in Azure to which you can push the image
-and then deploy a container to Azure App Service. You can start by
-creating a resource group in which you want to collect all the
+To push images onto and deploy containers with the Azure App 
+Service, you need to first prepare some resources. Start by
+creating a resource group that will collect all your
 resources.
 
 .. code:: sh
@@ -104,7 +103,7 @@ You can change the ``--location`` value to specify a region near you.
 Create a Container Registry
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can now push the image to Azure Container Registry from which App
+You can now push the image to Azure Container Registry so that App
 Service can deploy it. Create an Azure Container Registry to push your
 images to:
 
@@ -113,7 +112,7 @@ images to:
    az acr create --name <registry-name> --resource-group myResourceGroup --sku Basic --admin-enabled true
 
 Replace ``<registry-name>`` with a suitable name for your registry. The
-name must contain only letters, numbers, and must be unique across all
+name must contain only letters and numbers, and must be unique across all
 of Azure.
 
 Retrieve your credentials for the Container Registry:
@@ -132,7 +131,7 @@ Replace ``<registry-name>`` and ``<registry-username>`` with values from
 the previous steps. When prompted, type in one of the passwords from the
 previous step.
 
-Let's tag the images with the registry name:
+Tag the images with the registry name:
 
 .. code:: sh
 
@@ -169,8 +168,8 @@ command:
    az appservice plan create --name myAppServicePlan --resource-group myResourceGroup --is-linux
 
 Create the web app with the ``az webpp create`` command. Since we are
-deploying two images to two different web apps, you would need to
-specify the commands twice. To deploy, ``rest_api_gcbm`` to the first
+deploying two images to two different web apps, you need to
+enter these commands twice. To deploy ``rest_api_gcbm`` to the first
 web app and ``rest_api_flint.example`` to the second web app, run the
 following commands:
 
@@ -180,7 +179,7 @@ following commands:
    az webapp create --resource-group myResourceGroup --plan myAppServicePlan --name <app-name-2> --deployment-container-image-name <registry-name>.azurecr.io/rest_api_flint.example:latest
 
 Use the ``az webapp config appsettings set`` to set the
-``WEBSITES_PORT`` environment variable as expected by the app code. In
+``WEBSITES_PORT`` environment variable. In
 our case, the port to be exposed is ``8080``.
 
 .. code:: sh
@@ -222,7 +221,7 @@ Replace the following values:
    ``az account show`` command.
 
 Make sure the above steps are repeated for both of the apps that you are
-doing to deploy. Configure your app to use the managed identity to pull
+going to deploy. Configure your app to use the managed identity to pull
 from Azure Container Registry.
 
 .. code:: sh
@@ -248,9 +247,9 @@ container registry and the image to deploy for the web app:
    az webapp config container set --name <app-name-2> --resource-group myResourceGroup --docker-custom-image-name <registry-name>.azurecr.io/rest_api_flint.example:latest --docker-registry-server-url https://<registry-name>.azurecr.io
 
 Replace ``<app-name-1>`` and ``<app-name-2>`` with the name of your web
-app and replace ``<registry-name>`` in two places with the name of your
+app, and replace all instances of ``<registry-name>`` with the name of your
 registry. When the ``az webapp config container set`` command completes,
-the web app should be running in the container on App Service.
+the web app is running in the container on App Service.
 
 To test the app, browse to ``https://<app-name>.azurewebsites.net``,
 replacing ``<app-name>`` with the name of your web app. To clean up the
