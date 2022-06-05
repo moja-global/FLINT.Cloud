@@ -68,11 +68,11 @@ Currently the REST API has the following endpoints available for access:-
 
 | Endpoint       |  Functionality            |
 | :--------------| :------------------------ |
-| **\help\all**  | Produces a help message with information on all options for moja.CLI. |
-| **\help\arg**  | Produces a help message with information on option **arg** for moja.CLI. |
-| **\version**   | Outputs the version number of moja.CLI. |
-| **\point**     | Runs point example and outputs point_example.csv as an attachment to be downloaded.  Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations. |
-| **\rothc**    | Runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
+| **/help/all**  | Produces a help message with information on all options for moja.CLI. |
+| **/help/arg**  | Produces a help message with information on option **arg** for moja.CLI. |
+| **/version**   | Outputs the version number of moja.CLI. |
+| **/point**     | Runs point example and outputs point_example.csv as an attachment to be downloaded.  Parameters (multipart-form data) `file` for point_example can be passed to override the default configurations. |
+| **/rothc**    | Runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded. Parameters (multipart-form data) `file` for rothc_example can be passed to override the default configurations.
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.  
 
@@ -87,9 +87,15 @@ Currently the REST API has the following endpoints available for access:-
 
 | Endpoint      | Functionality     |
 | :------------ | :-----------------|
-| **\help\all** | Produces a help message with information on all options for moja.CLI. |
-| **\help\arg** | Produces a help message with information on option **arg** for moja.CLI.|
-| **\version**  | Outputs the version number of moja.CLI.|
+| **/help/all** | Produces a help message with information on all options for moja.CLI. |
+| **/help/arg** | Produces a help message with information on option **arg** for moja.CLI.|
+| **/version**  | Outputs the version number of moja.CLI.|
+| **/gcbm/new**| This endpoint is used to create new simulation with the suitable title.|
+| **/gcbm/upload**| This endpoint is used to upload all the input files that needs to run the GCBM simulation.| 
+| **/gcbm/dynamic**| This endpoint is used to execute the simulation process.|
+| **/gcbm/status**| This endpoint is used to check the status of the simulation process, whether the simulation is completed or not.|
+| **/gcbm/download**| This endpoint is used to download a simulation output in the zip format.|
+| **/gcbm/list**| This endpoint is used to check the available simulation currently present.| 
 
 
 This REST API is built using the `flask-restful` package and has been containerized using `Docker`.
