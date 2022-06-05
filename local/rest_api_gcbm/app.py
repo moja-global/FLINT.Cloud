@@ -18,6 +18,8 @@ import os
 import flask.scaffold
 import rasterio as rst
 from flask import jsonify
+from config_table import rename_columns
+import sqlite3 
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
@@ -241,30 +243,30 @@ def get_config_templates(input_dir):
 # the ["vars"] attribute of modules_cbm.json -> CBMDisturbanceListener
 # current hack is to drop the last five characters, but thats very fragile
 def get_modules_cbm_config(input_dir):
-    with open(f"{input_dir}/templates/modules_cbm.json", "r+") as pcf:
+    with open(f"{input_dir}/templates/modules_cbm.json", "r+") as modules_cbm_config:
         disturbances = []
-        data = json.load(pcf)
+        data = json.load(modules_cbm_config)
         for file in os.listdir(f"{input_dir}/disturbances/"):
             disturbances.append(
                 file.split(".")[0][:-5]
             )  # drop `_moja` to match modules_cbm.json template
-        pcf.seek(0)
+        modules_cbm_config.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
-        json.dump(data, pcf, indent=4)
-        pcf.truncate()
+        json.dump(data, modules_cbm_config, indent=4)
+        modules_cbm_config.truncate()
 
 
 def get_provider_config(input_dir):
-    with open(f"{input_dir}/templates/provider_config.json", "r+") as p_config:  # why gpc?
+    with open(f"{input_dir}/templates/provider_config.json", "r+") as provider_config:  
         lst = []
-        data = json.load(p_config)
+        data = json.load(provider_config)
 
         for file in os.listdir(f"{input_dir}/db/"):
             d = dict()
             d["path"] = file
             d["type"] = "SQLite"
             data["Providers"]["SQLite"] = d
-        p_config.seek(0)
+        provider_config.seek(0)
 
         for file in os.listdir(f"{input_dir}/disturbances/"):
             d = dict()
@@ -272,7 +274,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        p_config.seek(0)
+        provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/classifiers/"):
@@ -281,7 +283,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        p_config.seek(0)
+        provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/miscellaneous/"):
@@ -290,7 +292,7 @@ def get_provider_config(input_dir):
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             lst.append(d)
-        p_config.seek(0)
+        provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         Rasters = []
@@ -335,7 +337,7 @@ def get_provider_config(input_dir):
         else:
             print("Corrupt files")
 
-        p_config.seek(0)
+        provider_config.seek(0)
 
         data["Providers"]["RasterTiled"]["cellLonSize"] = cellLon
         data["Providers"]["RasterTiled"]["cellLatSize"] = cellLat
@@ -344,8 +346,8 @@ def get_provider_config(input_dir):
         data["Providers"]["RasterTiled"]["tileLatSize"] = tileLat
         data["Providers"]["RasterTiled"]["tileLonSize"] = tileLon
 
-        json.dump(data, p_config, indent=4)
-        p_config.truncate()
+        json.dump(data, provider_config, indent=4)
+        provider_config.truncate()
 
         dictionary = {
             "layer_type": "GridLayer",
@@ -657,6 +659,17 @@ def launch_run(title, input_dir):
         "execTime": e - s,
         "response": "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body.",
     }
+
+@app.route('/config', methods=['POST'])
+def config_table():
+    obj = request.get_json()
+    print(obj)
+    input_dir = f"{os.getcwd()}/input/{obj['simulation_name']}"
+    response = dict()
+    try:
+        return {'status': 1, 'response': rename_columns(obj['tables'], obj['simulation_name'])}
+    except Exception:
+        return {'status': 0, 'error': Exception}
 
 
 @app.route("/gcbm/download", methods=["POST"])
