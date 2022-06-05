@@ -19,7 +19,7 @@ import flask.scaffold
 import rasterio as rst
 from flask import jsonify
 from config_table import rename_columns
-import sqlite3 
+import sqlite3
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
@@ -257,7 +257,7 @@ def get_modules_cbm_config(input_dir):
 
 
 def get_provider_config(input_dir):
-    with open(f"{input_dir}/templates/provider_config.json", "r+") as provider_config:  
+    with open(f"{input_dir}/templates/provider_config.json", "r+") as provider_config:
         lst = []
         data = json.load(provider_config)
 
@@ -504,7 +504,7 @@ def get_provider_config(input_dir):
                     {
                         "x": int(t[2]),
                         "y": int(t[5]),
-                        "index": 12674, 
+                        "index": 12674,
                     }
                 ],
                 "pixel_size": cellLat,
@@ -583,6 +583,21 @@ def get_provider_config(input_dir):
         shutil.rmtree((f"{input_dir}/db/"))
 
 
+@app.route("/config", methods=["POST"])
+def config_table():
+    obj = request.get_json()
+    print(obj)
+    input_dir = f"{os.getcwd()}/input/{obj['simulation_name']}"
+    response = dict()
+    try:
+        return {
+            "status": 1,
+            "response": rename_columns(obj["tables"], obj["simulation_name"]),
+        }
+    except Exception:
+        return {"status": 0, "error": Exception}
+
+
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
     """
@@ -638,18 +653,17 @@ def launch_run(title, input_dir):
     (output, err) = res.communicate()
     logging.debug("Communicated")
 
-    # TODO: this should go in `output/title/` but will need updating in
-    # get_modules_cbm_config and download()
     if not os.path.exists(f"{input_dir}/output"):
         logging.error(err)
         return "OK"
     logging.debug("Output exists")
-    # returncode = final_run(title, gcbm_config_path, provider_config_path, input_dir)
+
+    # cut and paste output folder to app/output/simulation_name
+    shutil.copytree(f"{input_dir}/output", (f"{os.getcwd()}/output/{title}"))
     shutil.make_archive(
-        f"{input_dir}/output",
-        "zip",
-        f"{input_dir}/output",
+        f"{os.getcwd()}/output/{title}", "zip", f"{os.getcwd()}/output/{title}"
     )
+    shutil.rmtree((f"{input_dir}/output"))
     logging.debug("Made archive")
     e = time.time()
 
@@ -659,17 +673,6 @@ def launch_run(title, input_dir):
         "execTime": e - s,
         "response": "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body.",
     }
-
-@app.route('/config', methods=['POST'])
-def config_table():
-    obj = request.get_json()
-    print(obj)
-    input_dir = f"{os.getcwd()}/input/{obj['simulation_name']}"
-    response = dict()
-    try:
-        return {'status': 1, 'response': rename_columns(obj['tables'], obj['simulation_name'])}
-    except Exception:
-        return {'status': 0, 'error': Exception}
 
 
 @app.route("/gcbm/download", methods=["POST"])
@@ -693,10 +696,9 @@ def gcbm_download():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-    input_dir = f"{title}"
     return send_file(
-         f"{os.getcwd()}/input/{input_dir}/output.zip",
-        attachment_filename="output.zip",
+        f"{os.getcwd()}/output/{title}.zip",
+        attachment_filename="{title}.zip",
     )
 
 

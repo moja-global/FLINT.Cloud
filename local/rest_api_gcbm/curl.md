@@ -49,7 +49,7 @@
     A file named `output.zip` will be obtained. This file contains the outputs generated, which can be analysed on unzipping.
 
     ```
-        curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
+        curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o run4.zip
     ```
 6. `/gcbm/list`
     ```
