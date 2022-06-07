@@ -28,7 +28,7 @@ def get_simulation_status():
         logs = []
         with open(logs_file_name) as file_handle:
             logs = file_handle.readlines()
-        os.system('rm ' + logs_file_name)
+        #os.system('rm ' + logs_file_name)
         return {'container_running': True, 'logs': logs}
     return {'container_running': False}
 
