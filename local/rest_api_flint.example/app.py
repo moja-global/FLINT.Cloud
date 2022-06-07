@@ -33,10 +33,12 @@ SWAGGERUI_BLUEPRINT = get_swaggerui_blueprint(
 app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
-@app.route('/', methods=['GET'])
+
+@app.route("/", methods=["GET"])
 def home():
-    return 'FLINT.Example API'
-    
+    return "FLINT.Example API"
+
+
 @app.route("/spec")
 def spec():
     swag = swagger(app)
