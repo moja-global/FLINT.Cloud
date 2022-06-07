@@ -28,5 +28,6 @@ jobs:
         # # Create,load and run sim using curl
         cd local/rest_api_gcbm
         python cml_report/init_docker.py
+        curl -d "title=sim" -X POST http://0.0.0.0:8080/gcbm/new
         curl http://0.0.0.0:8080/gcbm/list
         # cml-send-comment report.md
