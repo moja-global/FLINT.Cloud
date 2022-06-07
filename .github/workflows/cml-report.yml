@@ -26,5 +26,6 @@ jobs:
         echo "## GCBM Model" > report.md
         cat GCBM_summary.txt >> report.md
         # Create,load and run sim using curl
-        curl -d "title=sim" -X POST http://localhost:8080/gcbm/new
+        python init_docker.py
+        curl http://localhost:8080/gcbm/list
         cml-send-comment report.md
