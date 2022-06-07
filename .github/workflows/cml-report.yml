@@ -27,6 +27,6 @@ jobs:
         cat GCBM_summary.txt >> report.md
         # Create,load and run sim using curl
         cd ..
-        python init_docker.py
+        python cml_report/init_docker.py
         curl http://localhost:8080/gcbm/list
         cml-send-comment report.md
