@@ -13,16 +13,19 @@ jobs:
       with:
         python-version: '3.x'
     
-    - name: Unzip Inputs and Build api
+    - name: Unzip Inputs Build api
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
         python -m pip install --upgrade pip
         cd local/rest_api_gcbm/cml_report
         python create_cml_report.py
-        cd ..
+    
+    - name: Build API
+      run: |
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --rm -p 8080:8080 gcbm-api
+   
     - name: Get Public IP
       id: ip
       uses: haythem/public-ip@v1.2
@@ -30,15 +33,10 @@ jobs:
     - name: Print public IP
       run: |
         echo ${{ steps.ip.outputs.ipv4 }}
-
-    - name: Create new Sim    
-      uses: satak/webrequest-action@master
-      with:
-        url: http://${{ steps.ip.outputs.ipv4 }}/gcbm/new
-        method: POST
-        payload: '{ "title" : "run4" }'
     
-    # - name: Get Simulation Status
-    #   uses: wei/curl@master
-    #   with:
-    #     args: -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
+    - name: Check portd
+      run: |
+        sudo netstat -tunlp
+    # - name: Create New Sim
+    #   run: |
+    #     curl http://0.0.0.0:
