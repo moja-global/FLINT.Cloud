@@ -26,4 +26,7 @@ jobs:
         # cml-send-comment report.md
         cd ../../tests
         python simulation_status.py
+        # docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
+        # docker run -d --rm -p 8080:8080 gcbm-api
+        docker --version
         echo "Succesfully retrieved log files"
