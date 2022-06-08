@@ -45,6 +45,7 @@ jobs:
       run: |
         cd local/rest_api_gcbm/cml_report
         python create_cml_report.py
+        cd ../../../GCBM
         curl -F config_files='@config/variables.json' \
             -F config_files='@config/spinup.json' \
             -F config_files='@config/provider_config.json' \
