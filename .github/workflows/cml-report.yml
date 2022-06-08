@@ -24,7 +24,7 @@ jobs:
     - name: Build API
       run: |
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
-        docker run -d --rm -p 8080:8080 gcbm-api
+        docker run -d --rm -p 5000:5000 gcbm-api
    
     - name: Get Public IP
       id: ip
@@ -37,6 +37,6 @@ jobs:
     - name: Check portd
       run: |
         sudo netstat -tunlp
-    # - name: Create New Sim
-    #   run: |
-    #     curl http://0.0.0.0:
+    - name: Create New Sim
+      run: |
+        curl -d "title=run4" -X POST http://0.0.0.0:5000/gcbm/new 
