@@ -1,0 +1,6 @@
+CONTAINER ID   IMAGE      COMMAND                  CREATED             STATUS             PORTS                    NAMES
+77cce3e812e1   gcbm-api   "gunicorn --bind :80…"   About an hour ago   Up About an hour   0.0.0.0:8080->8080/tcp   upbeat_aryabhata
+CONTAINER ID   IMAGE      COMMAND                  CREATED             STATUS             PORTS                    NAMES
+77cce3e812e1   gcbm-api   "gunicorn --bind :80…"   About an hour ago   Up About an hour   0.0.0.0:8080->8080/tcp   upbeat_aryabhata
+CONTAINER ID   IMAGE      COMMAND                  CREATED             STATUS             PORTS                    NAMES
+77cce3e812e1   gcbm-api   "gunicorn --bind :80…"   About an hour ago   Up About an hour   0.0.0.0:8080->8080/tcp   upbeat_aryabhata
