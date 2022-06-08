@@ -23,12 +23,20 @@ jobs:
         cd ..
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --rm -p 8080:8080 gcbm-api
+    - name: Get Public IP
+      id: ip
+      uses: haythem/public-ip@v1.2
+
+    - name: Print public IP
+      run: |
+        echo ${{ steps.ip.outputs.ipv4 }}
+        
     - name: Create New Simulation
       uses: wei/curl@master
       with:
-        args: -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+        args: -d "title=run4" -X POST http://${{ steps.ip.outputs.ipv4 }}:8080/gcbm/new
     
-    - name: Get Simulation Status
-      uses: wei/curl@master
-      with:
-        args: -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
+    # - name: Get Simulation Status
+    #   uses: wei/curl@master
+    #   with:
+    #     args: -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
