@@ -29,6 +29,6 @@ jobs:
         # cd ../rest_api_gcbm
         # docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         # docker run -d --rm -p 8080:8080 gcbm-api
-        # cd ../..
-        # curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+        cd cml_report
+        python api_cli.py
         echo "Succesfully retrieved log files"
