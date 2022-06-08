@@ -1,10 +1,10 @@
-from genericpath import isdir
-from operator import index
+# from genericpath import isdir
+# from operator import index
 import os
-import pandas as pd
-import tabulate
+# import pandas as pd
+# import tabulate
 import zipfile
-import json
+# import json
 
 #  Unzip file
 zip = os.path.join('..','..','..','GCBM_Demo_Run.zip')

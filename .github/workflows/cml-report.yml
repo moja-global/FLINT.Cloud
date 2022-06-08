@@ -26,3 +26,4 @@ jobs:
         # cml-send-comment report.md
         cd local/tests
         python simulation_status.py
+        echo "Succesfully retrieved log files"
