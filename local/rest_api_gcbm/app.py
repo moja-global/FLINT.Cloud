@@ -203,25 +203,25 @@ def gcbm_upload():
         for file in request.files.getlist("disturbances"):
             file.save(f"{input_dir}/disturbances/{file.filename}")
     else:
-        return {"error": "Missing configuration file"}, 400
+        return {"error": "Missing disturbances"}, 400
 
     if "classifiers" in request.files:
         for file in request.files.getlist("classifiers"):
             file.save(f"{input_dir}/classifiers/{file.filename}")
     else:
-        return {"error": "Missing configuration file"}, 400
+        return {"error": "Missing classifiers"}, 400
 
     if "db" in request.files:
         for file in request.files.getlist("db"):
             file.save(f"{input_dir}/db/{file.filename}")
     else:
-        return {"error": "Missing configuration file"}, 400
+        return {"error": "Missing db files"}, 400
 
     if "miscellaneous" in request.files:
         for file in request.files.getlist("miscellaneous"):
             file.save(f"{input_dir}/miscellaneous/{file.filename}")
     else:
-        return {"error": "Missing configuration file"}, 400
+        return {"error": "Missing miscellaneous files"}, 400
 
     get_config_templates(input_dir)
     get_modules_cbm_config(input_dir)
@@ -247,9 +247,7 @@ def get_modules_cbm_config(input_dir):
         disturbances = []
         data = json.load(modules_cbm_config)
         for file in os.listdir(f"{input_dir}/disturbances/"):
-            disturbances.append(
-                file.split(".")[0][:-5]
-            )  # drop `_moja` to match modules_cbm.json template
+            disturbances.append(file.split(".")[0])
         modules_cbm_config.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, modules_cbm_config, indent=4)
@@ -262,41 +260,41 @@ def get_provider_config(input_dir):
         data = json.load(provider_config)
 
         for file in os.listdir(f"{input_dir}/db/"):
-            d = dict()
-            d["path"] = file
-            d["type"] = "SQLite"
-            data["Providers"]["SQLite"] = d
+            db = dict()
+            db["path"] = file
+            db["type"] = "SQLite"
+            data["Providers"]["SQLite"] = db
         provider_config.seek(0)
 
         for file in os.listdir(f"{input_dir}/disturbances/"):
-            d = dict()
-            d["name"] = file[:-10]
-            d["layer_path"] = file
-            d["layer_prefix"] = file[:-5]
-            lst.append(d)
+            disturbances = dict()
+            disturbances["name"] = file[:-10]
+            disturbances["layer_path"] = file
+            disturbances["layer_prefix"] = file[:-5]
+            lst.append(disturbances)
         provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/classifiers/"):
-            d = dict()
-            d["name"] = file[:-10]
-            d["layer_path"] = file
-            d["layer_prefix"] = file[:-5]
-            lst.append(d)
+            classifiers = dict()
+            classifiers["name"] = file[:-10]
+            classifiers["layer_path"] = file
+            classifiers["layer_prefix"] = file[:-5]
+            lst.append(classifiers)
         provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
         for file in os.listdir(f"{input_dir}/miscellaneous/"):
-            d = dict()
-            d["name"] = file[:-10]
-            d["layer_path"] = file
-            d["layer_prefix"] = file[:-5]
-            lst.append(d)
+            miscellaneous = dict()
+            miscellaneous["name"] = file[:-10]
+            miscellaneous["layer_path"] = file
+            miscellaneous["layer_prefix"] = file[:-5]
+            lst.append(miscellaneous)
         provider_config.seek(0)
         data["Providers"]["RasterTiled"]["layers"] = lst
 
-        Rasters = []
-        Rastersm = []
+        rasters = []
+        rastersm = []
         nodatam = []
         nodata = []
         cellLatSize = []
@@ -306,16 +304,16 @@ def get_provider_config(input_dir):
         for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
-                Rasters.append(fp)
+                rasters.append(fp)
                 paths.append(fp)
 
         for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
-                Rasters.append(fp1)
+                rasters.append(fp1)
                 paths.append(fp1)
 
-        for nd in Rasters:
+        for nd in rasters:
             img = rst.open(nd)
             t = img.transform
             x = t[0]
@@ -369,9 +367,9 @@ def get_provider_config(input_dir):
             ):
                 for file in files:
                     fp2 = os.path.join(root, file)
-                    Rastersm.append(fp2)
+                    rastersm.append(fp2)
 
-                for i in Rastersm:
+                for i in rastersm:
                     img = rst.open(i)
                     d = img.nodata
                     nodatam.append(d)
@@ -544,13 +542,13 @@ def get_provider_config(input_dir):
         for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
-                Rasters.append(fp)
+                rasters.append(fp)
                 paths.append(fp)
 
         for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
-                Rasters.append(fp1)
+                rasters.append(fp1)
                 paths.append(fp1)
 
         for root, dirs, files in os.walk(
