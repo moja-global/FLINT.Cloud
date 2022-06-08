@@ -89,6 +89,7 @@ jobs:
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/dynamic
     
     - name: Get logs
+      run: |
         cd local/tests
         python simulation_status.py
         echo "## GCBM Simulation Log" > report.md
