@@ -36,7 +36,7 @@ jobs:
       with:
         url: http://${{ steps.ip.outputs.ipv4 }}/gcbm/new
         method: POST
-        payload: '{ "name" : "run4" }'
+        payload: '{ "title" : "run4" }'
     
     # - name: Get Simulation Status
     #   uses: wei/curl@master
