@@ -1,2 +1,0 @@
-CONTAINER ID   IMAGE      COMMAND                  CREATED          STATUS          PORTS                    NAMES
-9fced7a6d773   gcbm-api   "gunicorn --bind :80…"   27 minutes ago   Up 27 minutes   0.0.0.0:8080->8080/tcp   cranky_moore

@@ -13,13 +13,13 @@ jobs:
       with:
         python-version: '3.x'
     
-    - name: Unzip Inputs Build api
-      env:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        python -m pip install --upgrade pip
-        cd local/rest_api_gcbm/cml_report
-        python create_cml_report.py
+    # - name: Unzip Inputs
+    #   env:
+    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+    #   run: |
+    #     python -m pip install --upgrade pip
+    #     cd local/rest_api_gcbm/cml_report
+    #     python create_cml_report.py
     
     - name: Build API
       run: |
@@ -41,3 +41,56 @@ jobs:
     - name: Create New Sim
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+    - name: Unzip Files and Upload
+      run: |
+        cd local/rest_api_gcbm/cml_report
+        python create_cml_report.py
+        curl -F config_files='@config/variables.json' \
+            -F config_files='@config/spinup.json' \
+            -F config_files='@config/provider_config.json' \
+            -F config_files='@config/pools_cbm.json' \
+            -F config_files='@config/modules_output.json' \
+            -F config_files='@config/modules_cbm.json' \
+            -F config_files='@config/logging.conf' \
+            -F config_files='@config/localdomain.json' \
+            -F config_files='@config/internal_variables.json' \
+            -F config_files='@config/gcbm_config.cfg' \
+            -F input='@layers/tiled/bounding_box.tiff' \
+            -F input='@layers/tiled/Classifier1_moja.json' \
+            -F input='@layers/tiled/Classifier1_moja.tiff' \
+            -F input='@layers/tiled/Classifier2_moja.json' \
+            -F input='@layers/tiled/Classifier2_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2011_moja.json' \
+            -F input='@layers/tiled/disturbances_2011_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2012_moja.json' \
+            -F input='@layers/tiled/disturbances_2012_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2013_moja.json' \
+            -F input='@layers/tiled/disturbances_2013_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2014_moja.json' \
+            -F input='@layers/tiled/disturbances_2014_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2015_moja.json' \
+            -F input='@layers/tiled/disturbances_2015_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2016_moja.json' \
+            -F input='@layers/tiled/disturbances_2016_moja.tiff' \
+            -F input='@layers/tiled/disturbances_2018_moja.json' \
+            -F input='@layers/tiled/disturbances_2018_moja.tiff' \
+            -F input='@layers/tiled/initial_age_moja.json' \
+            -F input='@layers/tiled/initial_age_moja.tiff' \
+            -F input='@layers/tiled/mean_annual_temperature_moja.json' \
+            -F input='@layers/tiled/mean_annual_temperature_moja.tiff' \
+            -F input='@layers/tiled/study_area.json' \
+            -F input='@input_database/gcbm_input.db' \
+            -F db='@input_database/gcbm_input.db' \
+            -F title="run4" \
+            http://0.0.0.0:8080/gcbm/upload
+    - name: Run Simulation
+      run: |
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/dynamic
+        cd local/tests
+        python simulation_status.py
+        echo "## GCBM Simulation Log" > report.md
+        cat *.txt >> report.md
+        cml-send-comment report.md
+    - name: Download Results
+      run: |
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
