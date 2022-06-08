@@ -30,11 +30,13 @@ jobs:
     - name: Print public IP
       run: |
         echo ${{ steps.ip.outputs.ipv4 }}
-        
-    - name: Create New Simulation
-      uses: wei/curl@master
-      with:
-        args: -d "title=run4" -X POST http://${{ steps.ip.outputs.ipv4 }}:8080/gcbm/new
+
+    - name: Create new Sim    
+      uses: satak/webrequest-action@master
+        with:
+          url: http://${{ steps.ip.outputs.ipv4 }}/gcbm/new
+          method: POST
+          payload: '{ "name" : "run4" }'
     
     # - name: Get Simulation Status
     #   uses: wei/curl@master
