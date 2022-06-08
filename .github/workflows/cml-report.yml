@@ -24,6 +24,6 @@ jobs:
         # echo "## GCBM Model" > report.md
         # cat GCBM_summary.txt >> report.md
         # cml-send-comment report.md
-        cd local/tests
+        cd ../../tests
         python simulation_status.py
         echo "Succesfully retrieved log files"
