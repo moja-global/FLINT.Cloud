@@ -21,15 +21,10 @@ jobs:
         # python -m pip install --upgrade pip
         cd local/rest_api_gcbm/cml_report
         python create_cml_report.py
-        # echo "## GCBM Model" > report.md
-        # cat GCBM_summary.txt >> report.md
-        # cml-send-comment report.md
         cd ../../tests
-        python simulation_status.py
-        echo "Succesfully retrieved log files"
-        cd ../rest_api_gcbm
-        docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
-        docker run -d --rm -p 8080:8080 gcbm-api
-        cd cml_report
-        python api_cli.py
+        echo "## GCBM Model" > report.md
+        echo "### Log files" >> report.md
+        ls *.txt >> report.md
+        cml-send-comment report.md
+        
         

@@ -1,0 +1,184 @@
+[2022-06-08 14:23:23 +0000] [1] [INFO] Starting gunicorn 20.1.0
+[2022-06-08 14:23:23 +0000] [1] [INFO] Listening at: http://0.0.0.0:8080 (1)
+[2022-06-08 14:23:23 +0000] [1] [INFO] Using worker: gthread
+[2022-06-08 14:23:23 +0000] [8] [INFO] Booting worker with pid: 8
+<2022-06-08 14:44:19.568263> (info) - Config has files: 7
+<2022-06-08 14:44:19.568534> (info) - Using Logging Configuration: /app/input/run4/logging.conf
+<2022-06-08 14:44:19.568581> (info) - Using configurations: 
+<2022-06-08 14:44:19.568629> (info) - localdomain.json
+<2022-06-08 14:44:19.568644> (info) - pools_cbm.json
+<2022-06-08 14:44:19.568650> (info) - modules_cbm.json
+<2022-06-08 14:44:19.568657> (info) - modules_output.json
+<2022-06-08 14:44:19.568664> (info) - spinup.json
+<2022-06-08 14:44:19.568670> (info) - variables.json
+<2022-06-08 14:44:19.568676> (info) - internal_variables.json
+<2022-06-08 14:44:19.568745> (info) - Using provider configurations: 
+<2022-06-08 14:44:19.568789> (info) - provider_config.json
+<2022-06-08 14:44:19.598705> (info) - Using operation manager: 
+<2022-06-08 14:44:19.598789> (info) - spinup ON, sequencer - CBMSpinupSequencer
+<2022-06-08 14:44:19.674860> (info) - GCBM version: 1.0.0
+<2022-06-08 14:44:19.763585> (info) -   0:Queuing tile: ( 12674) 1 of 1
+<2022-06-08 14:44:19.764238> (info) -   0:Total Blocks queued for simulation: 100
+<2022-06-08 14:44:19.764298> (info) -   0:Run ID = '7a98e53e-e739-11ec-9b00-0242ac110002'
+<2022-06-08 14:44:19.764334> (info) -   0:Threads created for processing: 4
+<2022-06-08 14:44:19.765733> (info) - GCBM version: 1.0.0
+<2022-06-08 14:44:19.770303> (info) - 100:Run ID = '7a98e53e-e739-11ec-9b00-0242ac110002'
+<2022-06-08 14:44:19.770367> (info) - 100:Thread Created
+<2022-06-08 14:44:19.771411> (info) - GCBM version: 1.0.0
+<2022-06-08 14:44:19.775909> (info) - 101:Run ID = '7a98e53e-e739-11ec-9b00-0242ac110002'
+<2022-06-08 14:44:19.775984> (info) - 101:Thread Created
+<2022-06-08 14:44:19.776967> (info) - GCBM version: 1.0.0
+<2022-06-08 14:44:19.781540> (info) - 102:Run ID = '7a98e53e-e739-11ec-9b00-0242ac110002'
+<2022-06-08 14:44:19.781598> (info) - 102:Thread Created
+<2022-06-08 14:44:19.782603> (info) - GCBM version: 1.0.0
+<2022-06-08 14:44:19.787159> (info) - 103:Run ID = '7a98e53e-e739-11ec-9b00-0242ac110002'
+<2022-06-08 14:44:19.787218> (info) - 103:Thread Created
+<2022-06-08 14:44:19.787236> (info) - modules loaded: 
+<2022-06-08 14:44:19.787348> (info) - 	library: internal.flint, module name: TransactionManagerAfterSubmitModule
+<2022-06-08 14:44:19.787400> (info) - 	library: moja.modules.cbm, module name: CBMAgeIndicators
+<2022-06-08 14:44:19.787412> (info) - 	library: moja.modules.cbm, module name: CBMAggregatorLandUnitData
+<2022-06-08 14:44:19.787420> (info) - 	library: moja.modules.cbm, module name: CBMAggregatorSQLiteWriter
+<2022-06-08 14:44:19.787427> (info) - 	library: moja.modules.cbm, module name: CBMBuildLandUnitModule
+<2022-06-08 14:44:19.787434> (info) - 	library: moja.modules.cbm, module name: CBMDecayModule
+<2022-06-08 14:44:19.787474> (info) - 	library: moja.modules.cbm, module name: CBMDisturbanceEventModule
+<2022-06-08 14:44:19.787519> (info) - 	library: moja.modules.cbm, module name: CBMDisturbanceListener
+<2022-06-08 14:44:19.787532> (info) - 	library: moja.modules.cbm, module name: CBMGrowthModule
+<2022-06-08 14:44:19.787539> (info) - 	library: moja.modules.cbm, module name: CBMLandClassTransitionModule
+<2022-06-08 14:44:19.787546> (info) - 	library: moja.modules.cbm, module name: CBMSequencer
+<2022-06-08 14:44:19.787553> (info) - 	library: moja.modules.cbm, module name: CBMTransitionRulesModule
+<2022-06-08 14:44:19.787560> (info) - 	library: moja.modules.gdal, module name: WriteVariableGeotiff
+<2022-06-08 14:44:19.787573> (info) - Operation manager: Simple, Version: 1.0, Config: (Kahan[OFF], ZeroTransfers[OFF], AllowNegativeTransfers[ON], WarnNegativeTransfers[OFF])
+<2022-06-08 14:44:19.789440> (info) - 100:Thread Started 
+<2022-06-08 14:44:19.789660> (info) - 102:Thread Started 
+<2022-06-08 14:44:19.789642> (info) - 101:Thread Started 
+<2022-06-08 14:44:19.789754> (info) - 103:Thread Started 
+<2022-06-08 14:44:22.135006> (info) - 100: Stats level [Block]: Record [   98 of   100]: Index [( 12674,  2)]: Time(ms) [Total:     1989, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    80433]
+<2022-06-08 14:44:22.545422> (info) - 103: Stats level [Block]: Record [   99 of   100]: Index [( 12674,  1)]: Time(ms) [Total:     2401, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    66620]
+<2022-06-08 14:44:22.852594> (info) - 101: Stats level [Block]: Record [  100 of   100]: Index [( 12674,  0)]: Time(ms) [Total:     2709, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    59052]
+<2022-06-08 14:44:23.274420> (info) - 102: Stats level [Block]: Record [   97 of   100]: Index [( 12674,  3)]: Time(ms) [Total:     3128, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    51148]
+<2022-06-08 14:44:24.122744> (info) - 100: Stats level [Block]: Record [   96 of   100]: Index [( 12674,  4)]: Time(ms) [Total:     1987, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    80512]
+<2022-06-08 14:44:24.767113> (info) - 101: Stats level [Block]: Record [   94 of   100]: Index [( 12674,  6)]: Time(ms) [Total:     1914, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83589]
+<2022-06-08 14:44:24.896055> (info) - 103: Stats level [Block]: Record [   95 of   100]: Index [( 12674,  5)]: Time(ms) [Total:     2350, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    68083]
+<2022-06-08 14:44:25.729612> (info) - 102: Stats level [Block]: Record [   93 of   100]: Index [( 12674,  7)]: Time(ms) [Total:     2454, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    65180]
+<2022-06-08 14:44:26.310625> (info) - 100: Stats level [Block]: Record [   92 of   100]: Index [( 12674,  8)]: Time(ms) [Total:     2187, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    73143]
+<2022-06-08 14:44:26.972637> (info) - 101: Stats level [Block]: Record [   91 of   100]: Index [( 12674,  9)]: Time(ms) [Total:     2205, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    72559]
+<2022-06-08 14:44:27.179366> (info) - 103: Stats level [Block]: Record [   90 of   100]: Index [( 12674, 10)]: Time(ms) [Total:     2282, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70083]
+<2022-06-08 14:44:28.269339> (info) - 102: Stats level [Block]: Record [   89 of   100]: Index [( 12674, 11)]: Time(ms) [Total:     2539, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    63009]
+<2022-06-08 14:44:28.546012> (info) - 100: Stats level [Block]: Record [   88 of   100]: Index [( 12674, 12)]: Time(ms) [Total:     2234, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    71594]
+<2022-06-08 14:44:29.198935> (info) - 101: Stats level [Block]: Record [   87 of   100]: Index [( 12674, 13)]: Time(ms) [Total:     2225, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    71882]
+<2022-06-08 14:44:29.213892> (info) - 103: Stats level [Block]: Record [   86 of   100]: Index [( 12674, 14)]: Time(ms) [Total:     2034, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    78656]
+<2022-06-08 14:44:30.273870> (info) - 102: Stats level [Block]: Record [   85 of   100]: Index [( 12674, 15)]: Time(ms) [Total:     2004, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    79834]
+<2022-06-08 14:44:30.629106> (info) - 100: Stats level [Block]: Record [   84 of   100]: Index [( 12674, 16)]: Time(ms) [Total:     2082, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76823]
+<2022-06-08 14:44:31.639737> (info) - 103: Stats level [Block]: Record [   82 of   100]: Index [( 12674, 18)]: Time(ms) [Total:     2425, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    65966]
+<2022-06-08 14:44:31.836564> (info) - 101: Stats level [Block]: Record [   83 of   100]: Index [( 12674, 17)]: Time(ms) [Total:     2637, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    60671]
+<2022-06-08 14:44:32.299625> (info) - 102: Stats level [Block]: Record [   81 of   100]: Index [( 12674, 19)]: Time(ms) [Total:     2025, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    79000]
+<2022-06-08 14:44:33.024841> (info) - 100: Stats level [Block]: Record [   80 of   100]: Index [( 12674, 20)]: Time(ms) [Total:     2395, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    66797]
+<2022-06-08 14:44:34.107767> (info) - 103: Stats level [Block]: Record [   79 of   100]: Index [( 12674, 21)]: Time(ms) [Total:     2467, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    64840]
+<2022-06-08 14:44:34.174884> (info) - 101: Stats level [Block]: Record [   78 of   100]: Index [( 12674, 22)]: Time(ms) [Total:     2337, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    68437]
+<2022-06-08 14:44:34.569791> (info) - 102: Stats level [Block]: Record [   77 of   100]: Index [( 12674, 23)]: Time(ms) [Total:     2269, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70492]
+<2022-06-08 14:44:35.173874> (info) - 100: Stats level [Block]: Record [   76 of   100]: Index [( 12674, 24)]: Time(ms) [Total:     2148, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74472]
+<2022-06-08 14:44:36.199401> (info) - 103: Stats level [Block]: Record [   75 of   100]: Index [( 12674, 25)]: Time(ms) [Total:     2091, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76510]
+<2022-06-08 14:44:36.259254> (info) - 101: Stats level [Block]: Record [   74 of   100]: Index [( 12674, 26)]: Time(ms) [Total:     2083, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76783]
+<2022-06-08 14:44:36.647514> (info) - 102: Stats level [Block]: Record [   73 of   100]: Index [( 12674, 27)]: Time(ms) [Total:     2077, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    77023]
+<2022-06-08 14:44:37.317881> (info) - 100: Stats level [Block]: Record [   72 of   100]: Index [( 12674, 28)]: Time(ms) [Total:     2143, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74646]
+<2022-06-08 14:44:38.354734> (info) - 101: Stats level [Block]: Record [   70 of   100]: Index [( 12674, 30)]: Time(ms) [Total:     2095, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76370]
+<2022-06-08 14:44:38.371741> (info) - 103: Stats level [Block]: Record [   71 of   100]: Index [( 12674, 29)]: Time(ms) [Total:     2171, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    73666]
+<2022-06-08 14:44:38.784855> (info) - 102: Stats level [Block]: Record [   69 of   100]: Index [( 12674, 31)]: Time(ms) [Total:     2136, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74874]
+<2022-06-08 14:44:39.319315> (info) - 100: Stats level [Block]: Record [   68 of   100]: Index [( 12674, 32)]: Time(ms) [Total:     2001, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    79958]
+<2022-06-08 14:44:40.450608> (info) - 103: Stats level [Block]: Record [   66 of   100]: Index [( 12674, 34)]: Time(ms) [Total:     2078, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76977]
+<2022-06-08 14:44:40.457253> (info) - 101: Stats level [Block]: Record [   67 of   100]: Index [( 12674, 33)]: Time(ms) [Total:     2102, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76113]
+<2022-06-08 14:44:41.041367> (info) - 102: Stats level [Block]: Record [   65 of   100]: Index [( 12674, 35)]: Time(ms) [Total:     2255, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70922]
+<2022-06-08 14:44:41.389565> (info) - 100: Stats level [Block]: Record [   64 of   100]: Index [( 12674, 36)]: Time(ms) [Total:     2069, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    77299]
+<2022-06-08 14:44:42.484601> (info) - 101: Stats level [Block]: Record [   62 of   100]: Index [( 12674, 38)]: Time(ms) [Total:     2026, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    78936]
+<2022-06-08 14:44:42.971507> (info) - 103: Stats level [Block]: Record [   63 of   100]: Index [( 12674, 37)]: Time(ms) [Total:     2520, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    63481]
+<2022-06-08 14:44:43.215242> (info) - 102: Stats level [Block]: Record [   61 of   100]: Index [( 12674, 39)]: Time(ms) [Total:     2173, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    73613]
+<2022-06-08 14:44:43.988485> (info) - 100: Stats level [Block]: Record [   60 of   100]: Index [( 12674, 40)]: Time(ms) [Total:     2598, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    61573]
+<2022-06-08 14:44:44.437550> (info) - 101: Stats level [Block]: Record [   59 of   100]: Index [( 12674, 41)]: Time(ms) [Total:     1952, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81944]
+<2022-06-08 14:44:45.040522> (info) - 103: Stats level [Block]: Record [   58 of   100]: Index [( 12674, 42)]: Time(ms) [Total:     2068, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    77345]
+<2022-06-08 14:44:45.808614> (info) - 102: Stats level [Block]: Record [   57 of   100]: Index [( 12674, 43)]: Time(ms) [Total:     2593, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    61704]
+<2022-06-08 14:44:46.288850> (info) - 100: Stats level [Block]: Record [   56 of   100]: Index [( 12674, 44)]: Time(ms) [Total:     2299, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    69570]
+<2022-06-08 14:44:46.540136> (info) - 101: Stats level [Block]: Record [   55 of   100]: Index [( 12674, 45)]: Time(ms) [Total:     2102, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76110]
+<2022-06-08 14:44:47.012853> (info) - 103: Stats level [Block]: Record [   54 of   100]: Index [( 12674, 46)]: Time(ms) [Total:     1971, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81140]
+<2022-06-08 14:44:47.966940> (info) - 102: Stats level [Block]: Record [   53 of   100]: Index [( 12674, 47)]: Time(ms) [Total:     2157, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74145]
+<2022-06-08 14:44:48.497062> (info) - 101: Stats level [Block]: Record [   51 of   100]: Index [( 12674, 49)]: Time(ms) [Total:     1956, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81774]
+<2022-06-08 14:44:48.801030> (info) - 100: Stats level [Block]: Record [   52 of   100]: Index [( 12674, 48)]: Time(ms) [Total:     2511, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    63699]
+<2022-06-08 14:44:49.261646> (info) - 103: Stats level [Block]: Record [   50 of   100]: Index [( 12674, 50)]: Time(ms) [Total:     2248, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    71160]
+<2022-06-08 14:44:50.635845> (info) - 101: Stats level [Block]: Record [   48 of   100]: Index [( 12674, 52)]: Time(ms) [Total:     2138, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74822]
+<2022-06-08 14:44:51.080626> (info) - 100: Stats level [Block]: Record [   47 of   100]: Index [( 12674, 53)]: Time(ms) [Total:     2279, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70201]
+<2022-06-08 14:44:51.378529> (info) - 103: Stats level [Block]: Record [   46 of   100]: Index [( 12674, 54)]: Time(ms) [Total:     2116, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    75595]
+<2022-06-08 14:44:52.918016> (info) - 101: Stats level [Block]: Record [   45 of   100]: Index [( 12674, 55)]: Time(ms) [Total:     2281, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70125]
+<2022-06-08 14:44:53.078435> (info) - 100: Stats level [Block]: Record [   44 of   100]: Index [( 12674, 56)]: Time(ms) [Total:     1997, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    80103]
+<2022-06-08 14:44:53.361546> (info) - 103: Stats level [Block]: Record [   43 of   100]: Index [( 12674, 57)]: Time(ms) [Total:     1982, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    80700]
+<2022-06-08 14:44:55.195447> (info) - 100: Stats level [Block]: Record [   41 of   100]: Index [( 12674, 59)]: Time(ms) [Total:     2116, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    75592]
+<2022-06-08 14:44:55.254537> (info) - 101: Stats level [Block]: Record [   42 of   100]: Index [( 12674, 58)]: Time(ms) [Total:     2336, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    68488]
+<2022-06-08 14:44:55.275682> (info) - 103: Stats level [Block]: Record [   40 of   100]: Index [( 12674, 60)]: Time(ms) [Total:     1913, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83604]
+<2022-06-08 14:44:57.346704> (info) - 103: Stats level [Block]: Record [   37 of   100]: Index [( 12674, 63)]: Time(ms) [Total:     2070, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    77270]
+<2022-06-08 14:44:57.405394> (info) - 101: Stats level [Block]: Record [   38 of   100]: Index [( 12674, 62)]: Time(ms) [Total:     2150, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    74402]
+<2022-06-08 14:44:57.811076> (info) - 100: Stats level [Block]: Record [   39 of   100]: Index [( 12674, 61)]: Time(ms) [Total:     2615, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    61183]
+<2022-06-08 14:44:59.294345> (info) - 103: Stats level [Block]: Record [   36 of   100]: Index [( 12674, 64)]: Time(ms) [Total:     1947, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    82167]
+<2022-06-08 14:45:00.331148> (info) - 101: Stats level [Block]: Record [   35 of   100]: Index [( 12674, 65)]: Time(ms) [Total:     2925, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    54693]
+<2022-06-08 14:45:00.750797> (info) - 100: Stats level [Block]: Record [   34 of   100]: Index [( 12674, 66)]: Time(ms) [Total:     2939, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    54433]
+<2022-06-08 14:45:01.202980> (info) - 103: Stats level [Block]: Record [   33 of   100]: Index [( 12674, 67)]: Time(ms) [Total:     1908, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83845]
+<2022-06-08 14:45:02.657554> (info) - 101: Stats level [Block]: Record [   32 of   100]: Index [( 12674, 68)]: Time(ms) [Total:     2326, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    68787]
+<2022-06-08 14:45:03.060340> (info) - 100: Stats level [Block]: Record [   31 of   100]: Index [( 12674, 69)]: Time(ms) [Total:     2309, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    69288]
+<2022-06-08 14:45:03.441123> (info) - 103: Stats level [Block]: Record [   30 of   100]: Index [( 12674, 70)]: Time(ms) [Total:     2237, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    71501]
+<2022-06-08 14:45:04.746330> (info) - 101: Stats level [Block]: Record [   29 of   100]: Index [( 12674, 71)]: Time(ms) [Total:     2088, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76614]
+<2022-06-08 14:45:05.730255> (info) - 103: Stats level [Block]: Record [   27 of   100]: Index [( 12674, 73)]: Time(ms) [Total:     2288, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    69906]
+<2022-06-08 14:45:05.902639> (info) - 100: Stats level [Block]: Record [   28 of   100]: Index [( 12674, 72)]: Time(ms) [Total:     2841, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    56299]
+<2022-06-08 14:45:06.713909> (info) - 101: Stats level [Block]: Record [   26 of   100]: Index [( 12674, 74)]: Time(ms) [Total:     1967, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81338]
+<2022-06-08 14:45:07.827510> (info) - 100: Stats level [Block]: Record [   24 of   100]: Index [( 12674, 76)]: Time(ms) [Total:     1924, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83139]
+<2022-06-08 14:45:08.358385> (info) - 103: Stats level [Block]: Record [   25 of   100]: Index [( 12674, 75)]: Time(ms) [Total:     2627, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    60888]
+<2022-06-08 14:45:08.753509> (info) - 101: Stats level [Block]: Record [   23 of   100]: Index [( 12674, 77)]: Time(ms) [Total:     2039, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    78461]
+<2022-06-08 14:45:10.216847> (info) - 100: Stats level [Block]: Record [   22 of   100]: Index [( 12674, 78)]: Time(ms) [Total:     2388, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    66974]
+<2022-06-08 14:45:10.626692> (info) - 103: Stats level [Block]: Record [   21 of   100]: Index [( 12674, 79)]: Time(ms) [Total:     2267, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70553]
+<2022-06-08 14:45:10.665304> (info) - 101: Stats level [Block]: Record [   20 of   100]: Index [( 12674, 80)]: Time(ms) [Total:     1911, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83708]
+<2022-06-08 14:45:12.294724> (info) - 100: Stats level [Block]: Record [   19 of   100]: Index [( 12674, 81)]: Time(ms) [Total:     2077, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    77015]
+<2022-06-08 14:45:12.582084> (info) - 101: Stats level [Block]: Record [   17 of   100]: Index [( 12674, 83)]: Time(ms) [Total:     1916, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83488]
+<2022-06-08 14:45:13.340579> (info) - 103: Stats level [Block]: Record [   18 of   100]: Index [( 12674, 82)]: Time(ms) [Total:     2713, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    58965]
+<2022-06-08 14:45:14.253856> (info) - 100: Stats level [Block]: Record [   16 of   100]: Index [( 12674, 84)]: Time(ms) [Total:     1958, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81685]
+<2022-06-08 14:45:15.259308> (info) - 103: Stats level [Block]: Record [   14 of   100]: Index [( 12674, 86)]: Time(ms) [Total:     1918, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83404]
+<2022-06-08 14:45:15.269332> (info) - 101: Stats level [Block]: Record [   15 of   100]: Index [( 12674, 85)]: Time(ms) [Total:     2686, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    59548]
+<2022-06-08 14:45:16.164710> (info) - 100: Stats level [Block]: Record [   13 of   100]: Index [( 12674, 87)]: Time(ms) [Total:     1910, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83749]
+<2022-06-08 14:45:17.561261> (info) - 103: Stats level [Block]: Record [   12 of   100]: Index [( 12674, 88)]: Time(ms) [Total:     2301, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    69517]
+<2022-06-08 14:45:17.769894> (info) - 101: Stats level [Block]: Record [   11 of   100]: Index [( 12674, 89)]: Time(ms) [Total:     2500, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    63994]
+<2022-06-08 14:45:18.422064> (info) - 100: Stats level [Block]: Record [   10 of   100]: Index [( 12674, 90)]: Time(ms) [Total:     2256, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    70891]
+<2022-06-08 14:45:19.904884> (info) - 103: Stats level [Block]: Record [    9 of   100]: Index [( 12674, 91)]: Time(ms) [Total:     2343, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    68281]
+<2022-06-08 14:45:20.333423> (info) - 101: Stats level [Block]: Record [    8 of   100]: Index [( 12674, 92)]: Time(ms) [Total:     2563, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    62422]
+<2022-06-08 14:45:20.333601> (info) - 100: Stats level [Block]: Record [    7 of   100]: Index [( 12674, 93)]: Time(ms) [Total:     1911, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83718]
+<2022-06-08 14:45:21.984112> (info) - 103: Stats level [Block]: Record [    6 of   100]: Index [( 12674, 94)]: Time(ms) [Total:     2078, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    76965]
+<2022-06-08 14:45:22.284740> (info) - 100: Stats level [Block]: Record [    4 of   100]: Index [( 12674, 96)]: Time(ms) [Total:     1949, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    82065]
+<2022-06-08 14:45:22.981326> (info) - 101: Stats level [Block]: Record [    5 of   100]: Index [( 12674, 95)]: Time(ms) [Total:     2647, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    60435]
+<2022-06-08 14:45:24.192321> (info) - 100: Stats level [Block]: Record [    2 of   100]: Index [( 12674, 98)]: Time(ms) [Total:     1907, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    83891]
+<2022-06-08 14:45:24.192620> (info) - 100:Thread Finished 
+<2022-06-08 14:45:24.444463> (info) - 103: Stats level [Block]: Record [    3 of   100]: Index [( 12674, 97)]: Time(ms) [Total:     2459, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    65040]
+<2022-06-08 14:45:24.444792> (info) - 103:Thread Finished 
+<2022-06-08 14:45:24.948797> (info) - 101: Stats level [Block]: Record [    1 of   100]: Index [( 12674, 99)]: Time(ms) [Total:     1967, Processed:        0]: Units [Total:   160000, Processed:        0, NotProcessed:   160000, Errors:        0, LU/second:    81337]
+<2022-06-08 14:45:24.949101> (info) - 101:Thread Finished 
+<2022-06-08 14:49:22.989861> (info) - 102: Stats level [Block]: Record [   49 of   100]: Index [( 12674, 51)]: Time(ms) [Total:   275022, Processed:   114461]: Units [Total:   160000, Processed:    11347, NotProcessed:   148653, Errors:        0, LU/second:      581]
+<2022-06-08 14:49:24.643884> (info) - 102:Thread Finished 
+<2022-06-08 14:49:24.646154> (info) -   0:Summary of processing by Tile
+<2022-06-08 14:49:24.646311> (info) -   0: Stats level [Tile]: Index [( 12674)]: Time(sec) [Total:   495000, Processed:   114000]: Units [Total: 16000000, Processed:    11347, NotProcessed: 15988653, Errors:        0, LU/second:    32260]
+<2022-06-08 14:49:24.646369> (info) -   0:Summary of processing for full run
+<2022-06-08 14:49:24.646425> (info) -   0: Stats level [Global]: Time(sec) [Total:   495000, Processed:   114000]: Units [Total: 16000000, Processed:    11347, NotProcessed: 15988653, Errors:        0, LU/second:    32260]
+<2022-06-08 14:49:24.646444> (info) -   0:Start Time           : Wed Jun  8 14:44:19 2022 UTC
+<2022-06-08 14:49:24.646505> (info) -   0:Finish Time          : Wed Jun  8 14:49:24 2022 UTC
+<2022-06-08 14:49:24.646521> (info) -   0:Total Time (seconds) : 304
+<2022-06-08 14:49:24.646538> (info) -   0:Effective All LU/millisecond:             52
+<2022-06-08 14:49:24.646549> (info) -   0:Effective All LU/second:               52631
+<2022-06-08 14:49:24.646556> (info) -   0:Effective Processed LU/millisecond:        0
+<2022-06-08 14:49:24.646564> (info) -   0:Effective Processed LU/second:            37
+<2022-06-08 14:49:24.646614> (info) - Loading results into output/gcbm_output.db
+<2022-06-08 14:49:24.884877> (info) - Loading DateDimension
+<2022-06-08 14:49:24.898438> (info) - Loading PoolDimension
+<2022-06-08 14:49:24.911079> (info) - Loading LandClassDimension
+<2022-06-08 14:49:24.923576> (info) - Loading ModuleInfoDimension
+<2022-06-08 14:49:24.936061> (info) - Loading AgeClassDimension
+<2022-06-08 14:49:24.948586> (info) - Loading LocationDimension
+<2022-06-08 14:49:24.961662> (info) - Loading DisturbanceTypeDimension
+<2022-06-08 14:49:24.974163> (info) - Loading DisturbanceDimension
+<2022-06-08 14:49:24.987472> (info) - Loading Pools
+<2022-06-08 14:49:25.012341> (info) - Loading Fluxes
+<2022-06-08 14:49:25.038750> (info) - Loading ErrorDimension
+<2022-06-08 14:49:25.038991> (info) - Loading LocationErrorDimension
+<2022-06-08 14:49:25.039138> (info) - Loading AgeArea
+<2022-06-08 14:49:25.051846> (info) - SQLite insert complete.
