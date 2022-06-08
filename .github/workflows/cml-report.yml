@@ -40,4 +40,4 @@ jobs:
         sudo netstat -tunlp
     - name: Create New Sim
       run: |
-        curl -d "title=run4" -X http://0.0.0.0:8080/gcbm/new 
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
