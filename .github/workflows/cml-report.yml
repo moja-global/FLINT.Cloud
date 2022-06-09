@@ -6,8 +6,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Setup cml
-      uses: iterative/setup-cml@v1
+    # - name: Setup cml
+    #   uses: iterative/setup-cml@v1
     - name: Setup python
       uses: actions/setup-python@v2
       with:
@@ -86,9 +86,8 @@ jobs:
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
         echo "Sim logs"
         docker logs gcbm-api
-        cd local/tests
-        python simulation_status.py
-        # cml-send-comment report.md
+        # cd local/tests
+        # python simulation_status.py
     # - name: Download Results
     #   run: |
     #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
