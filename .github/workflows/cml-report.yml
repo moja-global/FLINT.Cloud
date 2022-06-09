@@ -19,10 +19,6 @@ jobs:
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
 
-    - name: Get Docker Logs
-      run: |
-        docker logs gcbm-api
-   
     - name: Get Public IP
       id: ip
       uses: haythem/public-ip@v1.2
@@ -34,9 +30,11 @@ jobs:
     - name: Check ports
       run: |
         sudo netstat -tunlp
+
     - name: Create New Sim
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+        
     - name: Unzip Files and Upload
       run: |
         python -m pip install --upgrade pip
@@ -81,9 +79,14 @@ jobs:
             -F db='@input_database/gcbm_input.db' \
             -F title="run4" \
             http://0.0.0.0:8080/gcbm/upload
+    
     - name: Run Simulation
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/dynamic
+
+    - name: Check Sim Status
+      run: |
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
     
     - name: Get logs
       run: |
@@ -91,6 +94,6 @@ jobs:
         cd local/tests
         python simulation_status.py
         # cml-send-comment report.md
-    - name: Download Results
-      run: |
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
+    # - name: Download Results
+    #   run: |
+    #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
