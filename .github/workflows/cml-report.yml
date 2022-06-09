@@ -35,7 +35,7 @@ jobs:
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
         
-    - name: Unzip Files ,Upload and Run Simulation
+    - name: Unzip Files 
       run: |
         python -m pip install --upgrade pip
         cd local/rest_api_gcbm/cml_report
@@ -81,13 +81,19 @@ jobs:
             http://0.0.0.0:8080/gcbm/upload
         echo "Simulation Status"
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
+    - name: Run Simulation
+      run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/dynamic
-        echo "Simulation Status"
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/status
-        echo "Sim logs"
-        docker logs gcbm-api
-        # cd local/tests
-        # python simulation_status.py
-    # - name: Download Results
-    #   run: |
-    #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
+        cd local/tests
+        python simulation_status.py
+        ls -l
+    
+    - name: Download Results
+      run: |
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
+        cd local/rest_api_gcbm/cml_report
+        python process_output.py
+
+    - name: See if results are empty
+      run: |
+        ls -l output
