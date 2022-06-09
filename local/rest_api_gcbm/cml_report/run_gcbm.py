@@ -24,6 +24,6 @@ def get_status():
 
 if __name__ == "__main__":
     run_sim = run_simulation()
-    status = {run_sim.text}
+    status = get_status()
     while(status == {'finished':'In Progress'}):
         status = get_status()
