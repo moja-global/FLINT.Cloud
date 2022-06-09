@@ -87,7 +87,7 @@ jobs:
     - name: Retrive Logs
       run: |
         cd local/tests
-        python simulation_status
+        python simulation_status.py
         cat *.txt
     
     # - name: Download Results
