@@ -7,9 +7,9 @@ import zipfile
 # import json
 
 #  Unzip file
-zip = os.path.join('..','..','..','GCBM_Demo_Run.zip')
+zip = 'GCBM_Demo_Run.zip'
 with zipfile.ZipFile(zip,'r') as zip_ref:
-    zip_ref.extractall(os.path.join('..','..','..','GCBM'))
+    zip_ref.extractall('GCBM')
 
 # # Define input template as dataframes
 # GCBM_template_path = os.path.join('..','..','..','GCBM')
