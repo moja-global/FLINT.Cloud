@@ -17,7 +17,11 @@ jobs:
       run: |
         cd local/rest_api_gcbm
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
-        docker run -d --rm -p 8080:8080 gcbm-api
+        docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
+
+    - name: Get Docker Logs
+      run: |
+        docker logs gcbm-api
    
     - name: Get Public IP
       id: ip
@@ -83,6 +87,7 @@ jobs:
     
     - name: Get logs
       run: |
+        docker logs gcbm-api
         cd local/tests
         python simulation_status.py
         # cml-send-comment report.md
