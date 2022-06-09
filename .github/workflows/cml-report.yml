@@ -91,5 +91,8 @@ jobs:
     - name: Download Results
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
-        ls -l
+        cd local/rest_api_gcbm/cml_report
+        python process_output.py
+        cd ../../..
+        ls -l output
     
