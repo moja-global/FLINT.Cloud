@@ -31,6 +31,10 @@ general:
     - CVE-2022-0002 
     - CVE-2022-0847 
     - CVE-2022-1015
+    - CVE-2022-21499
+    - CVE-2022-29581
+    - CVE-2022-1966 
+    - CVE-2022-29361
     
   bestPracticeViolations:
     - CIS-DI-0007
