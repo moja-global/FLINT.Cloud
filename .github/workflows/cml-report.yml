@@ -85,9 +85,7 @@ jobs:
       run: |
         cd local/tests
         python simulation_status.py
-        echo "## GCBM Simulation Log" > report.md
-        cat *.txt >> report.md
-        cml-send-comment report.md
+        # cml-send-comment report.md
     - name: Download Results
       run: |
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
