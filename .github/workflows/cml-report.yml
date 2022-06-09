@@ -19,13 +19,13 @@ jobs:
         docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
 
-    - name: Get Public IP
-      id: ip
-      uses: haythem/public-ip@v1.2
+    # - name: Get Public IP
+    #   id: ip
+    #   uses: haythem/public-ip@v1.2
 
-    - name: Print public IP
-      run: |
-        echo ${{ steps.ip.outputs.ipv4 }}
+    # - name: Print public IP
+    #   run: |
+    #     echo ${{ steps.ip.outputs.ipv4 }}
     
     - name: Check ports
       run: |
@@ -81,14 +81,17 @@ jobs:
 
     - name: Run Simulation
       run: |
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/dynamic
-        cd local/tests
-        python simulation_status.py
-        ls -l
-    
-    - name: Download Results
+        python local/rest_api_gcbm/cml_report/run_gcbm.py
+      
+    - name: Retrive Logs
       run: |
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
-        # python local/rest_api_gcbm/cml_report/process_output.py
-        ls -l
+        cd local/tests
+        python simulation_status
+        cat *.txt
+    
+    # - name: Download Results
+    #   run: |
+    #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
+    #     # python local/rest_api_gcbm/cml_report/process_output.py
+    #     ls -l
     
