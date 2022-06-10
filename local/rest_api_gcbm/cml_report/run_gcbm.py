@@ -3,27 +3,38 @@ Run the whole simulation
 """
 
 import os
-from urllib.request import Request
 import requests
 import json
+import threading
+import logging
 
-HOME = "http://0.0.0.0:8080/gcbm"
-RESPONSES = []
+HOME = "http://localhost:8080/gcbm"
 
 def run_simulation():
     url = f"{HOME}/dynamic"
     req_data = {"title":"run4"}
-    res = requests.post(url,data=req_data)
-    return res
+    start_req = requests.post(url,data=req_data)
+    return start_req
 
 def get_status():
     url = f"{HOME}/status"
     req_data = {"title":"run4"}
-    res = requests.post(url,data=req_data)
-    return res.text
+    res = requests.post(url,req_data)
+    return json.loads(res.text)
+
+def check_if_finished():
+    status = get_status()
+    t = threading.Timer(10.0,check_if_finished)
+    if status['finished'] == 'In Progress':
+        t.start()
+        print(status['finished'])
+    else:
+        t.cancel()
+
 
 if __name__ == "__main__":
-    run_sim = run_simulation()
-    status = get_status()
-    while(status == {'finished':'In Progress'}):
-        status = get_status()
+    run_process = run_simulation()
+    check_if_finished()
+    
+    
+    
