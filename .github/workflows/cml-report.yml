@@ -90,6 +90,8 @@ jobs:
         python simulation_status.py
     
     - name: Download Results
+      env:
+          repot_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
         docker cp gcbm-api:/app/input/run4/output .
         echo "# GCBM Model Simulation Complete!" > report.md
