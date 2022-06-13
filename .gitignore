@@ -141,3 +141,6 @@ cython_debug/
 local/rest_api_gcbm/input/
 GCBM_Demo_Run/
 GCBM_New_Demo_Run/
+
+# Outputs
+local/rest_api_gcbm/ouput/*
