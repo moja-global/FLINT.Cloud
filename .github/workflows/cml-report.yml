@@ -6,8 +6,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    # - name: Setup cml
-    #   uses: iterative/setup-cml@v1
+    - name: Setup cml
+      uses: iterative/setup-cml@v1
     - name: Setup python
       uses: actions/setup-python@v2
       with:
@@ -92,5 +92,8 @@ jobs:
     - name: Download Results
       run: |
         docker cp gcbm-api:/app/input/run4/output .
-        ls -l output
+        echo "# GCBM Model Simulation Complete!" > report.md
+        echo "## Uncompiled Outputs" >> report.md
+        ls -l output >> report.md
+        cml-send-comment report.md
     
