@@ -81,7 +81,7 @@ jobs:
 
     - name: Run Simulation
       run: |
-        docker exec -it -w /app/input/run4 gcbm-api /opt/gcbm/moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
+        docker exec -i -w /app/input/run4 gcbm-api /opt/gcbm/moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
         
       
     - name: Retrive Logs
