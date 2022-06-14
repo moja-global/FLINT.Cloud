@@ -149,7 +149,8 @@ def gcbm_new():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-    input_dir = f"{title}"
+    # input_dir = f"{title}"
+    input_dir = f"{os.getcwd()}/input/{title}"
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")
         message = "New simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
