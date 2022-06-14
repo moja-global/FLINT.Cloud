@@ -39,9 +39,11 @@ run_sim = run_gcbm()
 print(run_sim)
 
 timer = CheckSimulation(30,display)
+print("Starting simulation.")
 timer.start()
-print("Starting simulation")
 time.sleep(300)
 if not DONE:
     time.sleep(300)
+
+print("Simulation Ending.")
 timer.cancel()

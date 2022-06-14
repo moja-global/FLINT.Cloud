@@ -10,8 +10,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Adding npm for CML Actions
 RUN apt-get update 
 RUN apt-get install nodejs npm -y
+RUN apt-get install python
 RUN node --version
 RUN npm --version
+
+RUN git clone https://github.com/moja-global/GCBM.CompileResults.git
 
 COPY . .
 

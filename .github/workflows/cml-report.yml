@@ -93,7 +93,10 @@ jobs:
         cd ../..
         curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
         python local/rest_api_gcbm/cml_report/process_output.py
-        ls -l output
+      
+    - name: Compile Results
+      run: |
+        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/gcbm_output.db --output_db sqlite:///output/compiled_gcbm_output.db
     
     # - name: CML
     #   env:
