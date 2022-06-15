@@ -101,6 +101,7 @@ jobs:
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
+        pip install pandas
         python local/rest_api_gcbm/cml_report/annual_summaries.py
         echo "# GCBM Model" >> report.md
         echo "<img src="./output/total_biomass_mt.png">" >> report.md
