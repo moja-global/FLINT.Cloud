@@ -9,7 +9,7 @@ query = f"""
         LEFT JOIN v_pool_indicators i
             ON years.year = i.year
         WHERE i.indicator = 'Total Biomass'
-            AND (years.year BETWEEN 1920 AND 2020)
+            AND (years.year BETWEEN 2010 AND 2020)
         GROUP BY years.year
         ORDER BY years.year
         """

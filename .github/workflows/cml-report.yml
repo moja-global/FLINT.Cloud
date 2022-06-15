@@ -106,5 +106,3 @@ jobs:
         echo "# GCBM Model" >> report.md
         echo "<img src="./output/total_biomass_mt.png">" >> report.md
         cml-send-comment report.md
-
-    
