@@ -106,4 +106,6 @@ jobs:
         python local/rest_api_gcbm/cml_report/annual_summaries.py
         echo "# GCBM Model" >> report.md
         cml-publish output/total_biomass_mt.png --md >> report.md
+        echo "## Simulation Logs" >> report.md
+        cat local/tests/*.txt >> report.md
         cml-send-comment report.md
