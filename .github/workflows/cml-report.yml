@@ -12,8 +12,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    - name: Setup cml
-      uses: iterative/setup-cml@v1
+    # - name: Setup cml
+      # uses: iterative/setup-cml@v1
     - name: Setup python
       uses: actions/setup-python@v2
       with:
@@ -104,6 +104,7 @@ jobs:
         docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///input/run4/output/gcbm_output.db --output_db sqlite:///input/run4/output/compiled_gcbm_output.db
         docker cp -L gcbm-api:/app/input/run4/output/compiled_gcbm_output.db output
     - name: CML
+      uses: iterative/setup-cml@v1
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
