@@ -113,7 +113,5 @@ jobs:
         echo "# GCBM Model" >> report.md
         cml-publish output/total_biomass_mt.png --md >> report.md
         echo "## Simulation Logs" >> report.md
-        echo "```" >> report.md
         cat local/tests/*.txt >> report.md
-        echo "```" >> report.md
         cml-send-comment report.md
