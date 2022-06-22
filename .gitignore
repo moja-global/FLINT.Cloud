@@ -169,3 +169,7 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# Add GCBM Demo runs
+GCBM_Demo_Run/
+GCBM_New_Demo_Run/
