@@ -3,6 +3,21 @@ import os
 
 
 def get_table_schema(conn, table_name):
+    """
+    Get table schema for gcbm_input.db
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: title
+            required: true
+            schema:
+                    type: string
+            description: Get table schema for gcbm_input.db
+    """
     schema = []
     ins = "PRAGMA table_info('" + table_name + "')"
     print(ins)
@@ -12,6 +27,22 @@ def get_table_schema(conn, table_name):
 
 
 def rename_columns(request, title):
+    """
+    Rename the columns/tables inside gcbm_input.db
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: title
+            required: true
+            schema:
+                    type: string
+            description: Rename the columns/tables inside gcbm_input.db
+
+    """
     input_dir = f"{os.getcwd()}/input/{title}"
     response = dict()
     conn = sqlite3.connect(f"{input_dir}/gcbm_input.db")
