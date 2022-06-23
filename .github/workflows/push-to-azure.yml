@@ -43,8 +43,8 @@ jobs:
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
 
-    deploy-rest-api-flint-gcbm:
-        name: Build and push REST API FLINT GCBM to ACR
+    deploy-rest-api-gcbm:
+        name: Build and push REST API GCBM to ACR
         runs-on: ubuntu-latest
         steps:
         - name: 'Checkout GitHub Action'
