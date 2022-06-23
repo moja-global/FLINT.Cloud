@@ -12,8 +12,8 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v2
-    # - name: Setup cml
-    #   uses: iterative/setup-cml@v1
+    - name: Setup cml
+      uses: iterative/setup-cml@v1
     - name: Setup python
       uses: actions/setup-python@v2
       with:
@@ -98,15 +98,25 @@ jobs:
         cd ../..
         curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
         python local/rest_api_gcbm/cml_report/process_output.py
-      
+
+    - name: Upload Logs as artifact
+    - uses: actions/upload-artifact@v3
+      with:
+        name: simulation-logs
+        path: local/tests/*.txt
+
     - name: Compile Results
       run: |
         docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///input/run4/output/gcbm_output.db --output_db sqlite:///input/run4/output/compiled_gcbm_output.db
         docker cp -L gcbm-api:/app/input/run4/output/compiled_gcbm_output.db output
     - name: CML
-      # env:
-      #   repo_token: ${{ secrets.GITHUB_TOKEN }}
+      env:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
       run: |
         pip install matplotlib
         pip install pandas
         python local/rest_api_gcbm/cml_report/annual_summaries.py
+        echo "# GCBM Model" > report.md
+        echo "## Total Biomass Curve" >> report.md
+        cml-publish output/total_biomass_mt.png --md >> report.md
+        cml-send-comment report.md
