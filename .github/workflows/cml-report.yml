@@ -100,7 +100,7 @@ jobs:
         python local/rest_api_gcbm/cml_report/process_output.py
 
     - name: Upload Logs as artifact
-    - uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v3
       with:
         name: simulation-logs
         path: local/tests/*.txt
