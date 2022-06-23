@@ -1,0 +1,44 @@
+name: Deploy to Azure Container Registry
+
+on: [push]
+
+env:
+  REGISTRY: mojaglobal.azurecr.io
+
+jobs:
+    deploy-rest-api-flint-example:
+        name: Build and push REST API FLINT Example to ACR
+        runs-on: ubuntu-latest
+        steps:
+        - name: 'Checkout GitHub Action'
+          uses: actions/checkout@v2
+
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v1
+          
+        - name: 'Login via Azure CLI'
+          uses: azure/login@v1
+          with:
+            creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+        - name: 'Build and push image'
+          uses: azure/docker-login@v1
+          with:
+            login-server: ${{ env.REGISTRY }}
+            username: ${{ secrets.REGISTRY_USERNAME }}
+            password: ${{ secrets.REGISTRY_PASSWORD }}
+
+        - name: Extract Docker metadata
+          id: meta
+          uses: docker/metadata-action@98669ae865ea3cffbcbaa878cf57c20bbf1c6c38
+          with:
+            images: ${{ env.REGISTRY }}/moja-global/rest_api_flint_example
+
+        - name: Build and push Docker image
+          uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
+          with:
+            context: ./local/rest_api_flint.example/
+            file: "./local/rest_api_flint.example/Dockerfile"
+            push: true
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
