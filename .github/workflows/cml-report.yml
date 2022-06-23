@@ -44,8 +44,8 @@ jobs:
     - name: Unzip Files 
       run: |
         python local/rest_api_gcbm/cml_report/process_input.py
+        ls -l GCBM
         cd GCBM
-        ls
         curl -F config_files='@config/variables.json' \
             -F config_files='@config/spinup.json' \
             -F config_files='@config/provider_config.json' \
