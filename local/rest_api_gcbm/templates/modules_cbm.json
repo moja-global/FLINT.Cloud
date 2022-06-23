@@ -1,0 +1,59 @@
+{
+    "Modules": {
+        "CBMBuildLandUnitModule": {
+            "order": 1,
+            "library": "moja.modules.cbm"
+        },
+        "CBMSequencer": {
+            "order": 2,
+            "library": "moja.modules.cbm"
+        },
+        "CBMDisturbanceListener": {
+            "enabled": true,
+            "order": 3,
+            "library": "moja.modules.cbm",
+            "settings": {
+                "vars": [
+                 
+                ]
+            }
+        },
+        "CBMDisturbanceEventModule": {
+            "enabled": true,
+            "order": 4,
+            "library": "moja.modules.cbm"
+        },
+        "CBMTransitionRulesModule": {
+            "enabled": true,
+            "order": 5,
+            "library": "moja.modules.cbm"
+        },
+        "CBMLandClassTransitionModule": {
+            "enabled": true,
+            "order": 6,
+            "library": "moja.modules.cbm"
+        },
+        "CBMGrowthModule": {
+            "enabled": true,
+            "order": 7,
+            "library": "moja.modules.cbm"
+        },
+        "CBMDecayModule": {
+            "enabled": true,
+            "order": 8,
+            "library": "moja.modules.cbm",
+            "settings": {
+                "extra_decay_removals": false
+            }
+        },
+        "CBMAgeIndicators": {
+            "enabled": true,
+            "order": 9,
+            "library": "moja.modules.cbm"
+        },
+        "TransactionManagerAfterSubmitModule": {
+            "order": 10,
+            "library": "internal.flint"
+        }
+    }
+}
