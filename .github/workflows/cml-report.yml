@@ -38,7 +38,7 @@ jobs:
 
     - name: Create New Sim
       run: |
-        curl -d "title=run4" -X POST http://localhost:8080/gcbm/new
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
         
     - name: Unzip Files 
       run: |
@@ -81,8 +81,8 @@ jobs:
             -F input='@layers/tiled/study_area.json' \
             -F input='@input_database/gcbm_input.db' \
             -F db='@input_database/gcbm_input.db' \
-            -F title="run4" \
-            -X POST http://localhost:8080/gcbm/upload
+            -F title='run4' \
+            http://0.0.0.0:8080/gcbm/upload
 
     - name: Run Simulation
       run: |
@@ -95,7 +95,7 @@ jobs:
         cd local/tests
         python simulation_status.py
         cd ../..
-        curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o output.zip
+        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o output.zip
         python local/rest_api_gcbm/cml_report/process_output.py
 
     - name: Upload Logs as artifact
@@ -111,7 +111,7 @@ jobs:
         
     - name: Setup cml
       uses: iterative/setup-cml@v1
-      
+
     - name: CML
       env:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
