@@ -42,11 +42,12 @@ jobs:
         
     - name: Unzip Files 
       run: |
+        pip install requests
         python local/rest_api_gcbm/cml_report/process_input.py
 
     - name: Run Simulation
       run: |
-        pip install requests
+        
         python local/rest_api_gcbm/cml_report/run_gcbm.py
         
       
