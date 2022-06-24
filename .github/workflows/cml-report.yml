@@ -35,11 +35,11 @@ jobs:
 
     - name: Create New Sim
       run: |
+        python local/rest_api_gcbm/cml_report/process_input.py
         curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
         
     - name: Unzip Files 
       run: |
-        python local/rest_api_gcbm/cml_report/process_input.py
         cd GCBM/GCBM_New_Demo_Run
         curl -F disturbances='@disturbances/disturbances_2011_moja.tiff' \
             -F disturbances='@disturbances/disturbances_2012_moja.tiff' \
