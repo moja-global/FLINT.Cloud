@@ -79,20 +79,20 @@ jobs:
     - name: Compile Results
       run: |
         ls -l output
-        # docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/gcbm_output.db --output_db sqlite:///output/run4/compiled_gcbm_output.db
-        # docker cp -L gcbm-api:/app/output/run4/compiled_gcbm_output.db output/run4
+        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/simulation_output.db --output_db sqlite:///output/run4/compiled_simulation_output.db
+        docker cp -L gcbm-api:/app/output/run4/compiled_simulation_output.db output
         
-    # - name: Setup cml
-    #   uses: iterative/setup-cml@v1
+    - name: Setup cml
+      uses: iterative/setup-cml@v1
 
-    # - name: CML
-    #   env:
-    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     pip install matplotlib
-    #     pip install pandas
-    #     python local/rest_api_gcbm/cml_report/annual_summaries.py
-    #     echo "# GCBM Model" > report.md
-    #     echo "## Total Biomass Curve" >> report.md
-    #     cml-publish output/total_biomass_mt.png --md >> report.md
-    #     cml-send-comment report.md
+    - name: CML
+      env:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        pip install matplotlib
+        pip install pandas
+        python local/rest_api_gcbm/cml_report/annual_summaries.py
+        echo "# GCBM Model" > report.md
+        echo "## Total Biomass Curve" >> report.md
+        cml-publish output/total_biomass_mt.png --md >> report.md
+        cml-send-comment report.md
