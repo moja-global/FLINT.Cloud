@@ -8,7 +8,7 @@ zip = 'GCBM_Demo_Run.zip'
 with zipfile.ZipFile(zip, 'r') as zip_ref:
     zip_ref.extractall('GCBM')
 
-os.chdir('GCBM')
+os.chdir(os.path.join('GCBM','GCBM_Demo_Run'))
 
 url = "http://localhost:8080/gcbm/upload"
 
