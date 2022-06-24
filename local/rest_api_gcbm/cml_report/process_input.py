@@ -12,6 +12,7 @@ print(os.listdir(os.path.join(os.path.join('GCBM','GCBM_Demo_Run','layers','tile
 
 os.chdir(os.path.join('GCBM','GCBM_Demo_Run'))
 
+
 url = "http://localhost:8080/gcbm/upload"
 
 files = {
@@ -47,7 +48,7 @@ files = {
     'input': open(os.path.join('layers','tiled','initial_age_moja.json'),'rb'),
     'input': open(os.path.join('layers','tiled','initial_age_moja.tiff'),'rb'),
     'input': open(os.path.join('layers','tiled','mean_annual_temperature_moja.json'),'rb'),
-    'input': open(os.path.join('layers','tiled','mean_annual_temperature_moja.tiff'),'rb'),
+    'input': open(os.path.join('layers','tiled','mean_annual_temperature_moja_masked.tiff'),'rb'),
     'input': open(os.path.join('layers','tiled','study_area.json'),'rb'),
     'input': open(os.path.join('input_database','gcbm_input.db'),'rb'),
     'db': open(os.path.join('input_database','gcbm_input.db'),'rb'),
