@@ -19,7 +19,7 @@ jobs:
       run: |
         python local/rest_api_gcbm/cml_report/process_input.py
         cd local/rest_api_gcbm
-        docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
+        docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
 
     - name: Get Public IP
