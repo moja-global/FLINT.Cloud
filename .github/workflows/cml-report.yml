@@ -48,7 +48,7 @@ jobs:
         ls -l config
         ls -l layers/tiled
         ls -l input_database
-        curl -F config_files='@config/variables.json' \
+        curl -v -F config_files='@config/variables.json' \
             -F config_files='@config/spinup.json' \
             -F config_files='@config/provider_config.json' \
             -F config_files='@config/pools_cbm.json' \
