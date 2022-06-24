@@ -86,6 +86,7 @@ jobs:
 
     - name: Run Simulation
       run: |
+        pip install requests
         python local/rest_api_gcbm/cml_report/run_gcbm.py
       
     - name: Retrive Logs and Download Results
