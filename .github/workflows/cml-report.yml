@@ -44,7 +44,6 @@ jobs:
       run: |
         python local/rest_api_gcbm/cml_report/process_input.py
         cd GCBM/GCBM_New_Demo_Run
-        ls -l layers/tiled
         curl -F disturbances='@disturbances/disturbances_2011_moja.tiff' \
             -F disturbances='@disturbances/disturbances_2012_moja.tiff' \
             -F disturbances='@disturbances/disturbances_2013_moja.tiff' \
