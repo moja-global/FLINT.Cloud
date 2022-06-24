@@ -12,6 +12,8 @@ os.chdir(os.path.join('GCBM','GCBM_Demo_Run'))
 
 url = "http://localhost:8080/gcbm/upload"
 
+print(os.listdir(os.path.join(os.path.join('GCBM','GCBM_Demo_Run','layers','tiled'))))
+
 files = {
     'config_files': open(os.path.join('config','variables.json'),'rb'),
     'config_files': open(os.path.join('config','spinup.json'),'rb'),
