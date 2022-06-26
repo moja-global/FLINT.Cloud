@@ -38,6 +38,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 def home():
     return "FLINT.Example API"
 
+
 @app.route("/health-flint-example", methods=["GET"])
 def health():
     """
@@ -50,6 +51,7 @@ def health():
             description: A status check for FLINT example
     """
     return "FLINT.Example is active."
+    
 
 @app.route("/spec")
 def spec():
