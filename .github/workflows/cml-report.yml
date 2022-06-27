@@ -6,7 +6,7 @@ on:
       - master
 jobs:
   sim-summary:
-    if: contains(github.event.pull_request.labels.*.name, ['run-simulation','GCBM'])
+    if:  ${{ github.event.label.name == ['run-simulation','GCBM'] }}
     runs-on: [ubuntu-latest]
     steps:
     - name: Checkout Repository
