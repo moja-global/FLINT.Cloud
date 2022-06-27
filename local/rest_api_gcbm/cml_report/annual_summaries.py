@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-conn = sqlite3.connect("output/compiled_gcbm_output.db")
+conn = sqlite3.connect("output/compiled_simulation_output.db")
 
 query = f"""
         SELECT years.year, COALESCE(SUM(i.pool_tc), 0) / 1e6 AS total_biomass_mt
