@@ -1,10 +1,12 @@
 name: simulation-report
 on:
   pull_request:
+    types: [ labeled ]
     branches:
       - master
 jobs:
   sim-summary:
+    if: ${{ github.event.label.name == 'run-simulation' }}
     runs-on: [ubuntu-latest]
     steps:
     - name: Checkout Repository
