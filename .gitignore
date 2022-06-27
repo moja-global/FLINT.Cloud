@@ -173,6 +173,3 @@ terraform.rc
 # Add GCBM Demo runs
 GCBM_Demo_Run/
 GCBM_New_Demo_Run/
-
-# templates
-local/rest_api_gcbm/cml_report/templates/
