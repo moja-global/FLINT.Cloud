@@ -53,5 +53,5 @@
     or
 
     ```bash
-        curl -X POST -H "Content-Type: application/json" -d ""  http://0.0.0.0:8080/point
+        curl -X POST -H "Content-Type: application/json" -d ""  http://0.0.0.0:8080/rothc
     ```
