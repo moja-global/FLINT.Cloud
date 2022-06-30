@@ -39,7 +39,7 @@ def home():
     return "FLINT.Example API"
 
 
-@app.route("/health-flint-example", methods=["GET"])
+@app.route("/health", methods=["GET"])
 def health():
     """
     Get health status of FLINT example

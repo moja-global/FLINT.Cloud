@@ -61,7 +61,7 @@ app.register_blueprint(SWAGGERUI_BLUEPRINT, url_prefix=SWAGGER_URL)
 ### end swagger specific ###
 
 
-@app.route("/health-gcbm", methods=["GET"])
+@app.route("/health", methods=["GET"])
 def health():
     """
     Get health status of GCBM
