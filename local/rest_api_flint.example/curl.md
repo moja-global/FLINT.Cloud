@@ -1,6 +1,6 @@
-## Endpoints
+# Endpoints
 
-- ### `/version`
+- ## `/version`
 
     Outputs the version number of moja.CLI.
 
@@ -8,7 +8,7 @@
         curl -X GET http://0.0.0.0:8080/version
     ```
 
-- ### `/point`
+- ## `/point`
 
     Runs point example and outputs point_example.csv as an attachment to be downloaded.
 
@@ -20,19 +20,21 @@
         curl -X POST -H "Content-Type: application/json" -d @config/NEW_FILE_NAME.json  http://0.0.0.0:8080/point
     ```
 
-    or
+    or (2nd)
 
     ```bash
         curl -X POST -H "Content-Type: application/json" -d @config/point_example.json http://0.0.0.0:8080/point
     ```
 
-    or
+    Following command uses default json data, just as the 2nd command does.
 
     ```bash
         curl -X POST -H "Content-Type: application/json" -d ""  http://0.0.0.0:8080/point
     ```
 
-- ### `/rothc`
+    The output file for default data is [`default_point_output.csv`](output/default_point_output.csv)
+
+- ## `/rothc`
 
     Runs rothc example and outputs point_rothc_example.csv as an attachment to be downloaded.
 
@@ -44,14 +46,16 @@
         curl -X POST -H "Content-Type: application/json" -d @config/NEW_FILE_NAME.json  http://0.0.0.0:8080/rothc
     ```
 
-    or
+    or (2nd)
 
     ```bash
         curl -X POST -H "Content-Type: application/json" -d @config/point_rothc_example.json http://0.0.0.0:8080/rothc
     ```
 
-    or
+    Following command uses default json data, just as the 2nd command does.
 
     ```bash
         curl -X POST -H "Content-Type: application/json" -d ""  http://0.0.0.0:8080/rothc
     ```
+
+    The output file for default data is [`default_point_output.csv`](output/default_point_rothc_output.csv)
