@@ -39,7 +39,7 @@ jobs:
     - name: Create New Sim
       run: |
         
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+        curl -d "title=test-run" -X POST http://0.0.0.0:8080/gcbm/new
         
     - name: Upload Files 
       run: |
@@ -56,7 +56,7 @@ jobs:
             -F db='@db/gcbm_input.db' \
             -F miscellaneous='@miscellaneous/initial_age_moja.tiff' \
             -F miscellaneous='@miscellaneous/mean_annual_temperature_moja.tiff' \
-            -F title="run4" \
+            -F title="test-run" \
             http://localhost:8080/gcbm/upload
 
     - name: Run Simulation
@@ -69,7 +69,7 @@ jobs:
         cd local/tests
         python simulation_status.py
         cd ../..
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o run4.zip
+        curl -d "title=test-run" -X POST http://0.0.0.0:8080/gcbm/download -L -o test-run.zip
         python local/rest_api_gcbm/cml_report/process_output.py
 
     - name: Upload Logs as artifact
@@ -81,8 +81,8 @@ jobs:
     - name: Compile Results
       run: |
         ls -l output
-        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/simulation_output.db --output_db sqlite:///output/run4/compiled_simulation_output.db
-        docker cp -L gcbm-api:/app/output/run4/compiled_simulation_output.db output
+        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/test-run/simulation_output.db --output_db sqlite:///output/test-run/compiled_simulation_output.db
+        docker cp -L gcbm-api:/app/output/test-run/compiled_simulation_output.db output
         
     - name: Setup cml
       uses: iterative/setup-cml@v1

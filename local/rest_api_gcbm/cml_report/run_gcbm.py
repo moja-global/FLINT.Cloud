@@ -9,13 +9,13 @@ DONE = False
 
 def run_gcbm():
     url = f"{HOME}/dynamic"
-    req_data = {"title":"run4"}
+    req_data = {"title":"test-run"}
     res = requests.post(url,data=req_data)
     return res.text
 
 def status():
     url = f"{HOME}/status"
-    req_data = {"title":"run4"}
+    req_data = {"title":"test-run"}
     res = requests.post(url,data=req_data)
     return json.loads(res.text)
 
