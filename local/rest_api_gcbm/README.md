@@ -2,7 +2,7 @@
 <br/>
  
 To run the GCBM simulation locally, execute the following steps :- 
-1. Clone the FLINT.cloud repository using the command:
+1. Clone the `FLINT.Cloud` repository using the command:
 
 ```bash
 git clone https://github.com/moja-global/FLINT.Cloud.git
@@ -12,11 +12,11 @@ git clone https://github.com/moja-global/FLINT.Cloud.git
   ```
    cd FLINT.Cloud/local/rest_api_gcbm
   ```
-3. Build the docker image with name gcbm-api :
+3. Build the docker image with name `gcbm-api` :
   ```
     docker build --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
   ```
-4. Create a container over the gcbm-api image and start it : 
+4. Create a container over the `gcbm-api` image and start it : 
  ```
     docker run --rm -p 8080:8080 gcbm-api
   ```
