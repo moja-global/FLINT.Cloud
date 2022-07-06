@@ -77,7 +77,7 @@ To run the endpoints and start a new GCBM simulation :
      ```
          curl -d "title=run4" -X POST http://localhost:8080/gcbm/dynamic
      ```
-     This should take a maximum of 20-25 minutes to finish running and even less depending on your system. The end terminal message should be `SQLite insert complete`.This message would be printed on the terminal used to execute docker commands.
+     This should take around 35-40 minutes to finish running and even less depending on your system. The end terminal message should be `SQLite insert complete`.This message would be printed on the terminal used to execute docker commands.
     
    
    4. To download the simulation outputs, run the following curl command 3-5 minutes after the simulation has finished running:
