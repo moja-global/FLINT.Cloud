@@ -1,5 +1,7 @@
 ### GCBM local REST API Setup  
 <br/>
+
+The simulation is supported on linux for now, an alternative to perform the steps below is using a virtual machine.
  
 To run the GCBM simulation locally, execute the following steps :- 
 1. Clone the `FLINT.Cloud` repository using the command:
