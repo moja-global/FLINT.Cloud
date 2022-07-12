@@ -311,7 +311,7 @@ class TestApiFlintGCBM:
         data = {
             "title": yield_title,
         }
-        upload_reponse = requests.post(upload_title, json=data);
+        upload_reponse = requests.post(upload_title, json=data)
         assert upload_reponse.status_code == 200
 
     def test_gcbm_disturbances(self, gcbm_endpoint, yield_disturbances_files, yield_title):
@@ -319,7 +319,7 @@ class TestApiFlintGCBM:
             is working or not by uploading a GCBM disturbance file \
             with yield_title. 
         """
-        upload_files = yield_disturbances_files;
+        upload_files = yield_disturbances_files
         data = {
             "title": yield_title,
         }
@@ -332,7 +332,7 @@ class TestApiFlintGCBM:
             is working or not by uploading a GCBM classifiers file \
             with yield_title. 
         """
-        upload_files = yield_classifiers_files;
+        upload_files = yield_classifiers_files
         data = {
             "title": yield_title,
         }
@@ -345,7 +345,7 @@ class TestApiFlintGCBM:
             is working or not by uploading a GCBM miscellaneous file \
             with yield_title. 
         """
-        upload_files = yield_miscellaneous_files;
+        upload_files = yield_miscellaneous_files
         data = {
             "title": yield_title,
         }
@@ -358,7 +358,7 @@ class TestApiFlintGCBM:
             is working or not by uploading a GCBM db file \
             with yield_title. 
         """
-        upload_files = yield_db_file;
+        upload_files = yield_db_file
         data = {
             "title": yield_title,
         }
