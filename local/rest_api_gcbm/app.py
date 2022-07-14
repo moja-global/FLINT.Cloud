@@ -229,7 +229,7 @@ def gcbm_upload():
     get_provider_config(input_dir)
 
     return {
-        "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
+        "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/run"
     }
 
 
@@ -599,8 +599,8 @@ def config_table():
         return {"status": 0, "error": Exception}
 
 
-@app.route("/gcbm/dynamic", methods=["POST"])
-def gcbm_dynamic():
+@app.route("/gcbm/run", methods=["POST"])
+def gcbm_run():
     """
     Get GCBM Dynamic implementation of FLINT
     ---
