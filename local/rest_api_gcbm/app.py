@@ -131,19 +131,19 @@ def version():
 @app.route("/gcbm/new", methods=["POST"])
 def gcbm_new():
     """
-    Upload files for GCBM Dynamic implementation of FLINT
+    Create a new GCBM simulation with a title.
     ---
     tags:
             - gcbm
     responses:
             200:
     parameters:
-                    - in: body
+            - in: body
             name: title
             required: true
             schema:
                     type: string
-            description: File upload for GCBM Implementation FLINT
+            description: Create a new simulation for GCBM Implementation of FLINT
     """
     # Default title = simulation
     title = request.form.get("title") or "simulation"
