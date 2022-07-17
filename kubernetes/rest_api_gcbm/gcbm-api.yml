@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gcbm-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: gcbm
+  template:
+    metadata:
+      labels:
+        app: gcbm
+    spec:
+      containers:
+      - name: gcbm-api
+        image: gcbm-api:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080

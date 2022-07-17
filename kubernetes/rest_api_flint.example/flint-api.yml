@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flint-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: flint
+  template:
+    metadata:
+      labels:
+        app: flint
+    spec:
+      containers:
+      - name: flint-example
+        image: flint-example:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8080
