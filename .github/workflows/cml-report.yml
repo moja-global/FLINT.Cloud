@@ -1,13 +1,14 @@
-name: simulation-report
+name: CML Simulation Report
+
 on:
   pull_request:
-    types: [ labeled ]
-    branches:
-      - master
+    # types: [ labeled ]
+    branches: [ master ]
+
 jobs:
   sim-summary:
-    if:  ${{ github.event.label.name == ['run-simulation','GCBM'] }}
-    runs-on: [ubuntu-latest]
+    # if:  ${{ github.event.label.name == ['run-simulation','GCBM'] }}
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
@@ -21,7 +22,8 @@ jobs:
       run: |
         python local/rest_api_gcbm/cml_report/process_input.py
         cd local/rest_api_gcbm
-        docker pull ghcr.io/moja-global/rest_api_gcbm:master
+        docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
+        docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
 
     - name: Get Public IP
       id: ip
@@ -37,7 +39,6 @@ jobs:
 
     - name: Create New Sim
       run: |
-        
         curl -d "title=test-run" -X POST http://0.0.0.0:8080/gcbm/new
         
     - name: Upload Files 
