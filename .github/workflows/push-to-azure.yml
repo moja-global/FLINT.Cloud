@@ -1,6 +1,8 @@
 name: Deploy to Azure Container Registry
 
-on: [push]
+on:
+  push:
+    branches: [ master ]
 
 env:
   REGISTRY: mojaglobal.azurecr.io
@@ -39,7 +41,7 @@ jobs:
           with:
             context: ./local/rest_api_flint.example/
             file: "./local/rest_api_flint.example/Dockerfile"
-            push: true
+            push: ${{ github.event_name != 'pull_request' }}
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
 
@@ -73,6 +75,6 @@ jobs:
           with:
             context: ./local/rest_api_gcbm/
             file: "./local/rest_api_gcbm/Dockerfile"
-            push: true
+            push: ${{ github.event_name != 'pull_request' }}
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
