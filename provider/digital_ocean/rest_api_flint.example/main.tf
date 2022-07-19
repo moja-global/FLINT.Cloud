@@ -1,7 +1,7 @@
 terraform {
   required_providers {
     digitalocean = {
-      source = "digitalocean/digitalocean"
+      source  = "digitalocean/digitalocean"
       version = "~> 2.0"
     }
   }
@@ -72,8 +72,8 @@ resource "digitalocean_firewall" "app" {
   }
 
   outbound_rule {
-    protocol         = "tcp"
-    port_range       = "all"
+    protocol              = "tcp"
+    port_range            = "all"
     destination_addresses = ["0.0.0.0/0", "::/0"]
   }
 }
