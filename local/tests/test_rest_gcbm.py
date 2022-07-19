@@ -301,7 +301,7 @@ class TestApiFlintGCBM:
         status_response = requests.post(status_endpoint, json=data)
         assert status_response.status_code == 200
         assert status_response.json().get("finished") == "In Progress"
-    
+
     def test_upload_title(self, base_endpoint, yield_title):
         """ This test would check wheather the upload title \
             is working or not with the title provided by the \
@@ -314,7 +314,9 @@ class TestApiFlintGCBM:
         upload_reponse = requests.post(upload_title, json=data)
         assert upload_reponse.status_code == 200
 
-    def test_gcbm_disturbances(self, gcbm_endpoint, yield_disturbances_files, yield_title):
+    def test_gcbm_disturbances(
+        self, gcbm_endpoint, yield_disturbances_files, yield_title
+    ):
         """ This test would check wheather the upload disturbance  \
             is working or not by uploading a GCBM disturbance file \
             with yield_title. 
@@ -327,7 +329,9 @@ class TestApiFlintGCBM:
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
 
-    def test_gcbm_classifiers(self, gcbm_endpoint, yield_classifiers_files, yield_title):
+    def test_gcbm_classifiers(
+        self, gcbm_endpoint, yield_classifiers_files, yield_title
+    ):
         """ This test would check wheather the upload classifiers \
             is working or not by uploading a GCBM classifiers file \
             with yield_title. 
@@ -340,7 +344,9 @@ class TestApiFlintGCBM:
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
 
-    def test_gcbm_miscellaneous(self, gcbm_endpoint, yield_miscellaneous_files, yield_title):
+    def test_gcbm_miscellaneous(
+        self, gcbm_endpoint, yield_miscellaneous_files, yield_title
+    ):
         """ This test would check wheather the upload miscellaneous \
             is working or not by uploading a GCBM miscellaneous file \
             with yield_title. 

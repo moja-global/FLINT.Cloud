@@ -765,6 +765,7 @@ def check():
 def home():
     return "FLINT.Cloud API"
 
+
 @app.route("/upload/title", methods=["POST"])
 def getTitle():
     """
@@ -784,10 +785,10 @@ def getTitle():
     """
     # Default sim_title = simulation
     sim_title = request.form.get("title") or "simulation"
-    
+
     # Sanitize title
     sim_title = "".join(c for c in sim_title if c.isalnum())
-    
+
     # input_dir = f"{title}"
     input_dir = f"{os.getcwd()}/input/{sim_title}"
     if not os.path.exists(f"{input_dir}"):
@@ -797,6 +798,7 @@ def getTitle():
         message = "Simulation already exists with name {sim_title}. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
 
     return {"data": message}, 200
+
 
 @app.route("/gcbm/upload/disturbances", methods=["POST"])
 def gcbm_disturbances():
@@ -835,10 +837,9 @@ def gcbm_disturbances():
             file.save(f"{input_dir}/disturbances/{file.filename}")
     else:
         return {"error": "Missing disturbances file"}, 400
-    
-    return {
-        "data": "Disturbances file uploaded succesfully. Proceed to the next step."
-    }
+
+    return {"data": "Disturbances file uploaded succesfully. Proceed to the next step."}
+
 
 @app.route("/gcbm/upload/classifiers", methods=["POST"])
 def gcbm_classifiers():
@@ -877,10 +878,9 @@ def gcbm_classifiers():
             file.save(f"{input_dir}/classifiers/{file.filename}")
     else:
         return {"error": "Missing classifiers file"}, 400
-    
-    return {
-        "data": "Classifiers file uploaded succesfully. Proceed to the next step."
-    }
+
+    return {"data": "Classifiers file uploaded succesfully. Proceed to the next step."}
+
 
 @app.route("/gcbm/upload/miscellaneous", methods=["POST"])
 def gcbm_miscellaneous():
@@ -919,7 +919,7 @@ def gcbm_miscellaneous():
             file.save(f"{input_dir}/miscellaneous/{file.filename}")
     else:
         return {"error": "Missing miscellaneous file"}, 400
-    
+
     return {
         "data": "Miscellaneous file uploaded succesfully. Proceed to the next step."
     }
@@ -962,10 +962,8 @@ def gcbm_db():
             file.save(f"{input_dir}/db/{file.filename}")
     else:
         return {"error": "Missing db file"}, 400
-    
-    return {
-        "data": "db file uploaded succesfully. Proceed to the next step."
-    }
+
+    return {"data": "db file uploaded succesfully. Proceed to the next step."}
 
 
 if __name__ == "__main__":
