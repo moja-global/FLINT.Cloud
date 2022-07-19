@@ -798,7 +798,7 @@ def getTitle():
 
     return {"data": message}, 200
 
-@app.route("gcbm/upload/disturbances", methods=["POST"])
+@app.route("/gcbm/upload/disturbances", methods=["POST"])
 def gcbm_disturbances():
     """
     Disturbances file for GCBM Dynamic implementation of FLINT
@@ -840,7 +840,7 @@ def gcbm_disturbances():
         "data": "Disturbances file uploaded succesfully. Proceed to the next step."
     }
 
-@app.route("gcbm/upload/classifiers", methods=["POST"])
+@app.route("/gcbm/upload/classifiers", methods=["POST"])
 def gcbm_classifiers():
     """
     Classifiers file for GCBM Dynamic implementation of FLINT
@@ -882,7 +882,7 @@ def gcbm_classifiers():
         "data": "Classifiers file uploaded succesfully. Proceed to the next step."
     }
 
-@app.route("gcbm/upload/miscellaneous", methods=["POST"])
+@app.route("/gcbm/upload/miscellaneous", methods=["POST"])
 def gcbm_miscellaneous():
     """
     Miscellaneous file for GCBM Dynamic implementation of FLINT
@@ -925,7 +925,7 @@ def gcbm_miscellaneous():
     }
 
 
-@app.route("gcbm/upload/db", methods=["POST"])
+@app.route("/gcbm/upload/db", methods=["POST"])
 def gcbm_db():
     """
     db file for GCBM Dynamic implementation of FLINT
