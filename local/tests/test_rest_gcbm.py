@@ -1,3 +1,4 @@
+from distutils.command.upload import upload
 from pkg_resources import yield_lines
 import pytest
 import requests
@@ -300,6 +301,76 @@ class TestApiFlintGCBM:
         status_response = requests.post(status_endpoint, json=data)
         assert status_response.status_code == 200
         assert status_response.json().get("finished") == "In Progress"
+
+    def test_upload_title(self, base_endpoint, yield_title):
+        """ This test would check wheather the upload title \
+            is working or not with the title provided by the \
+            yield_title fixture. 
+        """
+        upload_title = base_endpoint + "upload/title"
+        data = {
+            "title": yield_title,
+        }
+        upload_reponse = requests.post(upload_title, json=data)
+        assert upload_reponse.status_code == 200
+
+    def test_gcbm_disturbances(
+        self, gcbm_endpoint, yield_disturbances_files, yield_title
+    ):
+        """ This test would check wheather the upload disturbance  \
+            is working or not by uploading a GCBM disturbance file \
+            with yield_title. 
+        """
+        upload_files = yield_disturbances_files
+        data = {
+            "title": yield_title,
+        }
+        upload_endpoint = gcbm_endpoint + "upload/disturbances"
+        upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
+        assert upload_response.status_code == 200
+
+    def test_gcbm_classifiers(
+        self, gcbm_endpoint, yield_classifiers_files, yield_title
+    ):
+        """ This test would check wheather the upload classifiers \
+            is working or not by uploading a GCBM classifiers file \
+            with yield_title. 
+        """
+        upload_files = yield_classifiers_files
+        data = {
+            "title": yield_title,
+        }
+        upload_endpoint = gcbm_endpoint + "upload/classifiers"
+        upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
+        assert upload_response.status_code == 200
+
+    def test_gcbm_miscellaneous(
+        self, gcbm_endpoint, yield_miscellaneous_files, yield_title
+    ):
+        """ This test would check wheather the upload miscellaneous \
+            is working or not by uploading a GCBM miscellaneous file \
+            with yield_title. 
+        """
+        upload_files = yield_miscellaneous_files
+        data = {
+            "title": yield_title,
+        }
+        upload_endpoint = gcbm_endpoint + "upload/miscellaneous"
+        upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
+        assert upload_response.status_code == 200
+
+    def test_gcbm_db(self, gcbm_endpoint, yield_db_file, yield_title):
+        """ This test would check wheather the upload db \
+            is working or not by uploading a GCBM db file \
+            with yield_title. 
+        """
+        upload_files = yield_db_file
+        data = {
+            "title": yield_title,
+        }
+        upload_endpoint = gcbm_endpoint + "upload/db"
+        upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
+        assert upload_response.status_code == 200
 
     @pytest.mark.skip(reason="Test fails on CI")
     def test_download(self, gcbm_endpoint, yield_title):
