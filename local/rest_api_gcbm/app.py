@@ -1,3 +1,4 @@
+from crypt import methods
 from threading import Thread
 
 from numpy import append
@@ -763,6 +764,206 @@ def check():
 @app.route("/", methods=["GET"])
 def home():
     return "FLINT.Cloud API"
+
+
+@app.route("/upload/title", methods=["POST"])
+def getTitle():
+    """
+    Get simulation title for GCBM implementation of FLINT
+    ---
+    tags:
+            - gcbm-upload
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: title
+            required: true
+            schema:
+                    type: string
+            description: Get simulation title for GCBM
+    """
+    # Default sim_title = simulation
+    sim_title = request.form.get("title") or "simulation"
+
+    # Sanitize title
+    sim_title = "".join(c for c in sim_title if c.isalnum())
+
+    # input_dir = f"{title}"
+    input_dir = f"{os.getcwd()}/input/{sim_title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
+        message = "New {sim_title} simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
+    else:
+        message = "Simulation already exists with name {sim_title}. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
+
+    return {"data": message}, 200
+
+
+@app.route("/gcbm/upload/disturbances", methods=["POST"])
+def gcbm_disturbances():
+    """
+    Disturbances file for GCBM Dynamic implementation of FLINT
+    ---
+    tags:
+            - gcbm-upload
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: string
+            required: true
+            schema:
+                    type: string
+            description: Disturbances File upload for GCBM Implementation FLINT
+    """
+
+    # Get the title from the payload
+    title = request.form.get("title") or "simulation"
+
+    # Check for project directory else create one
+    input_dir = f"{os.getcwd()}/input/{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
+    logging.debug(os.getcwd())
+
+    # input files follow a strict structure
+    if not os.path.exists(f"{input_dir}/disturbances"):
+        os.makedirs(f"{input_dir}/disturbances")
+
+    # store disturbances file in a new folder
+    if "disturbances" in request.files:
+        for file in request.files.getlist("disturbances"):
+            file.save(f"{input_dir}/disturbances/{file.filename}")
+    else:
+        return {"error": "Missing disturbances file"}, 400
+
+    return {"data": "Disturbances file uploaded succesfully. Proceed to the next step."}
+
+
+@app.route("/gcbm/upload/classifiers", methods=["POST"])
+def gcbm_classifiers():
+    """
+    Classifiers file for GCBM Dynamic implementation of FLINT
+    ---
+    tags:
+            - gcbm-upload
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: string
+            required: true
+            schema:
+                    type: string
+            description: Classifiers File upload for GCBM Implementation FLINT
+    """
+
+    # Get the title from the payload
+    title = request.form.get("title") or "simulation"
+
+    # Check for project directory else create one
+    input_dir = f"{os.getcwd()}/input/{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
+    logging.debug(os.getcwd())
+
+    # input files follow a strict structure
+    if not os.path.exists(f"{input_dir}/classifiers"):
+        os.makedirs(f"{input_dir}/classifiers")
+
+    # store disturbances file in a new folder
+    if "classifiers" in request.files:
+        for file in request.files.getlist("classifiers"):
+            file.save(f"{input_dir}/classifiers/{file.filename}")
+    else:
+        return {"error": "Missing classifiers file"}, 400
+
+    return {"data": "Classifiers file uploaded succesfully. Proceed to the next step."}
+
+
+@app.route("/gcbm/upload/miscellaneous", methods=["POST"])
+def gcbm_miscellaneous():
+    """
+    Miscellaneous file for GCBM Dynamic implementation of FLINT
+    ---
+    tags:
+            - gcbm-upload
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: string
+            required: true
+            schema:
+                    type: string
+            description: Miscellaneous File upload for GCBM Implementation FLINT
+    """
+
+    # Get the title from the payload
+    title = request.form.get("title") or "simulation"
+
+    # Check for project directory else create one
+    input_dir = f"{os.getcwd()}/input/{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
+    logging.debug(os.getcwd())
+
+    # input files follow a strict structure
+    if not os.path.exists(f"{input_dir}/miscellaneous"):
+        os.makedirs(f"{input_dir}/miscellaneous")
+
+    # store miscellaneous file in a new folder
+    if "miscellaneous" in request.files:
+        for file in request.files.getlist("miscellaneous"):
+            file.save(f"{input_dir}/miscellaneous/{file.filename}")
+    else:
+        return {"error": "Missing miscellaneous file"}, 400
+
+    return {
+        "data": "Miscellaneous file uploaded succesfully. Proceed to the next step."
+    }
+
+
+@app.route("/gcbm/upload/db", methods=["POST"])
+def gcbm_db():
+    """
+    db file for GCBM Dynamic implementation of FLINT
+    ---
+    tags:
+            - gcbm-upload
+    responses:
+            200:
+    parameters:
+                    - in: body
+            name: string
+            required: true
+            schema:
+                    type: string
+            description: db File upload for GCBM Implementation FLINT
+    """
+
+    # Get the title from the payload
+    title = request.form.get("title") or "simulation"
+
+    # Check for project directory else create one
+    input_dir = f"{os.getcwd()}/input/{title}"
+    if not os.path.exists(f"{input_dir}"):
+        os.makedirs(f"{input_dir}")
+    logging.debug(os.getcwd())
+
+    # input files follow a strict structure
+    if not os.path.exists(f"{input_dir}/db"):
+        os.makedirs(f"{input_dir}/db")
+
+    # store miscellaneous file in a new folder
+    if "db" in request.files:
+        for file in request.files.getlist("db"):
+            file.save(f"{input_dir}/db/{file.filename}")
+    else:
+        return {"error": "Missing db file"}, 400
+
+    return {"data": "db file uploaded succesfully. Proceed to the next step."}
 
 
 if __name__ == "__main__":
