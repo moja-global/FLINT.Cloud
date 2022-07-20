@@ -1,6 +1,6 @@
-# REST API FLINT.Example Terraform integration for Digital Ocean
+# REST API GCBM Terraform integration for Digital Ocean
 
-This Terraform script provisions a Linux App Service which runs the `ghcr.io/moja-global/rest_api_flint.example` Docker container on Digital Ocean.
+This Terraform script provisions a Linux App Service which runs the `ghcr.io/moja-global/rest_api_gcbm` Docker container on Digital Ocean.
 
 ## Variables
 
@@ -23,12 +23,11 @@ This Terraform script provisions a Linux App Service which runs the `ghcr.io/moj
   ```sh
   terraform apply
   ```
-
 - Destory the infrastructure:
   ```sh
   terraform destory
   ```
-
+  
 - Show the infrastructure configuration
   ```sh
   terraform show
