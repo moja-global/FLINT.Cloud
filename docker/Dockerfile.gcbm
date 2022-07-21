@@ -28,6 +28,12 @@ RUN git clone -b develop https://github.com/moja-global/moja.canada \
     && make --quiet install \
     && make clean \
     && cd $ROOTDIR/src
+    
+# mojadata
+RUN pip install git+https://github.com/moja-global/GCBM.Data#subdirectory=mojadata
+
+# DVC
+RUN pip install dvc
 
 RUN mkdir -p /opt/gcbm
 RUN ln -t /opt/gcbm /usr/local/lib/lib*
