@@ -21,12 +21,12 @@ This setup will help us to create services, deployments and ingress on Azure Kub
    In our case, I have already created the secret using above command so no need to run this command. 
 5. Navigate to `kubernetes/azure/reat_api_flint.example` directory and create deployment
    ```sh
-	cd kubernetes/azure/reat_api_flint.example
+	cd kubernetes/azure/rest_api_flint.example
 	kubectl create -f flint-api.yml
    ```
 6. Navigate to `kubernetes/azure/reat_api_gcbm` directory and create deployment
    ```sh
-	cd kubernetes/azure/reat_api_gcbm
+	cd kubernetes/azure/rest_api_gcbm
 	kubectl create -f flint-gcbm.yml
    ```
 7. Check status using following command
