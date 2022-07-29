@@ -45,7 +45,7 @@ class TestApiFlintExample:
         point_endpoint = base_endpoint + "point"
         directory_path = Path(os.getcwd())
 
-        config_path=(os.path.dirname(directory_path.parent.absolute())+"/local/rest_api_flint.example/config/point_example.json")
+        config_path = "../rest_api_flint.example/config/point_example.json"
 
         with open(config_path) as data_file:
             data = json.load(data_file)
@@ -59,11 +59,11 @@ class TestApiFlintExample:
         rothc_endpoint = base_endpoint + "rothc"
         directory_path = Path(os.getcwd())
 
-        config_path=(os.path.dirname(directory_path.parent.absolute())+"/local/rest_api_flint.example/config/point_rothc_example.json")
+        config_path = "../rest_api_flint.example/config/point_rothc_example.json"
 
         with open(config_path) as data_file:
             data = json.load(data_file)
 
         config_string = json.dumps(data)
         rothc_response = requests.post(rothc_endpoint, data=config_string)
-        assert rothc_response.status_code == 200
+        assert rothc_response.status_code == 200 
