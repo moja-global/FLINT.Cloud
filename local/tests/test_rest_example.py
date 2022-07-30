@@ -66,4 +66,4 @@ class TestApiFlintExample:
 
         config_string = json.dumps(data)
         rothc_response = requests.post(rothc_endpoint, data=config_string)
-        assert rothc_response.status_code == 200 
+        assert rothc_response.status_code == 200
