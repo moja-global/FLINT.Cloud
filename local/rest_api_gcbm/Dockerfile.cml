@@ -1,24 +1,11 @@
-FROM ghcr.io/moja-global/flint.gcbm:master
+FROM ghcr.io/moja-global/rest_api_gcbm@sha256:5e2eddb75f60d0767d1623202777c2922286ea6e0c4cc4740ffaf8f8d45ab440
 
-WORKDIR /app
-
-RUN pip install --upgrade pip
-
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Adding npm for CML Actions
 RUN apt-get update 
-RUN apt-get install nodejs npm -y
 RUN apt-get install -y python3-dev \
     && cd /usr/local/bin \
     && ln -s /usr/bin/python3 python
 RUN python --version
-RUN node --version
-RUN npm --version
 
 RUN git clone https://github.com/moja-global/GCBM.CompileResults.git
-
-COPY . .
 
 CMD ["gunicorn", "--bind", ":8080", "--workers", "1", "--threads", "2", "--timeout", "0", "app:app"]
