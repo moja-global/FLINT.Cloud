@@ -13,7 +13,15 @@
             "order": 3,
             "library": "moja.modules.cbm",
             "settings": {
-                "vars": []
+                "vars": [
+                    "disturbances_2012",
+                    "disturbances_2011",
+                    "disturbances_2015",
+                    "disturbances_2016",
+                    "disturbances_2018",
+                    "disturbances_2014",
+                    "disturbances_2013"
+                ]
             }
         },
         "CBMDisturbanceEventModule": {

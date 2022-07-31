@@ -1,4 +1,5 @@
 import os
+import shutil
 import pathlib
 import json
 
@@ -11,6 +12,8 @@ class GCBMList:
     """
 
     def __init__(self, files=dict(), config=[], category=None):
+        # TODO: set simulation folder as global
+        self.dirpath = "input/test-run"
         self.data = list()
         self.files = files
         self.config = config
@@ -38,19 +41,16 @@ class GCBMList:
         return False
 
     def _update_config(self):
-        for raster_file_path in self.data:
-            json_config_file_path = GCBMList.change_extension(raster_file_path, ".json")
+        for file in self.data:
+            json_config_file = GCBMList.change_extension(file, ".json")
+            json_filepath = os.path.join(self.dirpath, json_config_file)
 
-            if json_config_file_path.name not in self.config:
-                self.generate_config(
-                    os.path.abspath(raster_file_path), json_config_file_path
-                )
+            if json_config_file.name not in self.config:
+                self.generate_config(file, json_config_file)
             else:
-                with open(
-                    f"templates/config/{json_config_file_path.name}", "r+"
-                ) as _file:
+                with open(json_filepath, "r+") as _config:
                     json.dump(
-                        self.files[os.path.abspath(raster_file_path)], _file, indent=4
+                        self.files[file], _config, indent=4
                     )
 
     def _populate_config_with_hard_coded_config(
@@ -69,58 +69,64 @@ class GCBMList:
                 config[key] = hc_config[key]
         return config
 
-    def generate_config(self, file_path, json_config_file_path):
+    def generate_config(self, file, json_config_file):
+        filepath = os.path.join(self.dirpath, file)
+        json_filepath = os.path.join(self.dirpath, json_config_file)
+
         mode = "w+"
-        if os.path.exists(f"templates/config/{json_config_file_path}"):
+        if os.path.exists(json_filepath):
             mode = "r+"
 
-        hard_coded_path = f"hard_coded_values/{json_config_file_path}"
-        hard_coded_config = None
-        if os.path.exists(hard_coded_path):
-            with open(hard_coded_path) as hard_coded_file:
-                try:
-                    hard_coded_config = json.load(hard_coded_file)
-                except json.decoder.JSONDecodeError as e:
-                    raise e
+        # AO: disabling in favour of user defined attributes
+        # hard_coded_path = f"hard_coded_values/{json_config_file}"
+        # hard_coded_config = None
+        # if os.path.exists(hard_coded_path):
+        #     with open(hard_coded_path) as hard_coded_file:
+        #         try:
+        #             hard_coded_config = json.load(hard_coded_file)
+        #         except json.decoder.JSONDecodeError as e:
+        #             raise e
 
-        with open(f"templates/config/{json_config_file_path.name}", mode) as _file:
+        with open(json_filepath, mode) as _file:
             if mode == "r+":
                 config = json.load(_file)
             else:
                 config = dict()
 
             # Defaults
-            with rasterio.open(file_path) as raster_obj:
-                tr = raster_obj.transform
-                config["cellLatSize"] = tr[0]
-                config["cellLonSize"] = -tr[4]
-                config["nodata"] = raster_obj.nodata
+            if ".tiff" in file:
+                with rasterio.open(filepath) as raster_obj:
+                    tr = raster_obj.transform
+                    config["cellLatSize"] = tr[0]
+                    config["cellLonSize"] = -tr[4]
+                    config["nodata"] = raster_obj.nodata
 
-                config["blockLonSize"] = config["cellLonSize"] * 400
-                config["blockLatSize"] = config["cellLatSize"] * 400
-                config["tileLatSize"] = config["cellLatSize"] * 4000
-                config["tileLonSize"] = config["cellLonSize"] * 4000
-                config["layer_type"] = "GridLayer"
-                config["layer_data"] = "Byte"
-                # config["has_year"] = False
-                # config["has_type"] = False
+                    config["blockLonSize"] = config["cellLonSize"] * 400
+                    config["blockLatSize"] = config["cellLatSize"] * 400
+                    config["tileLatSize"] = config["cellLatSize"] * 4000
+                    config["tileLonSize"] = config["cellLonSize"] * 4000
+                    config["layer_type"] = "GridLayer"
+                    config["layer_data"] = "Byte"
+                    # config["has_year"] = False
+                    # config["has_type"] = False
 
-                # Now populate if hard_coded_config exists
-                config = self._populate_config_with_hard_coded_config(
-                    config, hard_coded_config, raster_obj.nodata
-                )
 
-                print("Dumping config: ", config)
-                json.dump(config, _file, indent=4)
+                    # Now populate if hard_coded_config exists
+                    # config = self._populate_config_with_hard_coded_config(
+                    #     config, hard_coded_config, raster_obj.nodata
+                    # )
 
-                self.files[file_path] = config
-                self.config.append(json_config_file_path.name)
+                    print("Dumping config: ", config)
+                    json.dump(config, _file, indent=4)
 
-        # TODO:
+                    print(file)
+                    self.files[file] = config
+                    self.config.append(json_config_file.name)
+
+        # AO: I think this has been replaced with _update_config
         # self.sync_config()
 
     def setattr(self, file, attributes):
-        file = os.path.abspath(file)
         config = self.files[file]
         config["attributes"] = attributes
 
@@ -140,6 +146,7 @@ class GCBMList:
 class GCBMDisturbanceList(GCBMList):
     def __init__(self, files, config):
         category = "disturbances"
+        self.dirpath = "input/test-run"
         self.files = files
         self.config = config
         super().__init__(files=files, config=config, category=category)
@@ -147,6 +154,7 @@ class GCBMDisturbanceList(GCBMList):
 
 class GCBMClassifiersList(GCBMList):
     def __init__(self, files, config):
+        self.dirpath = "input/test-run"
         category = "classifiers"
         self.files = files
         self.config = config
@@ -155,6 +163,7 @@ class GCBMClassifiersList(GCBMList):
 
 class GCBMMiscellaneousList(GCBMList):
     def __init__(self, files, config):
+        self.dirpath = "input/test-run"
         category = "miscellaneous"
         self.files = files
         self.config = config
@@ -164,6 +173,7 @@ class GCBMMiscellaneousList(GCBMList):
 class GCBMSimulation:
     def __init__(self):
         # create a global index
+        self.dirpath = "input/test-run"
         self.files = {}
 
         # create sub-indices of different types
@@ -178,11 +188,12 @@ class GCBMSimulation:
         self.miscellaneous = GCBMMiscellaneousList(files=self.files, config=self.config)
 
     def create_simulation_folder(self):
-        if not os.path.exists("templates/config"):
-            os.makedirs("templates/config/")
+        if not os.path.exists(self.dirpath):
+            os.makedirs(self.dirpath)
+
 
     def create_file_index(self):
-        config_dir_path = "templates/config"
+        config_dir_path = "templates"
         assert os.path.isdir(
             config_dir_path
         ), f"Given config directory path: {config_dir_path} either does not exist or is not a directory."
@@ -194,10 +205,15 @@ class GCBMSimulation:
                 data = GCBMSimulation.safe_read_json(abs_filepath)
 
                 # TODO: Discussion - should this be abs_filepath, or do we want just the filename?
-                self.files[abs_filepath] = data
+                self.files[filename] = data
 
                 # TODO: This should not happen here? maybe connect an endpoint directly to the sync_config method
                 # self.sync_config(abs_filepath)
+
+                # AO: sync_config is a write method, saving the current config
+                # state file - doing dumb copy until implemented.
+                sim_filepath = os.path.join(self.dirpath, filename)
+                shutil.copy(abs_filepath, sim_filepath)
 
     # file_path: disturbances (NOT MUST), classifiers (MUST), miscellaneous (MUST)
     def add_file(self, file_path: str):
@@ -211,13 +227,18 @@ class GCBMSimulation:
         ==========
         1. file_path (str), no default
         """
-        if self.disturbances._append(file_path):
+
+        # TODO: update to accept input from Flask endpoint
+        filename = os.path.basename(file_path)
+        shutil.copy(file_path, os.path.join(self.dirpath, filename))
+
+        if self.disturbances._append(filename):
             self.disturbances._update_config()
             return
-        if self.classifiers._append(file_path):
+        if self.classifiers._append(filename):
             self.classifiers._update_config()
             return
-        if self.miscellaneous._append(file_path):
+        if self.miscellaneous._append(filename):
             self.miscellaneous._update_config()
             return
         # TODO: Add covariates here
@@ -259,9 +280,22 @@ class GCBMSimulation:
 
     @staticmethod
     def safe_read_json(path):
-        if ".json" not in path:
-            raise UserWarning(f"Given path {path} not a json file")
+
+        # TODO: add read method for gcbm_config.cfg and logging.conf
+        if ".cfg" in path:
+            filename = os.path.join('input/test-run', "gcbm_config.cfg")
+            shutil.copy(path, filename)
             return {}
+        if ".conf" in path:
+            filename = os.path.join('input/test-run', "logging.conf")
+            shutil.copy(path, filename)
+            return {}
+
+        # check JSON
+        if ".json" not in path:
+            raise UserWarning(f"Given path {path} not a valid json file")
+            return {}
+
         # Make sure it's a file and not a directory
         if not os.path.isfile(path):
             raise UserWarning(
@@ -275,27 +309,47 @@ class GCBMSimulation:
 
 if __name__ == "__main__":
     sim = GCBMSimulation()
-    sim.add_file("disturbances/disturbances_2011_moja.tiff")
-    sim.add_file("disturbances/disturbances_2012_moja.tiff")
-    sim.add_file("disturbances/disturbances_2013_moja.tiff")
-    sim.add_file("disturbances/disturbances_2014_moja.tiff")
-    sim.add_file("disturbances/disturbances_2015_moja.tiff")
-    sim.add_file("disturbances/disturbances_2016_moja.tiff")
-    sim.add_file("disturbances/disturbances_2018_moja.tiff")
-    sim.add_file("classifiers/Classifier1_moja.tiff")
-    sim.add_file("classifiers/Classifier2_moja.tiff")
-    sim.add_file("miscellaneous/initial_age_moja.tiff")
-    sim.add_file("miscellaneous/mean_annual_temperature_moja.tiff")
-    # this^ generates disturbances_2011_moja.json file, which will contain the metadata from .tiff
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2011.tiff")
+    sim.set_disturbance_attributes("disturbances_2011.tiff", {"year": 2011, "disturbance_type": "Wildfire", "transition": 1})
 
-    # Sample payload to test
-    # If you want to add something of your own to the json file above, you can do this:
-    # payload = {
-    #     "year": 2012,
-    #     "disturbance_type": "Wildfire",
-    #     "random_thing": [1, 2, 3, 4],
-    #     "transition": 1,
-    # }
-    # sim.set_disturbance_attributes("disturbances/disturbances_2011_moja.tiff", payload)
-    # sim.set_classifier_attributes("classifiers/classifier1_moja.tiff", payload)
-    # sim.set_miscellaneous_attributes("miscellaneous/initial_age_moja.tiff", payload)
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2012.tiff")
+    sim.set_disturbance_attributes("disturbances_2012.tiff",
+                                  {"year": 2012, "disturbance_type": "Wildfire", "transition": 1})
+
+
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2013.tiff")
+    sim.set_disturbance_attributes("disturbances_2013.tiff",
+                                    {"year": 2013, "disturbance_type": "Mountain pine beetle — Very severe impact", "transition": 1})
+
+    # TODO: Check how to handle multiple attributes entries (L442-451 of `app.py:master`)
+    # sim.set_disturbance_attributes("disturbances_2013.tiff",
+    #                                 {"year": 2013, "disturbance_type": "Wildfire", "transition": 1})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2014.tiff")
+    sim.set_disturbance_attributes("disturbances_2014.tiff",
+                                    {"year": 2014, "disturbance_type": "Mountain pine beetle — Very severe impact", "transition": 1})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2015.tiff")
+    sim.set_disturbance_attributes("disturbances_2015.tiff",
+                                    {"year": 2015, "disturbance_type": "Wildfire", "transition": 1})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2016.tiff")
+    sim.set_disturbance_attributes("disturbances_2016.tiff",
+                                   {"year": 2016, "disturbance_type": "Wildfire", "transition": 1})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/disturbances/disturbances_2018.tiff")
+    sim.set_disturbance_attributes("disturbances_2018.tiff",
+                                    {"year": 2018, "disturbance_type": "Wildfire", "transition": 1})
+
+    # TODO: classifiers don't have 'year' attributes
+    sim.add_file("tests/GCBM_New_Demo_Run/classifiers/Classifier1.tiff")
+    # sim.set_classifier_attributes("classifier1.tiff",
+    #                               {"1": "TA", "2": "BP", "3": "BS", "4": "JP", "5": "WS", "6": "WB", "7": "BF", "8": "GA"})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/classifiers/Classifier2.tiff")
+    # sim.set_classifier_attributes("classifier1.tiff",
+    #                              {"1": "5", "2": "6", "3": "7", "4": "8"})
+
+    sim.add_file("tests/GCBM_New_Demo_Run/db/gcbm_input.db")
+    sim.add_file("tests/GCBM_New_Demo_Run/miscellaneous/initial_age.tiff")
+    sim.add_file("tests/GCBM_New_Demo_Run/miscellaneous/mean_annual_temperature.tiff")

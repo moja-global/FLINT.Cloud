@@ -1,7 +1,7 @@
 {
     "Providers": {
         "SQLite": {
-            "path": "../input_database/gcbm_input.db",
+            "path": "",
             "type": "SQLite"
         },
         "RasterTiled": {
