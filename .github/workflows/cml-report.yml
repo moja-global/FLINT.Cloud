@@ -97,8 +97,8 @@ jobs:
       
     - name: Run Simulation
       run: |
-        docker exec -i gcbm -w tests/config /opt/gcbm.moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
-        docker cp gcbm:/tests/output/logs/Moja_Debug.log local/rest_api_gcbm/tests
+        docker exec -i -w /app/tests/config gcbm /opt/gcbm/moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
+        docker cp gcbm:/app/tests/output/logs/Moja_Debug.log local/rest_api_gcbm/tests
     
     - name: Upload Logs as artifact
       uses: actions/upload-artifact@v3
