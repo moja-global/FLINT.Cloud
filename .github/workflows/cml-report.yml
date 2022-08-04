@@ -103,7 +103,6 @@ jobs:
     
     - name: Compile Results
       run: |
-        ls -l output
         docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///tests/output/simulation_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
         docker cp -L gcbm-api:/app/tests/output/compiled_simulation_output.db local/rest_api_gcbm/tests
 
