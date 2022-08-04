@@ -1,6 +1,13 @@
 FROM ghcr.io/moja-global/flint.gcbm:master
 # FROM ghcr.io/moja-global/rest_api_gcbm@sha256:4c23b9874109b274247c26e3a01f8bdeecf26cda1afc8b5941234530c47c0012
 
+WORKDIR /app
+
+RUN pip install --upgrade pip
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
 RUN apt-get update 
 RUN apt-get install -y python3-dev \
     && cd /usr/local/bin \
