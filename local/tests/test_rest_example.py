@@ -1,5 +1,8 @@
-import pytest
+﻿import pytest
 import requests
+import json
+import os
+from pathlib import Path
 
 
 class TestApiFlintExample:
@@ -36,3 +39,31 @@ class TestApiFlintExample:
             help_random_endpoint.json()["data"]["response"]
             == f"Unknown section '{random_arg}' in the --help-section option\n"
         )
+
+    def test_point(self, base_endpoint):
+        """This test is to test point endpoint with example data"""
+        point_endpoint = base_endpoint + "point"
+        directory_path = Path(os.getcwd())
+
+        config_path = "rest_api_flint.example/config/point_example.json"
+
+        with open(config_path) as data_file:
+            data = json.load(data_file)
+
+        config_string = json.dumps(data)
+        point_response = requests.post(point_endpoint, data=config_string)
+        assert point_response.status_code == 200
+
+    def test_rothc(self, base_endpoint):
+        """This test is to test rothc endpoint with example data"""
+        rothc_endpoint = base_endpoint + "rothc"
+        directory_path = Path(os.getcwd())
+
+        config_path = "rest_api_flint.example/config/point_rothc_example.json"
+
+        with open(config_path) as data_file:
+            data = json.load(data_file)
+
+        config_string = json.dumps(data)
+        rothc_response = requests.post(rothc_endpoint, data=config_string)
+        assert rothc_response.status_code == 200
