@@ -105,17 +105,17 @@ jobs:
         name: simulation-logs
         path: local/rest_api_gcbm/tests/Moja_Debug.log
         
-    - name: Setup CML
-      uses: iterative/setup-cml@v1
+    # - name: Setup CML
+    #   uses: iterative/setup-cml@v1
 
-    - name: Send the report
-      env:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        pip install matplotlib
-        pip install pandas
-        python local/rest_api_gcbm/cml_report/annual_summaries.py
-        echo "# GCBM Model" > report.md
-        echo "## Total Biomass Curve" >> report.md
-        cml-publish output/total_biomass_mt.png --md >> report.md
-        cml-send-comment report.md
+    # - name: Send the report
+    #   env:
+    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
+    #   run: |
+    #     pip install matplotlib
+    #     pip install pandas
+    #     python local/rest_api_gcbm/cml_report/annual_summaries.py
+    #     echo "# GCBM Model" > report.md
+    #     echo "## Total Biomass Curve" >> report.md
+    #     cml-publish output/total_biomass_mt.png --md >> report.md
+    #     cml-send-comment report.md
