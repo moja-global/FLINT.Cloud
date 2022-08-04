@@ -87,6 +87,7 @@ jobs:
 
     - name: Build container
       run: |
+        cd local/rest_api_gcbm
         docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
         docker run -d --name gcbm --rm -p 8080:8080 gcbm-api
     
