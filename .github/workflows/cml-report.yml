@@ -103,7 +103,7 @@ jobs:
     
     - name: Compile Results
       run: |
-        docker exec -i gcbm python GCBM.CompileResults/compileresults.py sqlite:///tests/output/simulation_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
+        docker exec -i gcbm python GCBM.CompileResults/compileresults.py sqlite:///tests/output/gcbm_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
         docker cp -L gcbm:/app/tests/output/compiled_simulation_output.db local/rest_api_gcbm/tests
 
     - name: Setup CML
