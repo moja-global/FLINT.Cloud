@@ -79,12 +79,7 @@ jobs:
     #     name: simulation-logs
     #     path: local/tests/*.txt
 
-    # - name: Compile Results
-    #   run: |
-    #     ls -l output
-    #     docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/simulation_output.db --output_db sqlite:///output/run4/compiled_simulation_output.db
-    #     docker cp -L gcbm-api:/app/output/run4/compiled_simulation_output.db output
-
+    
     - name: Build container
       run: |
         cd local/rest_api_gcbm
@@ -105,18 +100,24 @@ jobs:
       with:
         name: simulation-logs
         path: local/rest_api_gcbm/tests/Moja_Debug.log
-        
-    # - name: Setup CML
-    #   uses: iterative/setup-cml@v1
+    
+    - name: Compile Results
+      run: |
+        ls -l output
+        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///tests/output/simulation_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
+        docker cp -L gcbm-api:/app/tests/output/compiled_simulation_output.db local/rest_api_gcbm/tests
 
-    # - name: Send the report
-    #   env:
-    #     repo_token: ${{ secrets.GITHUB_TOKEN }}
-    #   run: |
-    #     pip install matplotlib
-    #     pip install pandas
-    #     python local/rest_api_gcbm/cml_report/annual_summaries.py
-    #     echo "# GCBM Model" > report.md
-    #     echo "## Total Biomass Curve" >> report.md
-    #     cml-publish output/total_biomass_mt.png --md >> report.md
-    #     cml-send-comment report.md
+    - name: Setup CML
+      uses: iterative/setup-cml@v1
+
+    - name: Send the report
+      env:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        pip install matplotlib
+        pip install pandas
+        python local/rest_api_gcbm/cml_report/annual_summaries.py
+        echo "# GCBM Model" > report.md
+        echo "## Total Biomass Curve" >> report.md
+        cml-publish output/total_biomass_mt.png --md >> report.md
+        cml-send-comment report.md

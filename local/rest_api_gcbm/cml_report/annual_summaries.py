@@ -1,7 +1,7 @@
 import sqlite3
 import pandas as pd
 
-conn = sqlite3.connect("output/compiled_simulation_output.db")
+conn = sqlite3.connect("local/rest_api_gcbm/tests/output/compiled_simulation_output.db")
 
 query = f"""
         SELECT years.year, COALESCE(SUM(i.pool_tc), 0) / 1e6 AS total_biomass_mt
@@ -16,4 +16,4 @@ query = f"""
 
 df = pd.read_sql_query(query, conn)
 ax = df.plot.line("year")  # x-axis
-ax.figure.savefig("output/total_biomass_mt.png", dpi=300)
+ax.figure.savefig("local/rest_api_gcbm/tests/output/total_biomass_mt.png", dpi=300)
