@@ -93,7 +93,7 @@ jobs:
     
     - name: Process Input
       run: |
-        docker exec -it gcbm python cml_report/process_input.py
+        docker exec -i gcbm python cml_report/process_input.py
       
     - name: Run Simulation
       run: |
