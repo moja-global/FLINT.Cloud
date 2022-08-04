@@ -19,71 +19,91 @@ jobs:
       with:
         python-version: '3.9'
     
-    - name: Build API
-      run: |
-        python local/rest_api_gcbm/cml_report/process_input.py
-        cd local/rest_api_gcbm
-        docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
-        docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
+    # - name: Build API
+    #   run: |
+    #     python local/rest_api_gcbm/cml_report/process_input.py
+    #     cd local/rest_api_gcbm
+    #     docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
+    #     docker run -d --name gcbm-api --rm -p 8080:8080 gcbm-api
 
-    - name: Get Public IP
-      id: ip
-      uses: haythem/public-ip@v1.2
+    # - name: Get Public IP
+    #   id: ip
+    #   uses: haythem/public-ip@v1.2
 
-    - name: Print public IP
-      run: |
-        echo ${{ steps.ip.outputs.ipv4 }}
+    # - name: Print public IP
+    #   run: |
+    #     echo ${{ steps.ip.outputs.ipv4 }}
     
-    - name: Check ports
-      run: |
-        sudo netstat -tunlp
+    # - name: Check ports
+    #   run: |
+    #     sudo netstat -tunlp
 
-    - name: Create New Sim
-      run: |
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
+    # - name: Create New Sim
+    #   run: |
+    #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/new
         
-    - name: Upload Files 
-      run: |
-        cd GCBM/GCBM_New_Demo_Run
-        curl -F disturbances='@disturbances/disturbances_2011_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2012_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2013_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2014_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2015_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2016_moja.tiff' \
-            -F disturbances='@disturbances/disturbances_2018_moja.tiff' \
-            -F classifiers='@classifiers/Classifier1_moja.tiff' \
-            -F classifiers='@classifiers/Classifier2_moja.tiff' \
-            -F db='@db/gcbm_input.db' \
-            -F miscellaneous='@miscellaneous/initial_age_moja.tiff' \
-            -F miscellaneous='@miscellaneous/mean_annual_temperature_moja.tiff' \
-            -F title="run4" \
-            http://localhost:8080/gcbm/upload
+    # - name: Upload Files 
+    #   run: |
+    #     cd GCBM/GCBM_New_Demo_Run
+    #     curl -F disturbances='@disturbances/disturbances_2011_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2012_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2013_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2014_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2015_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2016_moja.tiff' \
+    #         -F disturbances='@disturbances/disturbances_2018_moja.tiff' \
+    #         -F classifiers='@classifiers/Classifier1_moja.tiff' \
+    #         -F classifiers='@classifiers/Classifier2_moja.tiff' \
+    #         -F db='@db/gcbm_input.db' \
+    #         -F miscellaneous='@miscellaneous/initial_age_moja.tiff' \
+    #         -F miscellaneous='@miscellaneous/mean_annual_temperature_moja.tiff' \
+    #         -F title="run4" \
+    #         http://localhost:8080/gcbm/upload
 
+    # - name: Run Simulation
+    #   run: |
+    #     pip install requests
+    #     python local/rest_api_gcbm/cml_report/run_gcbm.py
+      
+    # - name: Retrive Logs and Download Results
+    #   run: |
+    #     cd local/tests
+    #     python simulation_status.py
+    #     cd ../..
+    #     curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o run4.zip
+    #     python local/rest_api_gcbm/cml_report/process_output.py
+
+    # - name: Upload Logs as artifact
+    #   uses: actions/upload-artifact@v3
+    #   with:
+    #     name: simulation-logs
+    #     path: local/tests/*.txt
+
+    # - name: Compile Results
+    #   run: |
+    #     ls -l output
+    #     docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/simulation_output.db --output_db sqlite:///output/run4/compiled_simulation_output.db
+    #     docker cp -L gcbm-api:/app/output/run4/compiled_simulation_output.db output
+
+    - name: Build container
+      run: |
+        docker build -f Dockerfile.cml --build-arg BUILD_TYPE=RELEASE --build-arg NUM_CPU=4 -t gcbm-api .
+        docker run -d --name gcbm --rm -p 8080:8080 gcbm-api
+    
+    - name: Process Input
+      run: |
+        docker exec -it gcbm python cml_report/process_input.py
+      
     - name: Run Simulation
       run: |
-        pip install requests
-        python local/rest_api_gcbm/cml_report/run_gcbm.py
-      
-    - name: Retrive Logs and Download Results
-      run: |
-        cd local/tests
-        python simulation_status.py
-        cd ../..
-        curl -d "title=run4" -X POST http://0.0.0.0:8080/gcbm/download -L -o run4.zip
-        python local/rest_api_gcbm/cml_report/process_output.py
-
+        docker exec -i gcbm -w tests/config /opt/gcbm.moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
+        docker cp gcbm:/tests/output/logs/Moja_Debug.log local/rest_api_gcbm/tests
+    
     - name: Upload Logs as artifact
       uses: actions/upload-artifact@v3
       with:
         name: simulation-logs
-        path: local/tests/*.txt
-
-    - name: Compile Results
-      run: |
-        ls -l output
-        docker exec -i gcbm-api python GCBM.CompileResults/compileresults.py sqlite:///output/run4/simulation_output.db --output_db sqlite:///output/run4/compiled_simulation_output.db
-        docker cp -L gcbm-api:/app/output/run4/compiled_simulation_output.db output
+        path: local/rest_api_gcbm/tests/Moja_Debug.log
         
     - name: Setup CML
       uses: iterative/setup-cml@v1
