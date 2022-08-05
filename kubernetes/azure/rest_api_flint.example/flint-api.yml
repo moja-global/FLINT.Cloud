@@ -4,7 +4,7 @@ metadata:
   name: flint-api
   namespace: default
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: flint-api
@@ -28,6 +28,8 @@ spec:
             limits:
               cpu: 256m
               memory: 200Mi
+      imagePullSecrets:
+      - name: secret
 ---
 apiVersion: v1
 kind: Service
