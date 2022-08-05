@@ -97,10 +97,7 @@ class GCBMList:
 
         with open(json_filepath, mode) as _file:
             if mode == "r+":
-                try:
-                    config = json.load(_file)
-                except:
-                    breakpoint()
+                config = json.load(_file)
             else:
                 config = dict()
 
