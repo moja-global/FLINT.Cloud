@@ -1,5 +1,6 @@
 from crypt import methods
 from threading import Thread
+from turtle import title
 
 from numpy import append
 from run_distributed import *
@@ -598,6 +599,26 @@ def config_table():
         }
     except Exception:
         return {"status": 0, "error": Exception}
+
+@app.route("/upload/db", method=["GET"])
+def send_table():
+    args = request.args
+    title = args.get("title")
+    input_dir = f"{os.getcwd()}/input/{title}"
+    response = dict()
+    conn = sqlite3.connect(f"{input_dir}/gcbm_input.db")
+    row_schema = []
+    col_schema = []
+    ins = "PRAGMA table_info(\'" + table_name + "\')"
+    print(ins)
+    for row in conn.execute(ins).fetchall():
+        schema.append(row[1])
+    
+    return {
+        "row": row_schema,
+        "col": col_schema,
+        "message": "Row and Column data of {title}.db file",
+    }, 200
 
 
 @app.route("/gcbm/dynamic", methods=["POST"])
