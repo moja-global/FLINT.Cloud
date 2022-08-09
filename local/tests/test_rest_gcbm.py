@@ -1,4 +1,6 @@
 from distutils.command.upload import upload
+from msilib.schema import tables
+import re
 from pkg_resources import yield_lines
 import pytest
 import requests
@@ -371,6 +373,12 @@ class TestApiFlintGCBM:
         upload_endpoint = gcbm_endpoint + "upload/db"
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
+
+    def test_gcbm_tables(self, gcbm_endpoint, yield_title):
+        """This test case would check the get table method"""
+        table_endpoint = gcbm_endpoint + f"upload/db/tables?title={yield_title}"
+        table_response = requests.get(table_endpoint)
+        assert table_response.status_code == 200
 
     @pytest.mark.skip(reason="Test fails on CI")
     def test_download(self, gcbm_endpoint, yield_title):

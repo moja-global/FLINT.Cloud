@@ -1,6 +1,5 @@
 from crypt import methods
 from threading import Thread
-from turtle import title
 
 from numpy import append
 from run_distributed import *
@@ -600,25 +599,24 @@ def config_table():
     except Exception:
         return {"status": 0, "error": Exception}
 
-@app.route("/upload/db", method=["GET"])
+@app.route("/upload/db/tables", methods=["GET"])
 def send_table():
-    args = request.args
-    title = args.get("title")
-    input_dir = f"{os.getcwd()}/input/{title}"
-    response = dict()
-    conn = sqlite3.connect(f"{input_dir}/gcbm_input.db")
-    row_schema = []
-    col_schema = []
-    ins = "PRAGMA table_info(\'" + table_name + "\')"
-    print(ins)
-    for row in conn.execute(ins).fetchall():
-        schema.append(row[1])
-    
-    return {
-        "row": row_schema,
-        "col": col_schema,
-        "message": "Row and Column data of {title}.db file",
-    }, 200
+    title = request.args.get("title")
+    input_dir = f"{os.getcwd()}/db/{title}"
+    print(input_dir)
+    conn = sqlite3.connect(f"{input_dir}.db")
+    sql_query = """SELECT name FROM sqlite_master 
+    WHERE type='table';"""
+
+    tables = conn.execute(sql_query).fetchall()
+    resp = dict()
+    for table_name in tables:
+        schema = []
+        ins = "PRAGMA table_info(\'" + table_name[0] + "\')"
+        for row in conn.execute(ins).fetchall():
+            schema.append(row[1])
+        resp[table_name[0]] = schema
+    return resp, 200
 
 
 @app.route("/gcbm/dynamic", methods=["POST"])
