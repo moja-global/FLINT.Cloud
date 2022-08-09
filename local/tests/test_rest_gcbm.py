@@ -375,7 +375,10 @@ class TestApiFlintGCBM:
         assert upload_response.status_code == 200
 
     def test_gcbm_tables(self, gcbm_endpoint, yield_title):
-        """This test case would check the get table method"""
+        """This test case would check the get table method. \
+           A title name would be sent in the URL params to locate \
+           the database file. 
+        """
         table_endpoint = gcbm_endpoint + f"upload/db/tables?title={yield_title}"
         table_response = requests.get(table_endpoint)
         assert table_response.status_code == 200

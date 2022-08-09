@@ -601,6 +601,20 @@ def config_table():
 
 @app.route("/upload/db/tables", methods=["GET"])
 def send_table():
+    """
+    Get GCBM table names from database file
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+            name: title
+                    type: string
+            description: GCBM table output 
+    """
+    # Default title = simulation
     title = request.args.get("title")
     input_dir = f"{os.getcwd()}/db/{title}"
     print(input_dir)
@@ -610,9 +624,11 @@ def send_table():
 
     tables = conn.execute(sql_query).fetchall()
     resp = dict()
+    # iterate over all the table name 
     for table_name in tables:
         schema = []
         ins = "PRAGMA table_info(\'" + table_name[0] + "\')"
+        # key as the table name and values as the column names
         for row in conn.execute(ins).fetchall():
             schema.append(row[1])
         resp[table_name[0]] = schema
