@@ -1,6 +1,4 @@
 from distutils.command.upload import upload
-from msilib.schema import tables
-import re
 from pkg_resources import yield_lines
 import pytest
 import requests
