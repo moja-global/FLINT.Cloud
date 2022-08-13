@@ -225,10 +225,6 @@ def gcbm_upload():
     else:
         return {"error": "Missing configuration file"}, 400
 
-    get_config_templates(input_dir)
-    get_modules_cbm_config(input_dir)
-    get_provider_config(input_dir)
-
     return {
         "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
     }
@@ -574,7 +570,6 @@ def get_provider_config(input_dir):
 
             # copy files to input directory
             for i in paths:
-                print(i)
                 shutil.copy2(i, (f"{input_dir}"))
 
         # delete folders from input directory
@@ -624,8 +619,9 @@ def gcbm_dynamic():
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{os.getcwd()}/input/{title}"
 
-    gcbm_config_path = "gcbm_config.cfg"
-    provider_config_path = "provider_config.json"
+    get_config_templates(input_dir)
+    get_modules_cbm_config(input_dir)
+    get_provider_config(input_dir)
 
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")
