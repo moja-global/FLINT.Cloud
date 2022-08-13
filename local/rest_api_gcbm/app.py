@@ -322,7 +322,7 @@ def get_provider_config(input_dir):
             t = img.transform
             x = t[0]
             y = -t[4]
-            n = float(img.nodata)
+            n = img.nodata
             cellLatSize.append(x)
             cellLonSize.append(y)
             nodata.append(n)
@@ -354,7 +354,7 @@ def get_provider_config(input_dir):
         dictionary = {
             "layer_type": "GridLayer",
             "layer_data": "Byte",
-            "nodata": float(nd),
+            "nodata": nd,
             "tileLatSize": tileLat,
             "tileLonSize": tileLon,
             "blockLatSize": blockLat,
@@ -375,7 +375,7 @@ def get_provider_config(input_dir):
 
                 for i in Rastersm:
                     img = rst.open(i)
-                    d = float(img.nodata)
+                    d = img.nodata
                     nodatam.append(d)
 
             with open(
@@ -383,15 +383,15 @@ def get_provider_config(input_dir):
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
                 dictionary["layer_data"] = "Int16"
-                dictionary["nodata"] = float(nodatam[1])
+                dictionary["nodata"] = 32767.0
                 json.dump(dictionary, json_file, indent=4)
 
             with open(
                 f"{input_dir}/mean_annual_temperature_moja.json", "w", encoding="utf8"
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
-                dictionary["layer_data"] = "Float32"
-                dictionary["nodata"] = float(nodatam[0])
+                dictionary["layer_data"] = "Int16"
+                dictionary["nodata"] = 32767.0
                 json.dump(dictionary, json_file, indent=4)
 
             with open(
@@ -399,7 +399,7 @@ def get_provider_config(input_dir):
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
                 dictionary["layer_data"] = "Byte"
-                dictionary["nodata"] = float(nd)
+                dictionary["nodata"] = nd
                 dictionary["attributes"] = {
                     "1": "TA",
                     "2": "BP",
@@ -417,7 +417,7 @@ def get_provider_config(input_dir):
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
                 dictionary["layer_data"] = "Byte"
-                dictionary["nodata"] = float(nd)
+                dictionary["nodata"] = nd
                 dictionary["attributes"] = {"1": "5", "2": "6", "3": "7", "4": "8"}
                 json.dump(dictionary, json_file, indent=4)
 
@@ -425,7 +425,7 @@ def get_provider_config(input_dir):
                 f"{input_dir}/disturbances_2011_moja.json", "w", encoding="utf8"
             ) as json_file:
                 dictionary["layer_data"] = "Byte"
-                dictionary["nodata"] = float(nd)
+                dictionary["nodata"] = nd
                 dictionary["attributes"] = {
                     "1": {"year": 2011, "disturbance_type": "Wildfire", "transition": 1}
                 }
@@ -661,11 +661,11 @@ def launch_run(title, input_dir):
     logging.debug("Output exists")
 
     # cut and paste output folder to app/output/simulation_name
-    # shutil.copytree(f"{input_dir}/output", (f"{os.getcwd()}/output/{title}"))
-    # shutil.make_archive(
-    #     f"{os.getcwd()}/output/{title}", "zip", f"{os.getcwd()}/output/{title}"
-    # )
-    # shutil.rmtree((f"{input_dir}/output"))
+    shutil.copytree(f"{input_dir}/output", (f"{os.getcwd()}/output/{title}"))
+    shutil.make_archive(
+        f"{os.getcwd()}/output/{title}", "zip", f"{os.getcwd()}/output/{title}"
+    )
+    shutil.rmtree((f"{input_dir}/output"))
     logging.debug("Made archive")
     e = time.time()
 
