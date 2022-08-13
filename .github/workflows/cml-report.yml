@@ -1,12 +1,13 @@
 name: Generate CML Report
 on:
   pull_request:
-    # types: [ labeled ]
+    types: [ labeled ]
     branches:
       - master
 
 jobs:
   generate_cml_report:
+    if:  ${{ github.event.label.name == ['run-simulation'] }}
     runs-on: ubuntu-latest
     defaults:
       run:

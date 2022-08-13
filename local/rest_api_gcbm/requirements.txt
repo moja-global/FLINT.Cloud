@@ -10,6 +10,6 @@ flask-cors==3.0.10
 simplejson==3.17.6
 sqlalchemy==1.4.32
 psutil==5.9.0
-pandas==1.4.2
-matplotlib==3.5.2
+pandas
+matplotlib
 rasterio
