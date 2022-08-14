@@ -7,7 +7,7 @@ on:
 
 jobs:
   generate_cml_report:
-    if:  ${{ github.event.label.name == ['run-simulation'] }}
+    if:  github.event.label.name == 'run-simulation'
     runs-on: ubuntu-latest
     defaults:
       run:
