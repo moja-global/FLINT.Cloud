@@ -599,6 +599,7 @@ def config_table():
     except Exception:
         return {"status": 0, "error": Exception}
 
+
 @app.route("/upload/db/tables", methods=["POST"])
 def send_table():
     """
@@ -612,7 +613,7 @@ def send_table():
             - in: Params
             name: title
                     type: string
-            description: GCBM table output 
+            description: GCBM table output
     """
     # Default title = simulation
     title = request.form.get("title") or "simulation"
@@ -623,10 +624,10 @@ def send_table():
 
     tables = conn.execute(sql_query).fetchall()
     resp = dict()
-    # iterate over all the table name 
+    # iterate over all the table name
     for table_name in tables:
         schema = []
-        ins = "PRAGMA table_info(\'" + table_name[0] + "\')"
+        ins = "PRAGMA table_info('" + table_name[0] + "')"
         # key as the table name and values as the column names
         for row in conn.execute(ins).fetchall():
             schema.append(row[1])
