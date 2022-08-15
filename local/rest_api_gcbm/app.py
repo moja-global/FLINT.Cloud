@@ -616,9 +616,9 @@ def send_table():
     """
     # Default title = simulation
     title = request.args.get("title")
-    input_dir = f"{os.getcwd()}/db/{title}"
+    input_dir = f"{os.getcwd()}/input/{title}"
     print(input_dir)
-    conn = sqlite3.connect(f"{input_dir}.db")
+    conn = sqlite3.connect(f"{input_dir}/gcbm_input.db")
     sql_query = """SELECT name FROM sqlite_master 
     WHERE type='table';"""
 
