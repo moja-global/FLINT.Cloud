@@ -595,6 +595,41 @@ def config_table():
         return {"status": 0, "error": Exception}
 
 
+@app.route("/upload/db/tables", methods=["POST"])
+def send_table():
+    """
+    Get GCBM table names from database file
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+            name: title
+                    type: string
+            description: GCBM table output
+    """
+    # Default title = simulation
+    title = request.form.get("title") or "simulation"
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    conn = sqlite3.connect(input_dir + "gcbm_input.db")
+    sql_query = """SELECT name FROM sqlite_master 
+    WHERE type='table';"""
+
+    tables = conn.execute(sql_query).fetchall()
+    resp = dict()
+    # iterate over all the table name
+    for table_name in tables:
+        schema = []
+        ins = "PRAGMA table_info('" + table_name[0] + "')"
+        # key as the table name and values as the column names
+        for row in conn.execute(ins).fetchall():
+            schema.append(row[1])
+        resp[table_name[0]] = schema
+    return resp, 200
+
+
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
     """
