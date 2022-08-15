@@ -599,7 +599,7 @@ def config_table():
     except Exception:
         return {"status": 0, "error": Exception}
 
-@app.route("/upload/db/tables", methods=["GET"])
+@app.route("/upload/db/tables", methods=["POST"])
 def send_table():
     """
     Get GCBM table names from database file
@@ -615,10 +615,9 @@ def send_table():
             description: GCBM table output 
     """
     # Default title = simulation
-    title = request.args.get("title")
-    input_dir = f"{os.getcwd()}/input/{title}"
-    print(input_dir)
-    conn = sqlite3.connect(f"{input_dir}/gcbm_input.db")
+    title = request.form.get("title") or "simulation"
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    conn = sqlite3.connect(input_dir + "gcbm_input.db")
     sql_query = """SELECT name FROM sqlite_master 
     WHERE type='table';"""
 
