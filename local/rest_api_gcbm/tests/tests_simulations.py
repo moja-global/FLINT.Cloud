@@ -1,6 +1,6 @@
 # This file tests the following GCBM simulations:
-# 1. GCBM Belize with disturbances
-# 2. GCBM Belize without disturbances
+# 1. GCBM Belize with disturbance
+# 2. GCBM Belize without disturbance
 # 3. GCBM New Demo Run
 
 import sys
@@ -12,25 +12,25 @@ from gcbm import GCBMSimulation
 
 
 belize_dict = {
-    "classifiers": ["tiff/belize/LifeZone_moja.tiff"],
-    "miscellaneous": ["tiff/belize/mean_annual_temperature_moja.tiff"],
+    "classifier": ["test_data/belize/LifeZone.tiff"],
+    "miscellaneous": ["test_data/belize/mean_annual_temperature.tiff"],
 }
 
 new_demo_run_dict = {
-    "disturbances": ["tiff/new_demo_run/disturbances_2011_moja.tiff", "tiff/new_demo_run/disturbances_2012_moja.tiff"],
-    "classifiers": ["tiff/new_demo_run/Classifier1_moja.tiff"],
-    "miscellaneous": ["tiff/new_demo_run/mean_annual_temperature_moja.tiff"],
+    "disturbance": ["test_data/new_demo_run/disturbances_2011.tiff", "test_data/new_demo_run/disturbances_2012.tiff"],
+    "classifier": ["test_data/new_demo_run/Classifier1.tiff"],
+    "miscellaneous": ["test_data/new_demo_run/mean_annual_temperature.tiff"],
 }
 
 def filter_input_dict(input_dict, if_disturbance):
     filtered_dict = input_dict
     if not if_disturbance:
         # Ignore disturbances from the dictionary
-        filtered_dict = {k: v for k, v in input_dict.items() if k != "disturbances"}
+        filtered_dict = {k: v for k, v in input_dict.items() if k != "disturbance"}
     
     # Do sanity check on input dict
     def _sanity_check(dict):
-        assert "classifiers" in list(dict.keys()) and "miscellaneous" in list(dict.keys()), f"classifiers and miscellaneous keys expected in the dict but got {dict.keys()} for simulation {simulation_name}"
+        assert "classifier" in list(dict.keys()) and "miscellaneous" in list(dict.keys()), f"classifier and miscellaneous keys expected in the dict but got {dict.keys()} for simulation {simulation_name}"
 
     _sanity_check(filtered_dict)
     return filtered_dict
@@ -70,7 +70,7 @@ def test_simulation_add(simulation_name, input_dict, if_disturbance):
 def test_simulation_set_attr(simulation_name, input_dict, if_disturbance):
     # Do sanity check on input dict
     def sanity_check(dict):
-        assert "classifiers" in list(dict.keys()) and "miscellaneous" in list(dict.keys()), f"classifiers and miscellaneous keys expected in the dict but got {dict.keys()} for simulation {simulation_name}"
+        assert "classifier" in list(dict.keys()) and "miscellaneous" in list(dict.keys()), f"classifier and miscellaneous keys expected in the dict but got {dict.keys()} for simulation {simulation_name}"
 
     # Assert if the json contains the expected data (payload)
     def check_data_in_json(json_path, expected_data):
@@ -84,7 +84,7 @@ def test_simulation_set_attr(simulation_name, input_dict, if_disturbance):
     filtered_dict = input_dict
     if not if_disturbance:
         # Ignore disturbances from the dictionary
-        filtered_dict = {k: v for k, v in input_dict.items() if k != "disturbances"}
+        filtered_dict = {k: v for k, v in input_dict.items() if k != "disturbance"}
 
     sanity_check(filtered_dict)
 
