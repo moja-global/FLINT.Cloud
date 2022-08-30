@@ -49,7 +49,7 @@ jobs:
           python3 GCBM.CompileResults/compileresults.py sqlite:///tests/output/gcbm_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
           
       - name: Install dependencies
-        run: pip3 install pandas matplotlib jupytext
+        run: pip3 install pandas matplotlib jupytext nbconvert
         
       - name: Setup CML
         uses: iterative/setup-cml@v1
