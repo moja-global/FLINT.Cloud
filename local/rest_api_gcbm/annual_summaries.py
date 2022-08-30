@@ -1,6 +1,14 @@
+# %% [markdown]
+# # Dependencies
+
+# %%
 import sqlite3
 import pandas as pd
 
+# %% [markdown]
+# # Connect to Database and Define SQL Query
+
+# %%
 conn = sqlite3.connect("tests/output/compiled_simulation_output.db")
 
 query = f"""
@@ -14,6 +22,10 @@ query = f"""
         ORDER BY years.year
         """
 
+# %% [markdown]
+# Run Query and Generate plot
+
+# %%
 df = pd.read_sql_query(query, conn)
 ax = df.plot.line("year")
 ax.figure.savefig("tests/output/total_biomass_mt.png", dpi=300)
