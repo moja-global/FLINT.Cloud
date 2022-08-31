@@ -59,12 +59,12 @@ jobs:
          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd local/rest_api_gcbm
-          jupytext --to ipynb  annual_summaries.py
-          jupyter nbconvert --to ipynb --inplace --execute --ExecutePreprocessor.kernel_name='python3' --allow-errors annual_summaries.ipynb
-          # this commands convert a python:percent script into a notebook(including md cells) and executes each cell
+          python3 annual_summaries.py
+          jupytext --to md  annual_summaries.py
+          # this commands convert a python:percent script into md format
           echo "# GCBM Model" > report.md
           echo "Plot Generation Code" >> report.md
-          jupytext --to md --output - annual_summaries.ipynb >> report.md  
+          cat annual_summaries.md >> report.md
           # this command takes each cell of the notebook and adds it to report.md as markdown
           echo "## Total Biomass Curve" >> report.md
           cml-publish tests/output/total_biomass_mt.png --md >> report.md
