@@ -60,12 +60,10 @@ jobs:
         run: |
           cd local/rest_api_gcbm
           python3 annual_summaries.py
-          # this commands convert a python:percent script into md format
           echo "# GCBM Model" > report.md
-          echo "Plot Generation Code" >> report.md
+          echo "## Code" >> report.md
           jupytext --to md --output - annual_summaries.py >> report.md
           # this command takes each cell of the notebook and adds it to report.md as markdown
           echo "## Total Biomass Curve" >> report.md
-          cml-publish tests/output/total_biomass_mt.png --md >> report.md
-          cml-send-comment --pr report.md
-
+          cml publish tests/output/total_biomass_mt.png --md >> report.md
+          cml send-comment --pr report.md
