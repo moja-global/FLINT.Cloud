@@ -60,7 +60,7 @@ jobs:
         run: |
           cd local/rest_api_gcbm
           jupytext --to notebook  annual_summaries.py
-          jupyter nbconvert --to ipynb --inplace --execute --ExecutePreprocessor.kernel_name=python3 --allow-errors annual_summaries.ipynb
+          jupyter nbconvert --to ipynb --inplace --execute --ExecutePreprocessor.kernel_name='python3' --allow-errors annual_summaries.ipynb
           # this commands convert a python:percent script into a notebook(including md cells) and executes each cell
           echo "# GCBM Model" > report.md
           echo "Plot Generation Code" >> report.md
