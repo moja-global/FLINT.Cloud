@@ -630,6 +630,58 @@ def send_table():
     return resp, 200
 
 
+def rename(connection, table_name, old_new_names):
+    for old_name, new_name in old_new_names.items():
+            try:
+                rename = (
+                    "ALTER TABLE "
+                    + table_name
+                    + " RENAME COLUMN "
+                    + old_name
+                    + " TO "
+                    + new_name
+                )
+                connection.execute(rename)                
+            except Exception as exception:
+                return {"status" : 0, "message" : str(exception)}
+    return {"status" : 1, "message" : "success"}
+
+@app.route("/gcbm/attribute/rename", methods=['POST'])
+def rename_attributes():
+    """
+    Rename an attribute in a table
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+                values : JSON
+                    JSON format:
+                        title : name-of-simulation
+                        tables : JSON 
+                            table_1 : JSON
+                                old_name_1 : new_name_1
+                                old_name_2 : new_name_2
+            description: If all the requests are successful, return status 1, else return status as 0 and the error
+    """
+    payload = request.get_json()
+    title = payload["title"]
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    connection = sqlite3.connect(f"{input_dir}/gcbm_input.db")
+    
+    # For each table_name in the payload, rename the attributes
+    for table_name in payload['tables']:
+        old_new_names = payload['tables'][table_name]
+        response = rename(connection, table_name, old_new_names)
+
+        # Report an error immediately if any of the requests fail
+        if response['status'] == 0:
+            return {'status' : 0, 'message' : "Error in table " + table_name + " " + response['message']}
+    return {"status" : 1, "message" : "success"}
+
+
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
     """
