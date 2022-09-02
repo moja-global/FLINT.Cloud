@@ -66,4 +66,4 @@ jobs:
           # this command takes each cell of the notebook and adds it to report.md as markdown
           echo "## Total Biomass Curve" >> report.md
           cml publish tests/output/total_biomass_mt.png --md >> report.md
-          GITHUB_SHA=$(git rev-parse HEAD) cml send-comment --pr --update
+          GITHUB_SHA=$(git rev-parse HEAD) cml send-comment --pr --update report.md
