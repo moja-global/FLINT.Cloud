@@ -629,6 +629,36 @@ def send_table():
         resp[table_name[0]] = schema
     return resp, 200
 
+@app.route("/gcbm/table/rename", methods=['POST'])
+def rename_table():
+    """
+    Rename a table
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+            name: title
+                    type: string
+            name: previous
+                    type: string
+            nsme: new
+                    type: string
+            description: Status indicating success/failure in performing the rename
+    """
+    title = request.form.get("title") or "simulation"
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    try:
+        connection = sqlite3.connect(input_dir + "gcbm_input.db")
+        cursor = connection.cursor()
+        previous_name = request.form.get('previous')
+        new_name = request.form.get('new')    
+        cursor.execute(f"ALTER TABLE {previous_name} rename to {new_name}")
+        return {"status": 1}
+    except Exception as exception:
+        return {"status": 0, "error": str(exception)}
 
 @app.route("/gcbm/dynamic", methods=["POST"])
 def gcbm_dynamic():
