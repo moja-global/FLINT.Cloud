@@ -225,10 +225,6 @@ def gcbm_upload():
     else:
         return {"error": "Missing configuration file"}, 400
 
-    get_config_templates(input_dir)
-    get_modules_cbm_config(input_dir)
-    get_provider_config(input_dir)
-
     return {
         "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
     }
@@ -574,7 +570,6 @@ def get_provider_config(input_dir):
 
             # copy files to input directory
             for i in paths:
-                print(i)
                 shutil.copy2(i, (f"{input_dir}"))
 
         # delete folders from input directory
@@ -598,6 +593,73 @@ def config_table():
         }
     except Exception:
         return {"status": 0, "error": Exception}
+
+
+@app.route("/upload/db/tables", methods=["POST"])
+def send_table():
+    """
+    Get GCBM table names from database file
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+            name: title
+                    type: string
+            description: GCBM table output
+    """
+    # Default title = simulation
+    title = request.form.get("title") or "simulation"
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    conn = sqlite3.connect(input_dir + "gcbm_input.db")
+    sql_query = """SELECT name FROM sqlite_master 
+    WHERE type='table';"""
+
+    tables = conn.execute(sql_query).fetchall()
+    resp = dict()
+    # iterate over all the table name
+    for table_name in tables:
+        schema = []
+        ins = "PRAGMA table_info('" + table_name[0] + "')"
+        # key as the table name and values as the column names
+        for row in conn.execute(ins).fetchall():
+            schema.append(row[1])
+        resp[table_name[0]] = schema
+    return resp, 200
+
+
+@app.route("/gcbm/table/rename", methods=["POST"])
+def rename_table():
+    """
+    Rename a table
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: Params
+            name: title
+                    type: string
+            name: previous
+                    type: string
+            nsme: new
+                    type: string
+            description: Status indicating success/failure in performing the rename
+    """
+    title = request.form.get("title") or "simulation"
+    input_dir = f"{os.getcwd()}/input/{title}/db/"
+    try:
+        connection = sqlite3.connect(input_dir + "gcbm_input.db")
+        cursor = connection.cursor()
+        previous_name = request.form.get("previous")
+        new_name = request.form.get("new")
+        cursor.execute(f"ALTER TABLE {previous_name} rename to {new_name}")
+        return {"status": 1}
+    except Exception as exception:
+        return {"status": 0, "error": str(exception)}
 
 
 @app.route("/gcbm/dynamic", methods=["POST"])
@@ -624,8 +686,9 @@ def gcbm_dynamic():
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{os.getcwd()}/input/{title}"
 
-    gcbm_config_path = "gcbm_config.cfg"
-    provider_config_path = "provider_config.json"
+    get_config_templates(input_dir)
+    get_modules_cbm_config(input_dir)
+    get_provider_config(input_dir)
 
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")

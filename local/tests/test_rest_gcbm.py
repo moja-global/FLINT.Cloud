@@ -378,6 +378,18 @@ class TestApiFlintGCBM:
         get_status = requests.get(get_status_endpoint);
         assert get_status.status_code == 200
 
+    def test_gcbm_tables(self, base_endpoint, yield_title):
+        """This test case would check the get table method. \
+           A title name would be sent in the URL params to locate \
+           the database file.
+        """
+        data = {
+            "title": yield_title,
+        }
+        table_endpoint = base_endpoint + f"upload/db/tables"
+        upload_response = requests.post(table_endpoint, data=data)
+        assert upload_response.status_code == 200
+
     @pytest.mark.skip(reason="Test fails on CI")
     def test_download(self, gcbm_endpoint, yield_title):
         """ This test would check the download endpoint. \
