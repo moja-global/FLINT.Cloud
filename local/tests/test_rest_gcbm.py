@@ -1,4 +1,5 @@
 from distutils.command.upload import upload
+import re
 from pkg_resources import yield_lines
 import pytest
 import requests
@@ -371,6 +372,11 @@ class TestApiFlintGCBM:
         upload_endpoint = gcbm_endpoint + "upload/db"
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
+    
+    def test_gcbm_status(self, gcbm_endpoint):
+        get_status_endpoint = gcbm_endpoint + "status"
+        get_status = requests.get(get_status_endpoint);
+        assert get_status.status_code == 200
 
     @pytest.mark.skip(reason="Test fails on CI")
     def test_download(self, gcbm_endpoint, yield_title):
