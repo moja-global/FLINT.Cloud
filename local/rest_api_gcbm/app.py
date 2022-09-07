@@ -726,7 +726,7 @@ def gcbm_list_simulations():
     }, 200
 
 
-@app.route("/gcbm/status", methods=["POST"])
+@app.route("/gcbm/report", methods=["POST"])
 def status():
     """
     Get status of a simulation
@@ -964,6 +964,41 @@ def gcbm_db():
         return {"error": "Missing db file"}, 400
 
     return {"data": "db file uploaded succesfully. Proceed to the next step."}
+
+
+def get_container_id():
+    """
+    Return the docker container id corresponding to the image gcbm-api running on Docker
+    """
+    container_id = ""
+    os.system("docker ps >> simulation.txt")
+    with open("simulation.txt") as log_file:
+        logs = log_file.readlines()
+        for line in logs:
+            if "gcbm-api" in line:
+                container_id = line.split()[0]
+    os.system("rm simulation.txt")
+    return container_id
+
+
+@app.route("/gcbm/status", methods=["GET"])
+def get_simulation_status():
+    """
+    If the container gcbm-api is running, the associated logs are returned to the end user.
+    """
+    container_id = get_container_id()
+    logs_file_name = container_id + ".txt"
+    if container_id != "":
+        logs_cmd = "docker logs " + container_id + " > " + logs_file_name + " 2>&1"
+        os.system(logs_cmd)
+        logs = []
+        with open(logs_file_name) as file_handle:
+            logs = file_handle.readlines()
+        # os.system('rm ' + logs_file_name)
+        return {"container_running": True, "logs": logs}, 200
+    else:
+        logs = ["Error No Running Container"]
+        return {"container_running": False, "logs": logs}, 400
 
 
 if __name__ == "__main__":
