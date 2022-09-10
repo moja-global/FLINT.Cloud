@@ -3,11 +3,13 @@ import shutil
 import json
 import rasterio as rst
 
+
 def get_config_templates(input_dir):
     if not os.path.exists(f"{input_dir}/templates"):
         shutil.copytree(
             f"{os.getcwd()}/templates", f"{input_dir}/templates", dirs_exist_ok=False
         )
+
 
 # TODO: there needs to be a link between the files configured here append
 # the ["vars"] attribute of modules_cbm.json -> CBMDisturbanceListener

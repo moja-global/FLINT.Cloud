@@ -21,7 +21,7 @@ import rasterio as rst
 from flask import jsonify
 from config_table import rename_columns
 import sqlite3
-from preprocess import get_config_templates,get_modules_cbm_config,get_provider_config
+from preprocess import get_config_templates, get_modules_cbm_config, get_provider_config
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
 from flask_restful import Resource, Api, reqparse
@@ -229,6 +229,7 @@ def gcbm_upload():
     return {
         "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
     }
+
 
 @app.route("/config", methods=["POST"])
 def config_table():
