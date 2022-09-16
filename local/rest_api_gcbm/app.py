@@ -323,7 +323,7 @@ def gcbm_dynamic():
     responses:
             200:
     parameters:
-            - in: body
+                - in: body
             name: title
             required: true
             schema:
@@ -348,6 +348,43 @@ def gcbm_dynamic():
     thread.start()
     # subscriber_path = create_topic_and_sub(title)
     return {"status": "Run started"}, 200
+
+
+@app.route("/gcbm/getConfig", methods=["POST"])
+def getConfig():
+    """
+    Return .json for the input .tiff files
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: body
+            name: title
+            required: true
+            schema:
+                    type: string
+            description: Name of the Simulation
+            name: file_name
+            required: true
+            schema:
+                    type: string
+            description: Name of the File
+    """
+    # Default title = Simulation
+    title = request.form.get("title") or "simulation"
+    file_name = request.form.get("file_name")
+    input_dir = f"{os.getcwd()}/input/{title}/{file_name}.json"
+
+    # Check if simulation exists or not
+    if not os.path.exists(f"{input_dir}"):
+        return {"error": "Simulation does'nt exist"}, 400
+
+    # Return the json for the corresponding file name
+    file_obj = open(f"{input_dir}")
+    obj = json.load(file_obj)
+    return {"data": obj}, 200
 
 
 def launch_run(title, input_dir):
