@@ -3,3 +3,5 @@ sphinx-tabs
 recommonmark
 sphinx_rtd_theme
 sphinx-autoapi
+furo
+
