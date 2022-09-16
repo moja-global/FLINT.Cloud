@@ -18,7 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = "FLINT.Cloud Technical Guide"
-copyright = "2022, Sneha Mishra, Arnav Tiwari"
+
+copyright = "2022, Moja Global"
 author = u"Sneha Mishra, Arnav Tiwari & contributors"
 
 
@@ -56,3 +57,15 @@ html_theme = "furo"
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
+
+# Auto API options
+autoapi_type = "python"
+autoapi_dirs = ["../local/rest_api_gcbm", "../local/tests"]
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+    "imported-members",
+]
