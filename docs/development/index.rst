@@ -19,3 +19,4 @@ Contents:
   :maxdepth: 1
 
   git_and_github_guide
+  gcbm_guide
