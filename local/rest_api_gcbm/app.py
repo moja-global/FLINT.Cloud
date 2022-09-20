@@ -373,19 +373,31 @@ def getConfig():
             description: Name of the File
     """
     # Default title = Simulation
-    title = request.form.get("title") or "simulation"
-    file_name = request.form.get("file_name")
-    input_dir = f"{os.getcwd()}/input/{title}/{file_name}.json"
+    title = request.form.get("title").strip()
+    file_name = request.form.get("file_name").strip()
+    input_dir = f"{os.getcwd()}/input/{title}"
+
+    # check if title is empty    
+    if(title == ""):
+        return {"error": "No Simulation name specified"}, 400
+    
+    #check if file_name is empty
+    if(file_name == ""):
+        return {"error": "No file name specified"}, 400
 
     # Check if simulation exists or not
     if not os.path.exists(f"{input_dir}"):
-        return {"error": "Simulation does'nt exist"}, 400
+        return {"error": "Simulation with the name "+title+" does'nt exists"}, 400
+
+    input_dir_file = f"{input_dir}/{file_name}.json"
+    # Check if file exists or not
+    if not os.path.exists(f"{input_dir_file}"):
+        return {"error": "File with name "+file_name+" does'nt exists"}, 400
 
     # Return the json for the corresponding file name
-    file_obj = open(f"{input_dir}")
+    file_obj = open(f"{input_dir_file}")
     obj = json.load(file_obj)
     return {"data": obj}, 200
-
 
 def launch_run(title, input_dir):
     s = time.time()
