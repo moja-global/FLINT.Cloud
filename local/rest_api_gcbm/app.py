@@ -387,12 +387,12 @@ def getConfig():
 
     # Check if simulation exists or not
     if not os.path.exists(f"{input_dir}"):
-        return {"error": "Simulation with the name " + title + " does'nt exists"}, 400
+        return {"error": "Simulation with the name " + title + " doesn't exists"}, 400
 
     input_dir_file = f"{input_dir}/{file_name}.json"
     # Check if file exists or not
     if not os.path.exists(f"{input_dir_file}"):
-        return {"error": "File with name " + file_name + " does'nt exists"}, 400
+        return {"error": "File with name " + file_name + " doesn't exists"}, 400
 
     # Return the json for the corresponding file name
     file_obj = open(f"{input_dir_file}")
