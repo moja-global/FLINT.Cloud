@@ -372,11 +372,6 @@ class TestApiFlintGCBM:
         upload_endpoint = gcbm_endpoint + "upload/db"
         upload_response = requests.post(upload_endpoint, files=upload_files, data=data)
         assert upload_response.status_code == 200
-    
-    def test_gcbm_status(self, gcbm_endpoint):
-        get_status_endpoint = gcbm_endpoint + "status"
-        get_status = requests.get(get_status_endpoint);
-        assert get_status.status_code == 200
 
     def test_gcbm_tables(self, base_endpoint, yield_title):
         """This test case would check the get table method. \
