@@ -60,6 +60,98 @@ Expected response (Success):
 }
 ```
 
+You can upload all the simulation files at once or upload them separately. To upload files separately follow the commands below. 
+
+### Upload Disturbances file
+Upload Disturbances file to run the simulation.
+| **Method** | **Endpoint** | **Response codes** | 
+|---  | ---| --- |
+| POST| `/gcbm/upload/disturbances` | 200 OK (Success), 400 (Error) |
+Example:
+
+Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
+
+```
+cd path-to-unzipped-file
+```
+
+Upload all the files present in the disturbances folder. 
+```
+curl -F disturbances='@disturbances/disturbances_2011_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2012_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2013_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2014_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2015_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2016_moja.tiff' \
+		-F disturbances='@disturbances/disturbances_2018_moja.tiff' \
+		-F title="run4" \
+		http://localhost:8080/gcbm/upload/disturbances
+```
+
+Expected response (Success):
+```json
+{
+  "data": "Disturbances file uploaded succesfully. Proceed to the next step."
+}
+```
+
+### Upload Classifiers file
+Upload Classifiers file to run the simulation.
+| **Method** | **Endpoint** | **Response codes** | 
+|---  | ---| --- |
+| POST| `/gcbm/upload/classifiers` | 200 OK (Success), 400 (Error) |
+Example:
+
+Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
+
+```
+cd path-to-unzipped-file
+```
+
+Upload all the files present in the disturbances folder. 
+```
+curl -F classifiers='@classifiers/Classifier1_moja.tiff' \
+		-F classifiers='@classifiers/Classifier2_moja.tiff' \
+		-F title="run4" \
+		http://localhost:8080/gcbm/upload/classifiers
+```
+
+Expected response (Success):
+```json
+{
+  "data": "Classifiers file uploaded succesfully. Proceed to the next step."
+}
+```
+
+### Upload Miscellaneous file
+Upload Miscellaneous file to run the simulation.
+| **Method** | **Endpoint** | **Response codes** | 
+|---  | ---| --- |
+| POST| `/gcbm/upload/miscellaneous` | 200 OK (Success), 400 (Error) |
+Example:
+
+Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
+
+```
+cd path-to-unzipped-file
+```
+
+Upload all the files present in the disturbances folder. 
+```
+curl -F miscellaneous='@miscellaneous/initial_age_moja.tiff' \
+		-F miscellaneous='@miscellaneous/mean_annual_temperature_moja.tiff' \
+		-F title="run4" \
+		http://localhost:8080/gcbm/upload/miscellaneous
+```
+
+Expected response (Success):
+```json
+{
+  "data": "Miscellaneous file uploaded succesfully. Proceed to the next step."
+}
+```
+
+
 ### Run the simulation 
 After uploading your files, you can run the simulation through this endpoint.
 
