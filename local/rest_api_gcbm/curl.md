@@ -72,6 +72,7 @@ Upload Disturbances file to run the simulation.
 | **Method** | **Endpoint** | **Response codes** |
 |--- | ---| --- |
 | POST| `/gcbm/upload/disturbances` | 200 OK (Success), 400 (Error) |
+
 Example:
 
 Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
@@ -108,6 +109,7 @@ Upload Classifiers file to run the simulation.
 | **Method** | **Endpoint** | **Response codes** |
 |--- | ---| --- |
 | POST| `/gcbm/upload/classifiers` | 200 OK (Success), 400 (Error) |
+
 Example:
 
 Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
@@ -139,6 +141,7 @@ Upload Miscellaneous file to run the simulation.
 | **Method** | **Endpoint** | **Response codes** |
 |--- | ---| --- |
 | POST| `/gcbm/upload/miscellaneous` | 200 OK (Success), 400 (Error) |
+
 Example:
 
 Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
@@ -170,6 +173,7 @@ Upload db file to run the simulation.
 | **Method** | **Endpoint** | **Response codes** |
 |--- | ---| --- |
 | POST| `/gcbm/upload/db` | 200 OK (Success), 400 (Error) |
+
 Example:
 
 Go to the location of the unzipped file `GCBM_New_Demo_Run.zip`
