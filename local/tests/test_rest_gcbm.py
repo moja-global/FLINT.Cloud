@@ -297,7 +297,7 @@ class TestApiFlintGCBM:
             yield_title fixture. It returns the status of a simulation which \
             we already uploaded the files under the title by \
             yield_title fixutre. """
-        status_endpoint = gcbm_endpoint + "status"
+        status_endpoint = gcbm_endpoint + "report"
         data = {"title": yield_title}
         status_response = requests.post(status_endpoint, json=data)
         assert status_response.status_code == 200
