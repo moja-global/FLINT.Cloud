@@ -324,7 +324,7 @@ def gcbm_dynamic():
     responses:
             200:
     parameters:
-            - in: body
+                - in: body
             name: title
             required: true
             schema:
@@ -349,6 +349,56 @@ def gcbm_dynamic():
     thread.start()
     # subscriber_path = create_topic_and_sub(title)
     return {"status": "Run started"}, 200
+
+
+@app.route("/gcbm/getConfig", methods=["POST"])
+def getConfig():
+    """
+    Return .json for the input .tiff files
+    ---
+    tags:
+            - gcbm
+    responses:
+            200:
+    parameters:
+            - in: body
+            name: title
+            required: true
+            schema:
+                    type: string
+            description: Name of the Simulation
+            name: file_name
+            required: true
+            schema:
+                    type: string
+            description: Name of the File
+    """
+    # Default title = Simulation
+    title = request.form.get("title").strip()
+    file_name = request.form.get("file_name").strip()
+    input_dir = f"{os.getcwd()}/input/{title}"
+
+    # check if title is empty
+    if title == "":
+        return {"error": "No Simulation name specified"}, 400
+
+    # check if file_name is empty
+    if file_name == "":
+        return {"error": "No file name specified"}, 400
+
+    # Check if simulation exists or not
+    if not os.path.exists(f"{input_dir}"):
+        return {"error": "Simulation with the name " + title + " doesn't exists"}, 400
+
+    input_dir_file = f"{input_dir}/{file_name}.json"
+    # Check if file exists or not
+    if not os.path.exists(f"{input_dir_file}"):
+        return {"error": "File with name " + file_name + " doesn't exists"}, 400
+
+    # Return the json for the corresponding file name
+    file_obj = open(f"{input_dir_file}")
+    obj = json.load(file_obj)
+    return {"data": obj}, 200
 
 
 def launch_run(title, input_dir):
