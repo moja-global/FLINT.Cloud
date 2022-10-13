@@ -98,20 +98,6 @@
                 ]
             }
         },
-        "/rothc": {
-            "post": {
-                "description": "",
-                "responses": {
-                    "200": {
-                        "description": "RothC based example FLINT"
-                    }
-                },
-                "summary": "Get RothC example of FLINT",
-                "tags": [
-                    "rothc"
-                ]
-            }
-        },
         "/version": {
             "get": {
                 "description": "",
