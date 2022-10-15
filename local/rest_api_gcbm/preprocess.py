@@ -16,12 +16,9 @@ def get_config_templates(input_dir):
 # current hack is to drop the last five characters, but thats very fragile
 def get_modules_cbm_config(input_dir):
     with open(f"{input_dir}/templates/modules_cbm.json", "r+") as modules_cbm_config:
-        disturbances = []
         data = json.load(modules_cbm_config)
         for file in os.listdir(f"{input_dir}/disturbances/"):
-            disturbances.append(
-                file.split(".")[0][:-5]
-            )   # drop `_moja` to match modules_cbm.json template
+            disturbances = [file.split(".")[0][:-5] for file in os.listdir(f"{input_dir}/disturbances/")]  # drop `_moja` to match modules_cbm.json template
         modules_cbm_config.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, modules_cbm_config, indent=4)
@@ -75,13 +72,13 @@ def get_provider_config(input_dir):
         cellLonSize = []
         paths = []
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
                 Rasters.append(fp)
                 paths.append(fp)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
@@ -136,7 +133,7 @@ def get_provider_config(input_dir):
         # should be able to accept variable number of inputs, but requires
         # means for user to specify/verify correct ["attributes"]
         def get_input_layers():
-            for root, dirs, files in os.walk(
+            for root, _, files in os.walk(
                 os.path.abspath(f"{input_dir}/miscellaneous/")
             ):
                 for file in files:
@@ -153,7 +150,7 @@ def get_provider_config(input_dir):
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
                 dictionary["layer_data"] = "Int16"
-                dictionary["nodata"] = nodatam[1]
+                dictionary["nodata"] = 32767
                 json.dump(dictionary, json_file, indent=4)
 
             with open(
@@ -161,7 +158,7 @@ def get_provider_config(input_dir):
             ) as json_file:
                 dictionary["layer_type"] = "GridLayer"
                 dictionary["layer_data"] = "Float32"
-                dictionary["nodata"] = nodatam[0]
+                dictionary["nodata"] = 32767
                 json.dump(dictionary, json_file, indent=4)
 
             with open(
@@ -313,31 +310,31 @@ def get_provider_config(input_dir):
 
         get_study_area()
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/disturbances/")):
             for file in files:
                 fp = os.path.join(root, file)
                 Rasters.append(fp)
                 paths.append(fp)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/classifiers/")):
             for file in files:
                 fp1 = os.path.join(root, file)
                 Rasters.append(fp1)
                 paths.append(fp1)
 
-        for root, dirs, files in os.walk(
+        for root, _, files in os.walk(
             os.path.abspath(f"{input_dir}/miscellaneous/")
         ):
             for file in files:
                 fp2 = os.path.join(root, file)
                 paths.append(fp2)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/templates/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/templates/")):
             for file in files:
                 fp3 = os.path.join(root, file)
                 paths.append(fp3)
 
-        for root, dirs, files in os.walk(os.path.abspath(f"{input_dir}/db/")):
+        for root, _, files in os.walk(os.path.abspath(f"{input_dir}/db/")):
             for file in files:
                 fp4 = os.path.join(root, file)
                 paths.append(fp4)
