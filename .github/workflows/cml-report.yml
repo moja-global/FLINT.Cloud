@@ -1,0 +1,69 @@
+name: Generate CML Report
+on:
+  pull_request:
+    types: [ labeled ]
+    branches:
+      - master
+
+jobs:
+  generate_cml_report:
+    if: github.event.label.name == 'simulation'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    container: 
+      image: ghcr.io/moja-global/rest_api_gcbm:master
+      ports:
+        - "8080:8080"
+    steps:
+    
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          
+      - name: Run the Simulation
+        run: |
+          apt-get update && apt-get install unzip -y
+          pushd local/rest_api_gcbm/tests/
+          unzip linux-demo.zip
+          cd config/
+          /opt/gcbm/moja.cli --config_file gcbm_config.cfg --config_provider provider_config.json
+          popd
+          cd local/rest_api_gcbm && mkdir GCBM.CompileResults
+          
+      - name: Checkout the Repository
+        uses: actions/checkout@v3
+        with:
+          repository: moja-global/GCBM.CompileResults
+          path: local/rest_api_gcbm/GCBM.CompileResults
+          
+      - name: Compile the Results
+        run: |
+          cd local/rest_api_gcbm
+          python3 GCBM.CompileResults/compileresults.py sqlite:///tests/output/gcbm_output.db --output_db sqlite:///tests/output/compiled_simulation_output.db
+          
+      - name: Install dependencies
+        run: pip3 install pandas matplotlib jupytext
+        
+      - name: Setup CML
+        uses: iterative/setup-cml@v1
+        
+      - name: Send the report
+        env:
+         repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd local/rest_api_gcbm
+          python3 annual_summaries.py
+          echo "# GCBM Model" > report.md
+          echo "## Code" >> report.md
+          jupytext --to md --output - annual_summaries.py >> report.md
+          # this command takes each cell of the notebook and adds it to report.md as markdown
+          echo "## Total Biomass Curve" >> report.md
+          cml publish tests/output/total_biomass_mt.png --md >> report.md
+          cml send-comment --update report.md
