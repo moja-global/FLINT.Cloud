@@ -462,9 +462,24 @@ def gcbm_download():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
+
+    output_dir = f"{os.getcwd()}/output/{title}.zip"
+    input_dir = f"{os.getcwd()}/input/{title}"
+
+    # if the title has an input simulation and there is no output simulation then they should check the status.
+    if not os.path.exists(f"{output_dir}") and os.path.exists(f"{input_dir}"):
+        return {
+            "message": "You simulation is currently running, check the status via /gcbm/status"
+        }
+
+    # if there is no input simulation and no output simulation then the simulation does not exist.
+    elif not os.path.exists(f"{output_dir}") and not os.path.exists(f"{input_dir}"):
+        return {
+            "message": "You don't have a simulation with this title kindly check the title and try again"
+        }
+
     return send_file(
-        f"{os.getcwd()}/output/{title}.zip",
-        attachment_filename="{title}.zip",
+        f"{os.getcwd()}/output/{title}.zip", attachment_filename="{title}.zip",
     )
 
 
@@ -484,10 +499,13 @@ def gcbm_list_simulations():
     for file in os.listdir(f"{os.getcwd()}/input"):
         list.append(file)
 
-    return {
-        "data": list,
-        "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
-    }, 200
+    return (
+        {
+            "data": list,
+            "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
+        },
+        200,
+    )
 
 
 @app.route("/gcbm/status", methods=["POST"])
