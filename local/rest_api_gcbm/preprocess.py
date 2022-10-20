@@ -17,8 +17,7 @@ def get_config_templates(input_dir):
 def get_modules_cbm_config(input_dir):
     with open(f"{input_dir}/templates/modules_cbm.json", "r+") as modules_cbm_config:
         data = json.load(modules_cbm_config)
-        for file in os.listdir(f"{input_dir}/disturbances/"):
-            disturbances = [file.split(".")[0][:-5] for file in os.listdir(f"{input_dir}/disturbances/")]  # drop `_moja` to match modules_cbm.json template
+        disturbances = [file.split(".")[0][:-5] for file in os.listdir(f"{input_dir}/disturbances/")]  # drop `_moja` to match modules_cbm.json template
         modules_cbm_config.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, modules_cbm_config, indent=4)
