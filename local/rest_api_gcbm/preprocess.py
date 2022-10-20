@@ -21,7 +21,7 @@ def get_modules_cbm_config(input_dir):
         for file in os.listdir(f"{input_dir}/disturbances/"):
             disturbances.append(
                 file.split(".")[0][:-5]
-            )  # drop `_moja` to match modules_cbm.json template
+            )   # drop `_moja` to match modules_cbm.json template
         modules_cbm_config.seek(0)
         data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
         json.dump(data, modules_cbm_config, indent=4)
