@@ -20,34 +20,41 @@ Upload details stores the information about the files upload in a json file.
 
 sample_db = {
     "filename":{
-        "path": "something something",
+        "path": "",
         "category":"disturbance"
     },
     "filename": {
-        "path": "something something",
+        "path": "",
         "category": "classifier"
     }
 } """
 
 
 class GbcmUpload(Resource):
-  
-    #this is will be used to fetch all files uploaded in regards to that simulation 
+
+    # this is used to fetch all files uploaded in regards to that simulation
     def get(self):
         title = request.form.get("title") or "simulation"
         input_dir = f"{os.getcwd()}/input/{title}"
         if os.path.exists(f"{input_dir}/upload_details.json"):
-            with open(f"{input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
+            with open(
+                f"{input_dir}/upload_details.json", "w+", encoding="utf8"
+            ) as upload_details:
                 upload_details_dictionary = json.load(upload_details)
-                return jsonify({'message': 'File retrived successfully', "data": upload_details_dictionary})
-  
-    #upload files to a paticular category.
+                return jsonify(
+                    {
+                        "message": "File retrived successfully",
+                        "data": upload_details_dictionary,
+                    }
+                )
+
+    # upload files to a paticular category.
     def post(self):
         """ sample - payload ={
         "title": "run4",
-        # "file": "file-uploaded",
+        "file": "file-uploaded",
         "category": "classifier"
-        } """  
+        } """
 
         title = request.form.get("title") or "simulation"
         category = request.args.get("category")
@@ -56,19 +63,23 @@ class GbcmUpload(Resource):
         input_dir = f"{os.getcwd()}/input/{title}"
 
         if os.path.exists(f"{input_dir}/upload_details.json"):
-            with open(f"{input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
+            with open(
+                f"{input_dir}/upload_details.json", "w+", encoding="utf8"
+            ) as upload_details:
                 upload_details_dictionary = json.load(upload_details)
         else:
-            with open(f"{input_dir}/upload_details.json", 'w', encoding="utf8") as upload_details:
+            with open(
+                f"{input_dir}/upload_details.json", "w", encoding="utf8"
+            ) as upload_details:
                 upload_details_dictionary = {}
         #     uploadDetailsDictionary = json.load(upload_details)
         # print(uploadDetailsDictionary)
-        
+
         for file in files:
             file.save(f"{input_dir}/{file.filename}")
             upload_details_dictionary[file.filename] = {
                 "path": f"{input_dir}/{file.filename}",
-                "category": category
+                "category": category,
             }
         json.dump(upload_details_dictionary, upload_details, indent=4)
 
@@ -78,39 +89,38 @@ class GbcmUpload(Resource):
 
 
 class EditConfig(Resource):
-    
-    #this get request will fetch the config templates. E.g modules.json, provider.json , and return them so that user can see them as seen on flint UI here -- https://flint-ui.vercel.app/gcbm/configurations/local-domain
+
+    # this get request will fetch the config templates. E.g modules.json, provider.json , and return them so that user can see them as seen on flint UI here -- https://flint-ui.vercel.app/gcbm/configurations/local-domain
     def get(self):
         pass
 
     def post(self):
         pass
-    
 
 
-
-
+# Running the simulation
 class GcbmRun(Resource):
     def post(self):
         title = request.form.get("title") or "simulation"
         input_dir = f"{os.getcwd()}/input/{title}"
 
-        gcbm_stimulation = GCBMStimulation(input_dir=input_dir)
-        gcbm_stimulation.set_config_templates()
-        gcbm_stimulation.add_database_to_provider_config()
-        gcbm_stimulation.add_files_to_provider_config_layers()
-        gcbm_stimulation.generate_provider_config()
+        gcbm_simulation = GCBMSimulation(input_dir=input_dir)
+        gcbm_simulation.set_config_templates()
+        gcbm_simulation.add_database_to_provider_config()
+        gcbm_simulation.add_files_to_provider_config_layers()
+        gcbm_simulation.generate_provider_config()
 
-        thread = Thread(target=launch_run, kwargs={"title": title, "input_dir": input_dir})
+        thread = Thread(
+            target=launch_run, kwargs={"title": title, "input_dir": input_dir}
+        )
         thread.start()
         return {"status": "Run started"}, 200
-        
-    
-
-#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
 
 
-class GCBMStimulation:
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+
+class GCBMSimulation:
     def __init__(self, input_dir):
         self.input_dir = input_dir
         self.Rastersm = []
@@ -124,8 +134,10 @@ class GCBMStimulation:
         )
 
     def get_uploaded_files_details(self):
-        with open(f"{self.input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
-                upload_details_dictionary = json.load(upload_details)
+        with open(
+            f"{self.input_dir}/upload_details.json", "w+", encoding="utf8"
+        ) as upload_details:
+            upload_details_dictionary = json.load(upload_details)
         return upload_details_dictionary
 
     def set_config_templates(self):
@@ -150,7 +162,11 @@ class GCBMStimulation:
         layer = []
         upload_details_dictionary = self.get_uploaded_files_details()
         for file in upload_details_dictionary:
-            dic = {"name": file, "layer_path": file["path"], "layer_prefix": file["path"][:5]}
+            dic = {
+                "name": file,
+                "layer_path": file["path"],
+                "layer_prefix": file["path"][:5],
+            }
             layer.append(dic)
         data["Providers"]["RasterTiled"]["layers"] += layer
 
@@ -159,11 +175,11 @@ class GCBMStimulation:
         nodata = []
         cellLatSize = []
         cellLonSize = []
-        
-        #if there is disturbances.
+
+        # if there is disturbances.
         upload_details_dictionary = self.get_uploaded_files_details()
         for file in upload_details_dictionary:
-            if file["category"] == 'disturbances':
+            if file["category"] == "disturbances":
                 self.rasters.append(file["path"])
 
         for nd in self.rasters:
@@ -240,19 +256,27 @@ class GCBMStimulation:
                     study_area.append({"name": file[:10], "type": "VectorLayer"})
                 elif file["category"] == "classifiers":
                     study_area.append(
-                    {"name": file[:10], "type": "VectorLayer", "tags": ["classifier"]}
-                )
+                        {
+                            "name": file[:10],
+                            "type": "VectorLayer",
+                            "tags": ["classifier"],
+                        }
+                    )
                 elif file["category"] == "disturbances":
                     study_area.append(
-                    {"name": file[:10], "type": "VectorLayer", "tags": ["classifier"]}
-                )
+                        {
+                            "name": file[:10],
+                            "type": "VectorLayer",
+                            "tags": ["classifier"],
+                        }
+                    )
                     study_area.append(
-                    {
-                        "name": file[:10],
-                        "type": "DisturbanceLayer",
-                        "tags": ["disturbance"],
-                    }
-                )
+                        {
+                            "name": file[:10],
+                            "type": "DisturbanceLayer",
+                            "tags": ["disturbance"],
+                        }
+                    )
 
             self.study_area["layers"] = study_area
             json.dump(self.study_area, json_file, indent=4)
