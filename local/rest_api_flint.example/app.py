@@ -1,4 +1,6 @@
-from flask import Flask, send_from_directory, request, jsonify
+from flask import (Flask, abort,
+                   send_from_directory,
+                   request, jsonify)
 from flask_restful import Resource, Api, reqparse
 import os
 import subprocess
@@ -44,9 +46,12 @@ def spec():
     swag = swagger(app)
     swag["info"]["version"] = "1.0"
     swag["info"]["title"] = "FLINT Rest Api"
-    f = open("./static/swagger.json", "w+")
-    json.dump(swag, f)
-    return jsonify(swag)
+    try:
+        f = open("./static/swagger.json", "w+")
+        json.dump(swag, f)
+        return jsonify(swag)
+    except IOError:
+        abort(404)
 
 
 @app.route("/help/<string:arg>", methods=["GET"])
@@ -66,18 +71,23 @@ def help(arg):
       200:
             description: Help
     """
-    s = time.time()
-    if arg == "all":
-        res = subprocess.run(["moja.cli", "--help"], stdout=subprocess.PIPE)
-    else:
-        res = subprocess.run(
-            ["moja.cli", "--help-section", arg], stdout=subprocess.PIPE
-        )
-    e = time.time()
+    start = time.time()
+    try:
+        if arg == "all":
+            res = subprocess.run(["moja.cli", "--help"], stdout=subprocess.PIPE)
+        else:
+            res = subprocess.run(
+                ["moja.cli", "--help-section", arg], stdout=subprocess.PIPE
+            )
+    except subprocess.SubprocessError:
+        abort(403)
+
+
+    end = time.time()
 
     response = {
         "exitCode": res.returncode,
-        "execTime": e - s,
+        "execTime": end - start,
         "response": res.stdout.decode("utf-8"),
     }
     return {"data": response}, 200
@@ -94,13 +104,13 @@ def version():
       200:
             description: Version
     """
-    s = time.time()
+    start = time.time()
     res = subprocess.run(["moja.cli", "--version"], stdout=subprocess.PIPE)
-    e = time.time()
+    end = time.time()
 
     response = {
         "exitCode": res.returncode,
-        "execTime": e - s,
+        "execTime": end - start,
         "response": res.stdout.decode("utf-8"),
     }
     return {"data": response}, 200
@@ -117,7 +127,7 @@ def point():
       200:
             description: Point based example FLINT
     """
-    s = time.time()
+    start = time.time()
 
     if int(request.headers.get("Content-Length")) > 0:
         request_data = request.get_json(force=True)
@@ -125,13 +135,11 @@ def point():
         if request_data:
             with open("config/received_point_example.json", "w") as outfile:
                 json.dump(request_data, outfile, indent=1)
-
             point_example = "config/received_point_example.json"
     else:
         point_example = "config/point_example.json"
     lib_simple = "config/libs.base.simple.json"
     logging_debug = "config/logging.debug_on.conf"
-
     if os.path.exists("output") == False:
         os.mkdir("output", mode=0o666)
 
@@ -150,7 +158,7 @@ def point():
         ],
         stdout=f,
     )
-    e = time.time()
+    end = time.time()
     UPLOAD_DIRECTORY = "./"
     if os.path.exists("config/received_point_example.json") == True:
         os.rename(
@@ -184,7 +192,7 @@ def rothc():
       200:
             description: RothC based example FLINT
     """
-    s = time.time()
+    start = time.time()
     if int(request.headers.get("Content-Length")) > 0:
         request_data = request.get_json(force=True)
 
@@ -216,7 +224,7 @@ def rothc():
         ],
         stdout=f,
     )
-    e = time.time()
+    end = time.time()
     UPLOAD_DIRECTORY = "./"
 
     if os.path.exists("config/received_rothc_example.json") == True:
