@@ -258,6 +258,90 @@ A file named `output.zip` will be obtained. This file contains the outputs gener
 curl -d "title=run4" -X POST http://localhost:8080/gcbm/download -L -o run4.zip
 ```
 
+### Get Config mean annual temperature moja file
+
+| **Method** | **Endpoint**      | **Response code** |
+| ---------- | ----------------- | ----------------- |
+| POST       | `/gcbm/getConfig` | 200 OK (Success)  |
+
+```
+curl -F file_name="mean_annual_temperature_moja" \
+                                -F title="run4" \
+                                http://localhost:8080/gcbm/getConfig
+
+```
+
+Expected response (Success):
+
+```json
+{"data":{
+        "blockLatSize":0.1,"blockLonSize":0.1,"cellLatSize":0.00025,
+        "cellLonSize":0.00025,"layer_data":"Float32","layer_type":"GridLayer",
+        "nodata":32767.0,"tileLatSize":1.0,"tileLonSize":1.0
+        }
+}
+```
+
+### Get Config internal_variables file
+
+| **Method** | **Endpoint**      | **Response code** |
+| ---------- | ----------------- | ----------------- |
+| POST       | `/gcbm/getConfig` | 200 OK (Success)  |
+
+```
+curl -F file_name="internal_variables" \
+                        -F title="run4" \
+                        http://localhost:8080/gcbm/getConfig
+
+```
+
+Expected response (Success):
+
+```json
+{"data":{
+        "Variables":{
+                        "LandUnitId":-1,"LocalDomainId":1,"age":0,"age_class":0,"blockIndex":0,
+                        "cellIndex":0,"classifier_set":{},"current_land_class":"FL","historic_land_class":"FL",
+                        "is_decaying":true,"is_forest":true,"landUnitArea":0,"landUnitBuildSuccess":true,
+                        "localDomainId":0,"peatlandId":-1,"regen_delay":0,"run_delay":false,"run_moss":false,
+                        "run_peatland":false,"simulateLandUnit":true,
+                        "spatialLocationInfo":{
+                                "flintdata":{"library":"internal.flint","settings":{},"type":"SpatialLocationInfo"}
+                                },
+                        "spinup_moss_only":false,"tileIndex":0,"unfccc_land_class":"UNFCCC_FL_R_FL"
+                }
+        }
+}
+```
+
+
+### Get Config localdomain file
+
+| **Method** | **Endpoint**      | **Response code** |
+| ---------- | ----------------- | ----------------- |
+| POST       | `/gcbm/getConfig` | 200 OK (Success)  |
+
+```
+curl -F file_name="localdomain" \
+                -F title="run4" \
+                http://localhost:8080/gcbm/getConfig
+
+```
+
+Expected response (Success):
+
+```json
+{"data":{"Libraries":{"moja.modules.cbm":"external","moja.modules.gdal":"external"},
+        "LocalDomain":{"end_date":"2021/01/01","landUnitBuildSuccess":"landUnitBuildSuccess",
+                "landscape":{"num_threads":4,"provider":"RasterTiled",
+                "tile_size_x":1.0,"tile_size_y":1.0,
+                "tiles":[{"index":12674,"x":-106,"y":55}],
+                "x_pixels":4000,"y_pixels":4000},
+                "sequencer":"CBMSequencer","sequencer_library":"moja.modules.cbm",
+                "simulateLandUnit":"simulateLandUnit","start_date":"2010/01/01",
+                "timing":"annual","type":"spatial_tiled"}}} 
+```
+
 ### List all of the simulations
 
 | **Method** | **Endpoint** | **Response code** |
