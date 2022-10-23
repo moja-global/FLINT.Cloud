@@ -232,7 +232,7 @@ class GCBMSimulation:
         self.study_area = {
             "tile_size": tileLat,
             "block_size": blockLat,
-            "tiles": [{"x": int(t[2]), "y": int(t[5]), "index": 12674,}],
+            "tiles": [{"x": int(t[2]), "y": int(t[5]), "index": 12674}],
             "pixel_size": cellLat,
             "layers": [],
         }
