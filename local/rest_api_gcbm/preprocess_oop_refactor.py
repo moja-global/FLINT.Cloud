@@ -1,11 +1,116 @@
+from nis import cat
 import os
 import shutil
 import json
+from unicodedata import category
 import rasterio as rst
+from flask import Flask, jsonify, request
+from flask_restful import Resource, Api
+from threading import Thread
+from app import launch_run
+
+app = Flask(__name__)
+# creating an API object
+api = Api(app)
+
+
+""" 
+
+Upload details stores the information about the files upload in a json file.
+
+sample_db = {
+    "filename":{
+        "path": "something something",
+        "category":"disturbance"
+    },
+    "filename": {
+        "path": "something something",
+        "category": "classifier"
+    }
+} """
+
+
+class GbcmUpload(Resource):
+  
+    #this is will be used to fetch all files uploaded in regards to that simulation 
+    def get(self):
+        title = request.form.get("title") or "simulation"
+        input_dir = f"{os.getcwd()}/input/{title}"
+        if os.path.exists(f"{input_dir}/upload_details.json"):
+            with open(f"{input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
+                upload_details_dictionary = json.load(upload_details)
+                return jsonify({'message': 'File retrived successfully', "data": upload_details_dictionary})
+  
+    #upload files to a paticular category.
+    def post(self):
+        """ sample - payload ={
+        "title": "run4",
+        # "file": "file-uploaded",
+        "category": "classifier"
+        } """  
+
+        title = request.form.get("title") or "simulation"
+        category = request.args.get("category")
+        files = request.files.getlist("file")
+
+        input_dir = f"{os.getcwd()}/input/{title}"
+
+        if os.path.exists(f"{input_dir}/upload_details.json"):
+            with open(f"{input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
+                upload_details_dictionary = json.load(upload_details)
+        else:
+            with open(f"{input_dir}/upload_details.json", 'w', encoding="utf8") as upload_details:
+                upload_details_dictionary = {}
+        #     uploadDetailsDictionary = json.load(upload_details)
+        # print(uploadDetailsDictionary)
+        
+        for file in files:
+            file.save(f"{input_dir}/{file.filename}")
+            upload_details_dictionary[file.filename] = {
+                "path": f"{input_dir}/{file.filename}",
+                "category": category
+            }
+        json.dump(upload_details_dictionary, upload_details, indent=4)
+
+        return {
+            "data": "All files uploaded succesfully. Proceed to the next step of the API at gcbm/dynamic."
+        }
+
+
+class EditConfig(Resource):
+    
+    #this get request will fetch the config templates. E.g modules.json, provider.json , and return them so that user can see them as seen on flint UI here -- https://flint-ui.vercel.app/gcbm/configurations/local-domain
+    def get(self):
+        pass
+
+    def post(self):
+        pass
+    
 
 
 
-class GCBM:
+
+class GcbmRun(Resource):
+    def post(self):
+        title = request.form.get("title") or "simulation"
+        input_dir = f"{os.getcwd()}/input/{title}"
+
+        gcbm_stimulation = GCBMStimulation(input_dir=input_dir)
+        gcbm_stimulation.set_config_templates()
+        gcbm_stimulation.add_database_to_provider_config()
+        gcbm_stimulation.add_files_to_provider_config_layers()
+        gcbm_stimulation.generate_provider_config()
+
+        thread = Thread(target=launch_run, kwargs={"title": title, "input_dir": input_dir})
+        thread.start()
+        return {"status": "Run started"}, 200
+        
+    
+
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++#
+
+
+class GCBMStimulation:
     def __init__(self, input_dir):
         self.input_dir = input_dir
         self.Rastersm = []
@@ -18,6 +123,11 @@ class GCBM:
             f"{self.input_dir}/templates/provider_config.json", "r+"
         )
 
+    def get_uploaded_files_details(self):
+        with open(f"{self.input_dir}/upload_details.json", 'w+', encoding="utf8") as upload_details:
+                upload_details_dictionary = json.load(upload_details)
+        return upload_details_dictionary
+
     def set_config_templates(self):
         if not os.path.exists(f"{self.input_dir}/templates"):
             shutil.copytree(
@@ -26,58 +136,37 @@ class GCBM:
                 dirs_exist_ok=False,
             )
 
-    def add_disturbances_to_modules_cbm_config(self):
-        with open(
-            f"{self.input_dir}/templates/modules_cbm.json", "r+"
-        ) as modules_cbm_config:
-            disturbances = []
-            data = json.load(modules_cbm_config)
-            for file in os.listdir(f"{self.input_dir}/disturbances/"):
-                disturbances.append(file.split(".")[0][:-5])
-            modules_cbm_config.seek(0)
-            data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
-            json.dump(data, modules_cbm_config, indent=4)
-            modules_cbm_config.truncate()
-
     def add_database_to_provider_config(self):
         data = json.load(self.provider_config)
-        for file in os.listdir(f"{self.input_dir}/db/"):
-            data["Providers"]["SQLite"] = {"path": file, "type": "SQLite"}
+        upload_details_dictionary = self.get_uploaded_files_details()
+        for file in upload_details_dictionary:
+            if file["category"] == "db":
+                data["Providers"]["SQLite"] = {"path": file["path"], "type": "SQLite"}
         self.provider_config.seek(0)
 
-    # disturbances, #classifiers, #miscellaneous,
-    def add_variables_to_provider_config_layers(self, variable):
+    # disturbances, #classifiers, #miscellaneous e.t.c,
+    def add_files_to_provider_config_layers(self):
         data = json.load(self.provider_config)
-        lst = []
-        for file in os.listdir(f"{self.input_dir}/{variable}/"):
-            dic = {"name": file[:10], "layer_path": file, "layer_prefix": file[:5]}
-            lst.append(dic)
-        self.provider_config.seek(0)
-        data["Providers"]["RasterTiled"]["layers"] += lst
+        layer = []
+        upload_details_dictionary = self.get_uploaded_files_details()
+        for file in upload_details_dictionary:
+            dic = {"name": file, "layer_path": file["path"], "layer_prefix": file["path"][:5]}
+            layer.append(dic)
+        data["Providers"]["RasterTiled"]["layers"] += layer
 
     def generate_provider_config(self):
         data = json.load(self.provider_config)
         nodata = []
         cellLatSize = []
         cellLonSize = []
+        
+        #if there is disturbances.
+        upload_details_dictionary = self.get_uploaded_files_details()
+        for file in upload_details_dictionary:
+            if file["category"] == 'disturbances':
+                self.rasters.append(file["path"])
 
-        for root, _, files in os.walk(
-            os.path.abspath(f"{self.input_dir}/disturbances/")
-        ):
-            for file in files:
-                fp = os.path.join(root, file)
-                self.Rasters.append(fp)
-                self.paths.append(fp)
-
-        for root, _, files in os.walk(
-            os.path.abspath(f"{self.input_dir}/classifiers/")
-        ):
-            for file in files:
-                fp1 = os.path.join(root, file)
-                self.Rasters.append(fp1)
-                self.paths.append(fp1)
-
-        for nd in self.Rasters:
+        for nd in self.rasters:
             img = rst.open(nd)
             t = img.transform
             x = t[0]
@@ -132,19 +221,6 @@ class GCBM:
             "layers": [],
         }
 
-    def get_input_json(self):
-        for root, _, files in os.walk(
-            os.path.abspath(f"{self.input_dir}/miscellaneous/")
-        ):
-            for file in files:
-                fp2 = os.path.join(root, file)
-                self.Rastersm.append(fp2)
-
-            for i in self.Rastersm:
-                img = rst.open(i)
-                d = img.nodata
-                self.nodatam.append(d)
-
     def set_attributes(self, file_name: str, payload: dict):
         with open(
             f"{self.input_dir}/{file_name}.json", "w", encoding="utf8"
@@ -158,16 +234,19 @@ class GCBM:
         ) as json_file:
             study_area = []
 
-            for file in os.listdir(f"{self.input_dir}/miscellaneous/"):
-                study_area.append({"name": file[:10], "type": "VectorLayer"})
-
-            for file in os.listdir(f"{self.input_dir}/classifiers/"):
-                study_area.append(
+            upload_details_dictionary = self.get_uploaded_files_details()
+            for file in upload_details_dictionary:
+                if file["category"] == "miscellaneous":
+                    study_area.append({"name": file[:10], "type": "VectorLayer"})
+                elif file["category"] == "classifiers":
+                    study_area.append(
                     {"name": file[:10], "type": "VectorLayer", "tags": ["classifier"]}
                 )
-
-            for file in os.listdir(f"{self.input_dir}/disturbances/"):
-                study_area.append(
+                elif file["category"] == "disturbances":
+                    study_area.append(
+                    {"name": file[:10], "type": "VectorLayer", "tags": ["classifier"]}
+                )
+                    study_area.append(
                     {
                         "name": file[:10],
                         "type": "DisturbanceLayer",
@@ -177,19 +256,3 @@ class GCBM:
 
             self.study_area["layers"] = study_area
             json.dump(self.study_area, json_file, indent=4)
-
-    def add_file_path(self, variable):
-        for root, _, files in os.walk(os.path.abspath(f"{self.input_dir}/{variable}/")):
-            for file in files:
-                fp = os.path.join(root, file)
-                self.paths.append(fp)
-
-    def copy_files_to_input_directory(self):
-        for i in self.paths:
-            shutil.copy2(i, (f"{self.input_dir}"))
-
-    def clean_up_directory(self, variable):
-        shutil.rmtree((f"{self.input_dir}/{variable}/"))
-
-
-##test run
