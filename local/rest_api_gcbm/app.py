@@ -663,9 +663,9 @@ def upload_files(type:str, title:str):
         os.makedirs(f"{input_dir}/{type}")
 
     # store file in a new folder
-    if "miscellaneous" in request.files:
+    if type in request.files:
         for file in request.files.getlist(type):
-            file.save(f"{input_dir}/miscellaneous/{file.filename}")
+            file.save(f"{input_dir}/{type}/{file.filename}")
     else:
         return {"error": f"Missing {type} file"}, 400
 
