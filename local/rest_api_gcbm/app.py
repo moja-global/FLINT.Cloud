@@ -602,25 +602,7 @@ def gcbm_disturbances():
 
     # Get the title from the payload
     title = request.form.get("title") or "simulation"
-
-    # Check for project directory else create one
-    input_dir = f"{os.getcwd()}/input/{title}"
-    if not os.path.exists(f"{input_dir}"):
-        os.makedirs(f"{input_dir}")
-    logging.debug(os.getcwd())
-
-    # input files follow a strict structure
-    if not os.path.exists(f"{input_dir}/disturbances"):
-        os.makedirs(f"{input_dir}/disturbances")
-
-    # store disturbances file in a new folder
-    if "disturbances" in request.files:
-        for file in request.files.getlist("disturbances"):
-            file.save(f"{input_dir}/disturbances/{file.filename}")
-    else:
-        return {"error": "Missing disturbances file"}, 400
-
-    return {"data": "Disturbances file uploaded succesfully. Proceed to the next step."}
+    return upload_files("disturbances", title)
 
 
 @app.route("/gcbm/upload/classifiers", methods=["POST"])
@@ -643,25 +625,7 @@ def gcbm_classifiers():
 
     # Get the title from the payload
     title = request.form.get("title") or "simulation"
-
-    # Check for project directory else create one
-    input_dir = f"{os.getcwd()}/input/{title}"
-    if not os.path.exists(f"{input_dir}"):
-        os.makedirs(f"{input_dir}")
-    logging.debug(os.getcwd())
-
-    # input files follow a strict structure
-    if not os.path.exists(f"{input_dir}/classifiers"):
-        os.makedirs(f"{input_dir}/classifiers")
-
-    # store disturbances file in a new folder
-    if "classifiers" in request.files:
-        for file in request.files.getlist("classifiers"):
-            file.save(f"{input_dir}/classifiers/{file.filename}")
-    else:
-        return {"error": "Missing classifiers file"}, 400
-
-    return {"data": "Classifiers file uploaded succesfully. Proceed to the next step."}
+    return upload_files("classifiers", title)
 
 
 @app.route("/gcbm/upload/miscellaneous", methods=["POST"])
@@ -684,7 +648,10 @@ def gcbm_miscellaneous():
 
     # Get the title from the payload
     title = request.form.get("title") or "simulation"
-
+    return upload_files("miscellaneous", title)
+    
+    
+def upload_files(type:str, title:str):
     # Check for project directory else create one
     input_dir = f"{os.getcwd()}/input/{title}"
     if not os.path.exists(f"{input_dir}"):
@@ -692,18 +659,18 @@ def gcbm_miscellaneous():
     logging.debug(os.getcwd())
 
     # input files follow a strict structure
-    if not os.path.exists(f"{input_dir}/miscellaneous"):
-        os.makedirs(f"{input_dir}/miscellaneous")
+    if not os.path.exists(f"{input_dir}/{type}"):
+        os.makedirs(f"{input_dir}/{type}")
 
-    # store miscellaneous file in a new folder
+    # store file in a new folder
     if "miscellaneous" in request.files:
-        for file in request.files.getlist("miscellaneous"):
+        for file in request.files.getlist(type):
             file.save(f"{input_dir}/miscellaneous/{file.filename}")
     else:
-        return {"error": "Missing miscellaneous file"}, 400
+        return {"error": f"Missing {type} file"}, 400
 
     return {
-        "data": "Miscellaneous file uploaded succesfully. Proceed to the next step."
+        "data": f"{type.capitalize()} file uploaded succesfully. Proceed to the next step."
     }
 
 
