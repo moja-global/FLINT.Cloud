@@ -3,7 +3,8 @@ import shutil
 import json
 import rasterio as rst
 
-def launch_run(title, input_dir): 
+
+def launch_run(title, input_dir):
     s = time.time()
     with open(f"{input_dir}/gcbm_logs.csv", "w+") as f:
         res = subprocess.Popen(
@@ -36,32 +37,43 @@ def launch_run(title, input_dir):
         "response": "Operation executed successfully. Downloadable links for input and output are attached in the response. Alternatively, you may also download this simulation input and output results by making a request at gcbm/download with the title in the body.",
     }
 
-class Configs:
 
+class Configs:
     def __init__(self, input_dir) -> None:
         self.input_dir = input_dir
         self.Rasters = []
-        self.Rastersm = []  
+        self.Rastersm = []
         self.nodatam = []
         self.nodata = []
         self.cellLatSize = []
         self.cellLonSize = []
         self.paths = []
         self.lst = []
-        self.provider_config = open(f"{os.getcwd()}/templates/provider_config.json", "r+")  
+        self.provider_config = open(
+            f"{os.getcwd()}/templates/provider_config.json", "r+"
+        )
 
     def get_config_templates(self):
         if not os.path.exists(f"{self.input_dir}/templates"):
             shutil.copytree(
-                f"{os.getcwd()}/templates", f"{self.input_dir}/templates", dirs_exist_ok=False
+                f"{os.getcwd()}/templates",
+                f"{self.input_dir}/templates",
+                dirs_exist_ok=False,
             )
-            self.provider_config = open(f"{self.input_dir}/templates/provider_config.json", "r+")
+            self.provider_config = open(
+                f"{self.input_dir}/templates/provider_config.json", "r+"
+            )
 
     def get_modules_cbm_config(self):
-        with open(f"{self.input_dir}/templates/modules_cbm.json", "r+") as modules_cbm_config:
+        with open(
+            f"{self.input_dir}/templates/modules_cbm.json", "r+"
+        ) as modules_cbm_config:
             data = json.load(modules_cbm_config)
-            disturbances = [file.split(".")[0][:-5] for file in os.listdir(f"{self.input_dir}/disturbances/")]  # drop `_moja` to match modules_cbm.json template
-            modules_cbm_config.seek(0)  
+            disturbances = [
+                file.split(".")[0][:-5]
+                for file in os.listdir(f"{self.input_dir}/disturbances/")
+            ]  # drop `_moja` to match modules_cbm.json template
+            modules_cbm_config.seek(0)
             data["Modules"]["CBMDisturbanceListener"]["settings"]["vars"] = disturbances
             json.dump(data, modules_cbm_config, indent=4)
             modules_cbm_config.truncate()
@@ -70,11 +82,10 @@ class Configs:
     def database_writes(self):
         data = json.load(self.provider_config)
         for file in os.listdir(f"{self.input_dir}/db/"):
-            data["Providers"]["SQLite"] = {"type": "SQLite", "path": file }
+            data["Providers"]["SQLite"] = {"type": "SQLite", "path": file}
         self.provider_config.seek(0)
 
-
-    def write_configs(self, config_type : str):
+    def write_configs(self, config_type: str):
         data = json.load(self.provider_config)
         for file in os.listdir(f"{self.input_dir}/{config_type}/"):
             d = dict()
@@ -82,7 +93,7 @@ class Configs:
             d["layer_path"] = file
             d["layer_prefix"] = file[:-5]
             self.lst.append(d)
-        if config_type == "disturbances" or config_type == "classifiers": 
+        if config_type == "disturbances" or config_type == "classifiers":
             for root, _, files in os.walk(
                 os.path.abspath(f"{self.input_dir}/{config_type}/")
             ):
@@ -91,15 +102,15 @@ class Configs:
                     self.Rasters.append(fp)
                     self.paths.append(fp)
         for self.nd in self.Rasters:
-            img = rst.open(self.nd)  
-            t = img.transform 
+            img = rst.open(self.nd)
+            t = img.transform
             x = t[0]
             y = -t[4]
-            n = img.nodata 
+            n = img.nodata
             self.cellLatSize.append(x)
             self.cellLonSize.append(y)
             self.nodata.append(n)
-        result = all(element == self.cellLatSize[0] for element in self.cellLatSize)  
+        result = all(element == self.cellLatSize[0] for element in self.cellLatSize)
         if result:
             cellLat = x
             cellLon = y
@@ -112,8 +123,15 @@ class Configs:
             print("Corrupt files")
 
         self.provider_config.seek(0)
-        new_values = {"cellLonSize": cellLon,"cellLatSize": cellLat, "blockLonSize": blockLon, "blockLatSize": blockLat, "tileLatSize": tileLat, "tileLonSize": tileLon}
-        data["Providers"]["RasterTiled"]["layers"] = self.lst  
+        new_values = {
+            "cellLonSize": cellLon,
+            "cellLatSize": cellLat,
+            "blockLonSize": blockLon,
+            "blockLatSize": blockLat,
+            "tileLatSize": tileLat,
+            "tileLonSize": tileLon,
+        }
+        data["Providers"]["RasterTiled"]["layers"] = self.lst
         data["Providers"]["RasterTiled"].update(new_values)
 
         json.dump(data, self.provider_config, indent=4)
@@ -132,21 +150,23 @@ class Configs:
         }
 
         self.study_area = {
-                "tile_size": tileLat,
-                "block_size": blockLat,
-                "tiles": [
-                    {
-                        "x": int(t[2]),
-                        "y": int(t[5]),
-                        "index": 12674,
-                    }
-                ],
-                "pixel_size": cellLat,
-                "layers": [],
-            }
+            "tile_size": tileLat,
+            "block_size": blockLat,
+            "tiles": [
+                {
+                    "x": int(t[2]),
+                    "y": int(t[5]),
+                    "index": 12674,
+                }
+            ],
+            "pixel_size": cellLat,
+            "layers": [],
+        }
 
     def add_file_to_path(self, config_type):
-        for root, _, files in os.walk(os.path.abspath(f"{self.input_dir}/{config_type}/")):
+        for root, _, files in os.walk(
+            os.path.abspath(f"{self.input_dir}/{config_type}/")
+        ):
             for file in files:
                 fp = os.path.join(root, file)
                 self.paths.append(fp)
@@ -157,15 +177,18 @@ class Configs:
 
     def flatten_directory(self, config_type):
         shutil.rmtree((f"{self.input_dir}/{config_type}/"))
-    
+
+
 class DisturbanceConfig(Configs):
-    def __init__(self, input_dir, config_file : str, attribute : dict = None ) -> None:
+    def __init__(self, input_dir, config_file: str, attribute: dict = None) -> None:
         super().__init__(input_dir)
         self.config_file = config_file
         self.attribute = attribute
 
     def disturbances_special(self):
-        with open(f"{self.input_dir}/{self.config_file}", "w", encoding="utf8") as json_file:
+        with open(
+            f"{self.input_dir}/{self.config_file}", "w", encoding="utf8"
+        ) as json_file:
             self.dictionary["attributes"] = self.attribute
             json.dump(self.dictionary, json_file, indent=4)
         with open(
@@ -194,14 +217,17 @@ class DisturbanceConfig(Configs):
         self.add_file_to_path("disturbances")
         self.copy_directory()
 
+
 class ClassifierConfig(Configs):
-    def __init__(self, input_dir, config_file : str, attribute : dict ) -> None:
+    def __init__(self, input_dir, config_file: str, attribute: dict) -> None:
         super().__init__(input_dir)
         self.config_file = config_file
         self.attribute = attribute
 
     def classifier_special(self):
-        with open(f"{self.input_dir}/{self.config_file}", "w", encoding="utf8") as json_file:
+        with open(
+            f"{self.input_dir}/{self.config_file}", "w", encoding="utf8"
+        ) as json_file:
             self.dictionary["attributes"] = self.attribute
             json.dump(self.dictionary, json_file, indent=4)
 
@@ -225,16 +251,17 @@ class ClassifierConfig(Configs):
             self.add_file_to_path("classifiers")
             self.copy_directory()
 
+
 class MiscellaneousConfig(Configs):
-    def __init__(self, input_dir, config_file : str, attribute : dict ) -> None:
+    def __init__(self, input_dir, config_file: str, attribute: dict) -> None:
         super().__init__(input_dir)
         self.config_file = config_file
         self.attribute = attribute
-        
-    def miscellaneous_special(self):    
+
+    def miscellaneous_special(self):
         for root, _, files in os.walk(
             os.path.abspath(f"{self.input_dir}/miscellaneous/")
-):
+        ):
             for file in files:
                 fp2 = os.path.join(root, file)
                 self.Rastersm.append(fp2)
@@ -244,9 +271,11 @@ class MiscellaneousConfig(Configs):
             d = img.nodata
             self.nodatam.append(d)
         """this is an experimental thing"""
-        with open(f"{self.input_dir}/{self.config_file}", "w", encoding="utf8") as json_file:
+        with open(
+            f"{self.input_dir}/{self.config_file}", "w", encoding="utf8"
+        ) as json_file:
             self.dictionary["layer_type"] = "GridLayer"
-            if self.config_file ==  "mean_annual_temperature_moja.json":
+            if self.config_file == "mean_annual_temperature_moja.json":
                 self.dictionary["layer_data"] = "Float32"
             else:
                 self.dictionary["layer_data"] = "Int16"
@@ -273,5 +302,3 @@ class MiscellaneousConfig(Configs):
             self.add_file_to_path("miscellaneous")
             self.copy_directory()
             self.flatten_directory("miscellaneous")
-
-
