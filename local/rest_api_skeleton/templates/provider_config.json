@@ -1,0 +1,55 @@
+{
+    "Providers": {
+        "SQLite": {
+            "path": "../input_database/gcbm_input.db",
+            "type": "SQLite"
+        },
+        "RasterTiled": {
+            "layers": [
+                {
+                    "name": "disturbances_2011",
+                    "layer_path": "disturbances_2011_moja.tiff",
+                    "layer_prefix": "disturbances_2011_moja"
+                },
+                {
+                    "name": "disturbances_2012",
+                    "layer_path": "disturbances_2012_moja.tiff",
+                    "layer_prefix": "disturbances_2012_moja"
+                },
+                {
+                    "name": "disturbances_2013",
+                    "layer_path": "disturbances_2013_moja.tiff",
+                    "layer_prefix": "disturbances_2013_moja"
+                },
+                {
+                    "name": "disturbances_2014",
+                    "layer_path": "disturbances_2014_moja.tiff",
+                    "layer_prefix": "disturbances_2014_moja"
+                },
+                {
+                    "name": "disturbances_2015",
+                    "layer_path": "disturbances_2015_moja.tiff",
+                    "layer_prefix": "disturbances_2015_moja"
+                },
+                {
+                    "name": "disturbances_2016",
+                    "layer_path": "disturbances_2016_moja.tiff",
+                    "layer_prefix": "disturbances_2016_moja"
+                },
+                {
+                    "name": "disturbances_2018",
+                    "layer_path": "disturbances_2018_moja.tiff",
+                    "layer_prefix": "disturbances_2018_moja"
+                }
+            ],
+            "blockLonSize": 0.1,
+            "tileLatSize": 0.1,
+            "tileLonSize": 1.0,
+            "cellLatSize": 0.00025,
+            "cellLonSize": 0.00025,
+            "blockLatSize": 0.1,
+            "type": "RasterTiledGDAL",
+            "library": "moja.modules.gdal"
+        }
+    }
+}
