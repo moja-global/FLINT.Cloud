@@ -336,10 +336,13 @@ def gcbm_dynamic():
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{os.getcwd()}/input/{title}"
-
-    get_config_templates(input_dir)
-    get_modules_cbm_config(input_dir)
-    get_provider_config(input_dir)
+    
+    try:
+        get_config_templates(input_dir)
+        get_modules_cbm_config(input_dir)
+        get_provider_config(input_dir)
+    except:
+        return {"error": "please upload files before running dynamic endpoint"}, 400
 
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")
