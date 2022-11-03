@@ -575,9 +575,9 @@ def getTitle():
     input_dir = f"{os.getcwd()}/input/{sim_title}"
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")
-        message = "New {sim_title} simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
+        message = f"New {sim_title} simulation started. Please move on to the next stage for uploading files at /gcbm/upload."
     else:
-        message = "Simulation already exists with name {sim_title}. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
+        message = f"Simulation already exists with name {sim_title}. Please check the list of simulations present before proceeding with a new simulation at gcbm/list. You may also download the input and output files for this simulation at gcbm/download sending parameter title in the body."
 
     return {"data": message}, 200
 
