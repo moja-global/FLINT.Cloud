@@ -1,7 +1,12 @@
+
 version: "3.9"
 services:
-  flint.example:
-    build: .
+  gcbm:
+    # - when developing use local builds
+    # build: .
+    # - or deploy using our CI
+    image: ghcr.io/moja-global/rest_api_gcbm:master
+    container_name: flint.gcbm
     ports:
       - "8080:8080"
     volumes:

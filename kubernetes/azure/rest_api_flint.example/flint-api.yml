@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flint-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flint-api
+  template:
+    metadata:
+      labels:
+        app: flint-api
+    spec:
+      nodeSelector:
+        kubernetes.io/os: linux
+      containers:
+        - name: flint-api
+          image: mojaglobal.azurecr.io/moja-global/rest_api_flint_example:master
+          ports:
+            - containerPort: 8080
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 125Mi
+            limits:
+              cpu: 256m
+              memory: 200Mi
+      imagePullSecrets:
+      - name: secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flint-api
+  namespace: default
+spec:
+  type: LoadBalancer
+  ports:
+    - targetPort: 8080
+      name: port8080
+      port: 8080
+      protocol: TCP
+    - targetPort: 80
+      name: port80
+      port: 80
+      protocol: TCP
+  selector:
+    app: flint-api
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flint-api
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: flint-api
+            port:
+              number: 8080
