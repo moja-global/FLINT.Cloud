@@ -1,6 +1,6 @@
 # GCBM REST API Setup
 
-The simulation is currently supported on Linux/macOS. To run the GCBM simulation locally, execute the following steps:
+The simulation is currently supported on Linux/macOS. To run the GCBM simulation locally, execute the following steps on `Terminal 1`:
 
 1. Clone the `FLINT.Cloud` repository using the command:
 
@@ -50,7 +50,7 @@ The inputs are contained in `GCBM_New_Demo_Run.zip`, present in the root of the 
 
 To run the endpoints and start a new GCBM simulation : 
 
-1. Unzip `GCBM_New_Demo_Run` and open a terminal inside the folder and run the following curl commands:
+1. Unzip `GCBM_New_Demo_Run` and open another `terminal 2` inside the folder and run the following `curl` commands:
  
 2. Create a new simulation (the default title of the simulation is `simulation`; Here the title `run4` is used): 
    ```bash
