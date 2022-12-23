@@ -20,7 +20,7 @@
 project = "FLINT.Cloud Technical Guide"
 
 copyright = "2022, Moja Global"
-author = u"Sneha Mishra, Arnav Tiwari & contributors"
+author = "Sneha Mishra, Arnav Tiwari & contributors"
 
 
 # -- General configuration ---------------------------------------------------

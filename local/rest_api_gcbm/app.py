@@ -336,7 +336,7 @@ def gcbm_dynamic():
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{os.getcwd()}/input/{title}"
-    
+
     try:
         get_config_templates(input_dir)
         get_modules_cbm_config(input_dir)
@@ -482,7 +482,8 @@ def gcbm_download():
         }
 
     return send_file(
-        f"{os.getcwd()}/output/{title}.zip", attachment_filename="{title}.zip",
+        f"{os.getcwd()}/output/{title}.zip",
+        attachment_filename="{title}.zip",
     )
 
 
