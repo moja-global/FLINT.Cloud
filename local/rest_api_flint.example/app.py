@@ -39,6 +39,20 @@ def home():
     return "FLINT.Example API"
 
 
+@app.route("/health", methods=["GET"])
+def health():
+    """
+    Get health status of FLINT example
+    ---
+    tags:
+      - health
+    responses:
+      200:
+            description: A status check for FLINT example
+    """
+    return "FLINT.Example is active."
+    
+
 @app.route("/spec")
 def spec():
     swag = swagger(app)
