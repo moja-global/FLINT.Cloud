@@ -30,6 +30,8 @@ class TestApiFlintExample:
         help_all_endpoint = base_endpoint + "help/all"
         help_all_response = requests.get(help_all_endpoint)
         assert help_all_response.status_code == 200
+     
+    def test_help_arg(self, base_endpoint):
         "This test is to check the help endpoint with random i.e arg argument"
         random_arg = "arg"
         help_random_endpoint = base_endpoint + "help/arg"
