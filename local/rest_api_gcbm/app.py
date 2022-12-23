@@ -21,6 +21,7 @@ import rasterio as rst
 from flask import jsonify
 from config_table import rename_columns
 import sqlite3
+import docker
 from preprocess import get_config_templates, get_modules_cbm_config, get_provider_config
 
 flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
@@ -512,7 +513,7 @@ def gcbm_list_simulations():
     )
 
 
-@app.route("/gcbm/status", methods=["POST"])
+@app.route("/gcbm/report", methods=["POST"])
 def status():
     """
     Get status of a simulation
@@ -750,6 +751,36 @@ def gcbm_db():
         return {"error": "Missing db file"}, 400
 
     return {"data": "db file uploaded succesfully. Proceed to the next step."}
+
+
+def checkDockerContainerStatus(container):
+    client = docker.from_env()
+    # cli = docker.APIClient()
+    if client.containers.list(filters={"name": container}):
+        response = client.containers.list(filters={"name": container})
+        return str(response[0].id)[:12]
+    else:
+        return None
+
+
+@app.route("/gcbm/status", methods=["GET"])
+def get_simulation_status():
+    """
+    If the container gcbm-api is running, the associated logs are returned
+    """
+    container_id = checkDockerContainerStatus("flint.gcbm")
+    logs_file_name = container_id + ".txt"
+    if container_id != "":
+        logs_cmd = "docker logs " + container_id + " > " + logs_file_name + " 2>&1"
+        os.system(logs_cmd)
+        logs = []
+        with open(logs_file_name) as file_handle:
+            logs = file_handle.readlines()
+        # os.system('rm ' + logs_file_name)
+        return {"container_running": True, "logs": logs}, 200
+    else:
+        logs = ["Error No Running Container"]
+        return {"container_running": False, "logs": logs}, 400
 
 
 if __name__ == "__main__":

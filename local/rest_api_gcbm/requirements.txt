@@ -13,3 +13,4 @@ psutil==5.9.0
 pandas
 matplotlib
 rasterio
+docker==6.0.0
