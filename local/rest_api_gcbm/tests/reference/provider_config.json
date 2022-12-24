@@ -1,0 +1,75 @@
+{
+    "Providers": {
+        "SQLite": {
+            "path": "gcbm_input.db",
+            "type": "SQLite"
+        },
+        "RasterTiled": {
+            "layers": [
+                {
+                    "name": "disturbances_2012",
+                    "layer_path": "disturbances_2012.tiff",
+                    "layer_prefix": "disturbances_2012"
+                },
+                {
+                    "name": "disturbances_2011",
+                    "layer_path": "disturbances_2011.tiff",
+                    "layer_prefix": "disturbances_2011"
+                },
+                {
+                    "name": "disturbances_2015",
+                    "layer_path": "disturbances_2015.tiff",
+                    "layer_prefix": "disturbances_2015"
+                },
+                {
+                    "name": "disturbances_2014",
+                    "layer_path": "disturbances_2014.tiff",
+                    "layer_prefix": "disturbances_2014"
+                },
+                {
+                    "name": "disturbances_2018",
+                    "layer_path": "disturbances_2018.tiff",
+                    "layer_prefix": "disturbances_2018"
+                },
+                {
+                    "name": "disturbances_2016",
+                    "layer_path": "disturbances_2016.tiff",
+                    "layer_prefix": "disturbances_2016"
+                },
+                {
+                    "name": "Classifier2",
+                    "layer_path": "Classifier2.tiff",
+                    "layer_prefix": "Classifier2"
+                },
+                {
+                    "name": "initial_age",
+                    "layer_path": "initial_age.tiff",
+                    "layer_prefix": "initial_age"
+                },
+                {
+                    "name": "mean_annual_temperature",
+                    "layer_path": "mean_annual_temperature.tiff",
+                    "layer_prefix": "mean_annual_temperature"
+                },
+                {
+                    "name": "Classifier1",
+                    "layer_path": "Classifier1.tiff",
+                    "layer_prefix": "Classifier1"
+                },
+                {
+                    "name": "disturbances_2013",
+                    "layer_path": "disturbances_2013.tiff",
+                    "layer_prefix": "disturbances_2013"
+                }
+            ],
+            "blockLonSize": 0.1,
+            "tileLatSize": 1.0,
+            "tileLonSize": 1.0,
+            "cellLatSize": 0.00025,
+            "cellLonSize": 0.00025,
+            "blockLatSize": 0.1,
+            "type": "RasterTiledGDAL",
+            "library": "moja.modules.gdal"
+        }
+    }
+}

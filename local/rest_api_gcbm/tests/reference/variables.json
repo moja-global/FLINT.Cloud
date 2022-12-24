@@ -107,6 +107,16 @@
                 "provider": "SQLite"
             }
         },
+        "initial_classifier_set": {
+            "transform": {
+                "type": "CompositeTransform",
+                "library": "internal.flint",
+                "vars": [
+                    "Classifier2",
+                    "Classifier1"
+                ]
+            }
+        },
         "disturbance_matrix_associations": {
             "transform": {
                 "queryString": "SELECT dt.name AS disturbance_type, dma.spatial_unit_id, dma.disturbance_matrix_id FROM disturbance_matrix_association dma INNER JOIN disturbance_type dt ON dma.disturbance_type_id = dt.id",
@@ -155,12 +165,92 @@
                 "provider": "SQLite"
             }
         },
+        "mean_annual_temperature": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "mean_annual_temperature"
+            }
+        },
         "decay_parameters": {
             "transform": {
                 "queryString": "SELECT p.name AS pool, dp.base_decay_rate AS organic_matter_decay_rate, dp.prop_to_atmosphere AS prop_to_atmosphere, dp.q10 AS q10, dp.reference_temp AS reference_temp, dp.max_rate AS max_decay_rate_soft FROM decay_parameter dp INNER JOIN dom_pool dom ON dp.dom_pool_id = dom.id INNER JOIN pool p ON p.id = dom.pool_id",
                 "type": "SQLQueryTransform",
                 "library": "internal.flint",
                 "provider": "SQLite"
+            }
+        },
+        "disturbances_2012": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2012"
+            }
+        },
+        "disturbances_2011": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2011"
+            }
+        },
+        "disturbances_2015": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2015"
+            }
+        },
+        "disturbances_2014": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2014"
+            }
+        },
+        "disturbances_2018": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2018"
+            }
+        },
+        "disturbances_2016": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2016"
+            }
+        },
+        "Classifier2": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "Classifier2"
+            }
+        },
+        "Classifier1": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "Classifier1"
+            }
+        },
+        "disturbances_2013": {
+            "transform": {
+                "library": "internal.flint",
+                "type": "LocationIdxFromFlintDataTransform",
+                "provider": "RasterTiled",
+                "data_id": "disturbances_2013"
             }
         }
     }

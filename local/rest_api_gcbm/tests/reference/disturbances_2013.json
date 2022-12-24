@@ -1,0 +1,23 @@
+{
+    "layer_type": "GridLayer",
+    "layer_data": "Byte",
+    "nodata": 255,
+    "tileLatSize": 1.0,
+    "tileLonSize": 1.0,
+    "blockLatSize": 0.1,
+    "blockLonSize": 0.1,
+    "cellLatSize": 0.00025,
+    "cellLonSize": 0.00025,
+    "attributes": {
+        "1": {
+            "year": 2013,
+            "disturbance_type": "Mountain pine beetle — Very severe impact",
+            "transition": 1
+        },
+        "2": {
+            "year": 2013,
+            "disturbance_type": "Wildfire",
+            "transition": 1
+        }
+    }
+}
