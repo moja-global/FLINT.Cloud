@@ -6,6 +6,7 @@ from run_distributed import *
 from flask_autoindex import AutoIndex
 from flask_swagger_ui import get_swaggerui_blueprint
 from flask_swagger import swagger
+from flask_restful import Resource, Api
 from datetime import timedelta
 from datetime import datetime
 from google.cloud import storage, pubsub_v1
@@ -337,12 +338,9 @@ def gcbm_dynamic():
     title = "".join(c for c in title if c.isalnum())
     input_dir = f"{os.getcwd()}/input/{title}"
 
-    try:
-        get_config_templates(input_dir)
-        get_modules_cbm_config(input_dir)
-        get_provider_config(input_dir)
-    except:
-        return {"error": "please upload files before running dynamic endpoint"}, 400
+    get_config_templates(input_dir)
+    get_modules_cbm_config(input_dir)
+    get_provider_config(input_dir)
 
     if not os.path.exists(f"{input_dir}"):
         os.makedirs(f"{input_dir}")
@@ -465,22 +463,6 @@ def gcbm_download():
     title = request.form.get("title") or "simulation"
     # Sanitize title
     title = "".join(c for c in title if c.isalnum())
-
-    output_dir = f"{os.getcwd()}/output/{title}.zip"
-    input_dir = f"{os.getcwd()}/input/{title}"
-
-    # if the title has an input simulation and there is no output simulation then they should check the status.
-    if not os.path.exists(f"{output_dir}") and os.path.exists(f"{input_dir}"):
-        return {
-            "message": "You simulation is currently running, check the status via /gcbm/status"
-        }
-
-    # if there is no input simulation and no output simulation then the simulation does not exist.
-    elif not os.path.exists(f"{output_dir}") and not os.path.exists(f"{input_dir}"):
-        return {
-            "message": "You don't have a simulation with this title kindly check the title and try again"
-        }
-
     return send_file(
         f"{os.getcwd()}/output/{title}.zip",
         attachment_filename="{title}.zip",
@@ -503,13 +485,10 @@ def gcbm_list_simulations():
     for file in os.listdir(f"{os.getcwd()}/input"):
         list.append(file)
 
-    return (
-        {
-            "data": list,
-            "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
-        },
-        200,
-    )
+    return {
+        "data": list,
+        "message": "To create a new simulation, create a request at gcbm/new. To access the results of the existing simulations, create a request at gcbm/download.",
+    }, 200
 
 
 @app.route("/gcbm/status", methods=["POST"])
@@ -546,10 +525,11 @@ def status():
 def check():
     return "Checks OK", 200
 
+class home(Resource):
+    def get(self):
+        return {"FLINT.Cloud API"}, 200
 
-@app.route("/", methods=["GET"])
-def home():
-    return "FLINT.Cloud API"
+api.add_resource(home, '/')
 
 
 @app.route("/upload/title", methods=["POST"])
