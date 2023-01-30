@@ -521,16 +521,18 @@ def status():
     return {"finished": message}
 
 
-@app.route("/check", methods=["GET", "POST"])
-def check():
-    return "Checks OK", 200
+class check(Resource):
+    def get(self):
+        return {"Checks OK"}, 200
+    def post(self):
+        return {"Checks OK"}, 200
 
 class home(Resource):
     def get(self):
         return {"FLINT.Cloud API"}, 200
 
+api.add_resource(check, "/check")
 api.add_resource(home, '/')
-
 
 @app.route("/upload/title", methods=["POST"])
 def getTitle():
