@@ -26,11 +26,15 @@ resource "azurerm_linux_web_app" "example" {
     "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
     "WEBSITES_PORT"                       = 8080
   }
+  
+  data "docker_image" "last_applied" {
+  name = "ghcr.io/moja-global/rest_api_flint.example"
+  }
 
   site_config {
     application_stack {
       docker_image     = "ghcr.io/moja-global/rest_api_flint.example"
-      docker_image_tag = "master"
+      docker_image_tag = "lastest"
     }
   }
 }
